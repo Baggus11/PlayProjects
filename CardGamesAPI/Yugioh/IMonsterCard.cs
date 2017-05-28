@@ -6,6 +6,4 @@ namespace CardGamesAPI.Yugioh
         YugiohMonsterType MonsterBaseType { get; set; }
         YugiohMonsterAttribute MonsterAttribute { get; set; }
     }
-    public interface ITrapCard : IYugiohCard
-    { }
 }

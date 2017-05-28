@@ -9,8 +9,12 @@ namespace CardGamesAPI.Yugioh.Tests
         [TestMethod()]
         public void MonsterCardTest()
         {
-            IMonsterCard card = new MonsterCard("BEWD", YugiohMonsterAttribute.Light);
-            card.Dump();
+            IMonsterCard cardA = new MonsterCard("BEWD", "Light", "Normal");
+            cardA.Dump();
+            IMonsterCard cardB = new MonsterCard("BEWD", YugiohMonsterAttribute.Light, YugiohMonsterType.Normal);
+            cardB.Dump();
+            //Assert.Equals(cardA, cardB);
+            Assert.IsTrue(cardA.Compare(cardB));
         }
     }
 }

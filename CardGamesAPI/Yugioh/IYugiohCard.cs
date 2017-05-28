@@ -11,5 +11,6 @@ namespace CardGamesAPI.Yugioh
         YugiohCardBaseType CardType { get; set; }
         event EventHandler<YugiohCardEventArgs> EffectTriggered;
         void ChangePosition(IYugiohCard card);
+        //void Equals(IYugiohCard card1, IYugiohCard card2);
     }
 }

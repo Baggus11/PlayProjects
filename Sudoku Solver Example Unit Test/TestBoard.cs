@@ -6,7 +6,6 @@ using System.Text;
 using System.Reflection;
 using System.Diagnostics;
 using Common.Extensions;
-
 namespace TestSudokuEngine
 {
     [TestClass]
@@ -51,16 +50,13 @@ namespace TestSudokuEngine
             board.SetSquareValue(9, 1, 8);
             board.SetSquareValue(9, 5, 1);
             board.SetSquareValue(9, 7, 3);
-
             //Debug.WriteLine(board.Validate());
             Assert.AreEqual(0, board.Squares.Count(x => !x.IsSolved));
-
             ////Shuffle the entire grid!
             //board.Squares.Shuffle(2).Dump();
             //board.Squares = board.Squares.Shuffle().ToList();
             Debug.WriteLine(board.ToString());
             //Debug.WriteLine(board.Validate());
-
         }
         public class Board
         {

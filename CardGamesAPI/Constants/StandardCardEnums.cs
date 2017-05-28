@@ -25,5 +25,4 @@
         Joker = 0,
     }
     public enum CardColor { Black, Red }
-
 }

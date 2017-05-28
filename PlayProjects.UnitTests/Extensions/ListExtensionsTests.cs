@@ -3,14 +3,11 @@ using PlayProjects.UnitTests;
 using System;
 using System.Collections.Generic;
 using System.Data;
-
 namespace Common.Extensions.Tests
 {
     [TestClass()]
     public class ListExtensionsTests
     {
-
-
         [TestMethod]
         public void List_To_Datatable()
         {
@@ -20,7 +17,6 @@ namespace Common.Extensions.Tests
                 new Person { Name = "Luna", Age = 1021 },
                 new Person { Name = "Celestia", Age = 1028 }
             };
-
             //Act
             list.Dump("list");
             dt = list.ToDatatable();
@@ -33,19 +29,15 @@ namespace Common.Extensions.Tests
         {
             throw new NotImplementedException();
         }
-
         [TestMethod()]
         public void SwapTest()
         {
             throw new NotImplementedException();
-
         }
-
         [TestMethod()]
         public void ToDatatableTest()
         {
             throw new NotImplementedException();
-
         }
     }
 }
