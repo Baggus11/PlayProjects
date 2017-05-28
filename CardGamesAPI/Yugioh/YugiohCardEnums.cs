@@ -1,4 +1,4 @@
-﻿namespace CardGamesAPI.Constants
+﻿namespace CardGamesAPI.Yugioh
 {
     /*Yugioh Card enums */
     public enum YugiohCardPosition
@@ -15,10 +15,16 @@
     }
     public enum YugiohMonsterType
     {
-        Normal
+        Dragon,
+        Spellcaster,
     }
     public enum YugiohMonsterAttribute
     {
-        Light
+        Light,
+        Dark
+    }
+    public enum YugiohMonsterBaseType
+    {
+        Normal,
     }
 }

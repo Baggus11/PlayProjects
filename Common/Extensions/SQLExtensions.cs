@@ -6,14 +6,108 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 namespace Common.Extensions
 {
     public static class SQLExtensions
     {
+        public static bool IsConnectionString(this string connectionString)
+        {
+            var csb = new SqlConnectionStringBuilder(connectionString);
+            if (csb.DataSource == null || csb.InitialCatalog == null)
+                throw new Exception($"Connection string: '{connectionString} invalid");
+            return true;
+        }
+        public static bool CanOpen(this string connectionString)
+        {
+            return new SqlConnection(connectionString).CanOpen();
+        }
+        public static bool CanOpen(this SqlConnection connection)
+        {
+            try
+            {
+                if (connection == null) { return false; }
+                connection.Open();
+                var canOpen = connection.State == ConnectionState.Open;
+                connection.Close();
+                return canOpen;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public static List<SqlParameter> GetSqlParams(this string connectionString, string tableName)
+        {
+            if (tableName.IsNullOrWhiteSpace()) throw new Exception("No table name provided!");
+            if (!connectionString.IsConnectionString()) return null;
+            List<SqlDbType> sql_db_types = new List<SqlDbType>();
+            DataTable dt = new DataTable();
+            //
+            /// Get the schema into a datatable
+            ////
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = connection.CreateCommand())
+                {
+                    connection.Open();
+                    cmd.CommandText = $"SET FMTONLY ON; select * from dbo.{tableName}; SET FMTONLY OFF";
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    dt = reader.GetSchemaTable();
+                }
+            }
+            //
+            /// Get the name of column, type of column and size and assign to tuples
+            ////
+            List<Tuple<string, SqlDbType, int>> sql_pre_param_list = new List<Tuple<string, SqlDbType, int>>();
+            foreach (var row in dt.Rows.Cast<DataRow>())
+            {
+                SqlDbType type = (SqlDbType)(int.Parse(row["ProviderType"].ToString()));
+                int size = int.Parse(row["ColumnSize"].ToString());
+                string name = row["ColumnName"].ToString();
+                //Debug.WriteLine($"type: {type.ToString()}; size: {size}");
+                Tuple<string, SqlDbType, int> tuple = new Tuple<string, SqlDbType, int>(name, type, size);
+                sql_pre_param_list.Add(tuple);
+            }
+            //
+            /// Create full parameter list!
+            ////
+            List<SqlParameter> sql_params_list = new List<SqlParameter>();
+            foreach (var item in sql_pre_param_list)
+            {
+                SqlParameter sp = new SqlParameter
+                {
+                    ParameterName = item.Item1,
+                    SqlDbType = item.Item2,
+                    Size = item.Item3
+                };
+                sql_params_list.Add(sp);
+            }
+            //sql_params_list.ForEach(x => { Debug.WriteLine($"{x.ParameterName}\t{x.SqlDbType.ToString()}\t{x.Size}"); });
+            return sql_params_list;
+        }
+        public static string GetInsertQuery(this IEnumerable<SqlParameter> sqlparameters, string tableName)
+        {
+            if (tableName.IsNullOrWhiteSpace()) return null;
+            StringBuilder query = new StringBuilder($"INSERT INTO dbo.{tableName}\n");
+            query.Append("(");
+            foreach (var parameter in sqlparameters)
+                query.Append($"{parameter.ParameterName}, ");
+            query.Length -= 2; //removes extra comma
+            query.Append(")\nVALUES\n(");
+            foreach (var parameter in sqlparameters)
+                query.Append($"@{parameter.ParameterName}, ");
+            query.Length -= 2; //removes extra comma
+            query.Append(")");
+
+            Debug.WriteLine($"Generated query: {query.ToString()}");
+
+            return query.ToString();
+        }
         /// <summary>
         /// Find Duplicate Rows from a given table
         /// Can Exclude columns by name
+        /// TODO: pull this out into it's own abstraction or part of one!
         /// </summary>
         /// <param name="connectionString"></param>
         /// <param name="tablename"></param>
@@ -38,7 +132,6 @@ namespace Common.Extensions
                     try
                     {
                         command.Connection.Open();
-                        //Debug.WriteLine(string.Format("{0}: Running Query:  {1}", MethodBase.GetCurrentMethod().Name.ToUpper(), sql_get_schema));
                         SqlDataReader reader = command.ExecuteReader();
                         dtSchema = reader.GetSchemaTable();
                     }
@@ -104,53 +197,6 @@ namespace Common.Extensions
                 }
             }
             return dt;
-        }
-        public static List<SqlParameter> GetTableSQLParams(string connection_str, string table_name)
-        {
-            List<SqlDbType> sql_db_types = new List<SqlDbType>();
-            DataTable dt = new DataTable();
-            //
-            /// Get the schema into a datatable
-            ////
-            using (SqlConnection connection = new SqlConnection(connection_str))
-            {
-                using (SqlCommand cmd = connection.CreateCommand())
-                {
-                    connection.Open();
-                    cmd.CommandText = $"SET FMTONLY ON; select * from {table_name}; SET FMTONLY OFF";
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    dt = reader.GetSchemaTable();
-                }
-            }
-            //
-            /// Get the name of column, type of column and size and assign to tuples
-            ////
-            List<Tuple<string, SqlDbType, int>> sql_pre_param_list = new List<Tuple<string, SqlDbType, int>>();
-            foreach (var row in dt.Rows.Cast<DataRow>())
-            {
-                SqlDbType type = (SqlDbType)(int.Parse(row["ProviderType"].ToString()));
-                int size = int.Parse(row["ColumnSize"].ToString());
-                string name = row["ColumnName"].ToString();
-                //Debug.WriteLine($"type: {type.ToString()}; size: {size}");
-                Tuple<string, SqlDbType, int> tuple = new Tuple<string, SqlDbType, int>(name, type, size);
-                sql_pre_param_list.Add(tuple);
-            }
-            //
-            /// Create full parameter list!
-            ////
-            List<SqlParameter> sql_params_list = new List<SqlParameter>();
-            foreach (var item in sql_pre_param_list)
-            {
-                SqlParameter sp = new SqlParameter
-                {
-                    ParameterName = item.Item1,
-                    SqlDbType = item.Item2,
-                    Size = item.Item3
-                };
-                sql_params_list.Add(sp);
-            }
-            sql_params_list.ForEach(x => { Debug.WriteLine($"{x.ParameterName}\t{x.SqlDbType.ToString()}\t{x.Size}"); });
-            return sql_params_list;
         }
     }
 }

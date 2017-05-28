@@ -1,9 +1,13 @@
-﻿using CardGamesAPI.Constants;
-namespace CardGamesAPI.Yugioh
+﻿namespace CardGamesAPI.Yugioh
 {
     public interface IMonsterCard : IYugiohCard
     {
-        YugiohMonsterType MonsterBaseType { get; set; }
-        YugiohMonsterAttribute MonsterAttribute { get; set; }
+        YugiohMonsterType MonsterType { get; }
+        YugiohMonsterAttribute MonsterAttribute { get; }
+        YugiohMonsterBaseType MonsterBaseType { get; }
+        int Attack { get; set; }
+        int Defense { get; set; }
+        int Rank { get; set; }
+        int Level { get; set; }
     }
 }

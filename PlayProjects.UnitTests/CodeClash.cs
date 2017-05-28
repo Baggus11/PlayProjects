@@ -18,7 +18,7 @@ namespace PlayProjects.UnitTests
         {
             string myString = "ToavX";
             int[] asciiArray = myString.Select(r => (int)r).ToArray();
-            int total = 0;
+            //int total = 0;
             //foreach (char letter in myString.Split())
             //{
             //    letter = toupper(letter);
@@ -189,7 +189,7 @@ namespace PlayProjects.UnitTests
             }
             grid.Dump("grid");
             char xyVal = '.';
-            int xRight, yRight, xBottom, yBottom;
+            //int xRight, yRight, xBottom, yBottom;
             for (int r = 0; r < height; r++)
             {
                 for (int c = 0; c < width; c++)
@@ -233,9 +233,9 @@ namespace PlayProjects.UnitTests
                 "the hand being over the heart.Persons in uniform should remain",
                 "silent, face the flag, and render the military salute.",
             };
-            int every_X_words = 3;
-            int min_Y_vowels = 2;//or more
-            int every_Z_lines = 2;
+            //int every_X_words = 3;
+            //int min_Y_vowels = 2;//or more
+            //int every_Z_lines = 2;
             //Finish this in Linq, then port over to python, js, something:
         }
         [TestMethod]

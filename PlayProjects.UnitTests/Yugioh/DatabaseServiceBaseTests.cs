@@ -1,7 +1,8 @@
 ﻿using CardGamesAPI.Yugioh;
+using Common.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-namespace Common.Interfaces.Tests
+namespace Common.Yugioh.Tests
 {
     [TestClass()]
     public class DatabaseServiceBaseTests
@@ -9,14 +10,13 @@ namespace Common.Interfaces.Tests
         [TestMethod()]
         public void InsertTest()
         {
-            MonsterCard monster = new MonsterCard("BEWD", "Light", "Dragon");
-            string connectionString =
-      "Persist Security Info=false;Integrated Security=false;Server=Nick-PC;Database=Yugioh;User ID=;Password=";
-
-
-            //DatabaseService service = new DatabaseServiceBase(connectionString);
-
-
+            MonsterCard monster = new MonsterCard("Dark Magician", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Normal);
+            string connectionString = "Data Source=NICK-PC;Initial Catalog=Yugioh;Integrated Security=True;";
+            monster.Attack = 3000;
+            //monster.CardBaseType = YugiohCardBaseType.Spell;
+            CardDatabaseService service = new CardDatabaseService(connectionString);
+            Assert.IsTrue(service.Insert(monster));
+            monster.Dump();
         }
         [TestMethod()]
         public void DeleteTest()

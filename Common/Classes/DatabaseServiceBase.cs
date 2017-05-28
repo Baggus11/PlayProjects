@@ -1,82 +1,94 @@
-﻿using System;
+﻿using Common.Extensions;
+using Common.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-namespace Common.Interfaces
+
+namespace Common
 {
     public abstract class DatabaseServiceBase : IDatabaseService
     {
-        private SqlConnectionStringBuilder ConnectionBuilder { get; set; }
-        public DatabaseServiceBase(string connectionString)
+        protected string TableName { get; set; }
+        protected string ConnectionString { get; set; }
+        public DatabaseServiceBase(string connectionString, string tableName)
         {
-            ConnectionString = connectionString;
-        }
-        public string ConnectionString { get; set; }
-        public bool Delete<T>(IEnumerable<T> items)
-        {
-            throw new NotImplementedException();
-        }
-        public bool Delete<T>(T item)
-        {
-            throw new NotImplementedException();
+            TableName = tableName;
+            if (connectionString.CanOpen())
+                ConnectionString = connectionString;
+            else
+                Debug.WriteLine($"Could not connect with (initial) connection string: {connectionString}");
         }
         public bool Insert<T>(IEnumerable<T> items)
         {
-            string connectionstr = "";
-            StringBuilder sql = new StringBuilder("INSERT INTO Database.dbo.Table");
-            sql.Append("(Field1, Field2)");
-            sql.Append("VALUES (@Field1, @Field2)"); //TODO: get generated SQL from object here
+            if (items == null) return false;
+            throw new NotImplementedException();
+        }
+        public bool Insert<T>(T item)
+        {
+            bool result = false;
+            if (item == null) throw new NullReferenceException(MethodBase.GetCurrentMethod().Name);
+            ConnectionString.CanOpen();
+            List<SqlParameter> sqlParams = ConnectionString.GetSqlParams(TableName);
             int rowsChanged = 0;
-            using (SqlConnection connection = new SqlConnection(connectionstr))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 try
                 {
                     connection.Open();
                     SqlTransaction trans = connection.BeginTransaction();
-                    //Debug.WriteLine(string.Format("{0}: Running Query:  {1}", MethodBase.GetCurrentMethod().Name.ToUpper(), sql.ToString()));
-                    using (SqlCommand command = new SqlCommand(sql.ToString(), connection))
+                    using (SqlCommand command = new SqlCommand())
                     {
                         command.Transaction = trans;
-                        foreach (var item in items)
+                        try
                         {
-                            try
+                            command.Parameters.Clear();
+                            foreach (var parameter in sqlParams)
                             {
-                                command.Parameters.Clear();
-                                //command.Parameters.Add("@Field1", SqlDbType.VarChar, 50).Value = item.Field1;
-                                //command.Parameters.Add("@Field2", SqlDbType.VarChar, 50).Value = item.Field2;
-                                //TODO: finish your SQLparameter creator method
-                                rowsChanged += command.ExecuteNonQuery();
+                                parameter.Value = item?.GetPropertyValue(parameter.ParameterName);
+                                if (parameter.Value != null)
+                                    command.Parameters.Add(parameter);
                             }
-                            catch (Exception ex)
-                            {
-                                string errMsg = $"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()}";
-                                trans.Rollback();
-                                throw new Exception(errMsg);
-                            }
+                            command.Connection = connection;
+                            command.CommandText = sqlParams.Where(p => p.Value != null).GetInsertQuery(TableName);
+                            //Debug.WriteLine(string.Format("{0}: Running Query: {1}", MethodBase.GetCurrentMethod().Name.ToUpper(), command.CommandText));
+                            rowsChanged += command.ExecuteNonQuery();
                         }
-                        if (rowsChanged > 0)
+                        catch (Exception ex)
                         {
-                            trans.Commit();
+                            Debug.WriteLine($"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()}");
+                            trans.Rollback();
+                            connection.Close();
+                            result = false;
                         }
+                    }
+                    if (rowsChanged > 0)
+                    {
+                        trans.Commit();
+                        result = true;
                     }
                 }
                 catch (Exception ex)
                 {
-                    string errMsg = $"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()}";
+                    Debug.WriteLine($"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()}");
+                    result = false;
+                    connection.Close();
                 }
             }
+            return result;
+        }
+        public bool Delete<T>(IEnumerable<T> items)
+        {
+            if (string.IsNullOrWhiteSpace(ConnectionString)) throw new Exception($"bad connection string: {ConnectionString}");
+            if (items == null) throw new NullReferenceException();
             throw new NotImplementedException();
         }
-        public bool Insert<T>(T item)
+        public bool Delete<T>(T item)
         {
-            throw new NotImplementedException();
-        }
-        public T Search<T>(T entityIdentifier)
-        {
+            if (string.IsNullOrWhiteSpace(ConnectionString)) throw new Exception($"bad connection string: {ConnectionString}");
+            if (item == null) throw new NullReferenceException();
             throw new NotImplementedException();
         }
         public bool Update<T>(IEnumerable<T> items)
@@ -90,6 +102,18 @@ namespace Common.Interfaces
         public void SetConnectionString(string connectionString)
         {
             ConnectionString = connectionString;
+        }
+        public bool Exists<T>(T item)
+        {
+
+            throw new NotImplementedException();
+        }
+
+        public Guid GetUniqueId<T>(T item, string name = "")
+        {
+            //Get first Guid from db.table that matches the given name, or Single, else if more than one get first
+
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Common.ViewModels;
-using HarvestAPI;
+using HarvestAPI.ViewModels;
 using System.Collections.ObjectModel;
 using System.Text;
 namespace HarvestAPI

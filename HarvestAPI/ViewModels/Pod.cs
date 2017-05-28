@@ -1,6 +1,5 @@
-﻿using Common.ViewModels;
-using System.ComponentModel;
-namespace HarvestAPI
+﻿using System.ComponentModel;
+namespace HarvestAPI.ViewModels
 {
     public class Pod : BindableBase
     {

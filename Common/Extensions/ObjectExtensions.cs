@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 namespace Common.Extensions
 {
     public static class ObjectExtensions
@@ -78,6 +81,44 @@ namespace Common.Extensions
                 var anotherValue = property.GetValue(another);
                 //Recursion
                 if (!objValue.DeepCompare(anotherValue)) result = false;
+            }
+            return result;
+        }
+        public static object GetPropertyValue(this object obj, string propertyName)
+        {
+            try
+            {
+                return obj.GetType().GetProperties()
+                    ?.Single(pi => pi.Name == propertyName)
+                    ?.GetValue(obj, null);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()} for property '{propertyName}'");
+                return null;
+            }
+        }
+        /// <summary>
+        /// Check an object's properties against a given table's schema
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="tableName"></param>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public static bool MatchesTable<T>(this T obj, string tableName, string connectionString)
+        {
+            throw new NotImplementedException();
+            var properties = typeof(T).GetProperties();
+            bool result = true;
+            if (connectionString.IsConnectionString())
+            {
+                foreach (var parameter in connectionString.GetSqlParams(tableName))
+                {
+                    //check each property
+                    //find a fail, then:
+                    result = false;
+                }
             }
             return result;
         }

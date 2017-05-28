@@ -143,7 +143,8 @@ namespace Common.Extensions
                 throw new NotSupportedException($"{MethodBase.GetCurrentMethod().Name}> Could not convert string '{value}' to type {typeof(T).Name}");
             else
                 return (T)Enum.Parse(typeof(T), value);
-            return (T)Convert.ChangeType(value, typeof(T));
+            //return (T)Convert.ChangeType(value, typeof(T));
         }
+        public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
     }
 }
