@@ -1,9 +1,10 @@
-﻿using HarvestAPI;
+﻿using Common.ViewModels;
+using HarvestAPI;
 using System.Collections.ObjectModel;
 using System.Text;
-namespace Common.ViewModels
+namespace HarvestAPI
 {
-    public class GrowerMainViewModel : ViewModelBase
+    public class HarvestMainViewModel : ViewModelBase
     {
         private StringBuilder _Status = new StringBuilder();
         public string Status

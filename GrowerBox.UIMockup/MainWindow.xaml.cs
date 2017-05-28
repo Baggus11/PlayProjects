@@ -1,4 +1,5 @@
 ﻿using Common.ViewModels;
+using HarvestAPI;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
@@ -13,7 +14,7 @@ namespace UIMockup
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static GrowerMainViewModel Data = new GrowerMainViewModel();
+        private static HarvestMainViewModel Data = new HarvestMainViewModel();
         public MainWindow()
         {
             InitializeComponent();

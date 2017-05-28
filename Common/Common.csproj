@@ -67,9 +67,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Parsers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="XAMLResources\CustomStyles.xaml">
       <SubType>Designer</SubType>
