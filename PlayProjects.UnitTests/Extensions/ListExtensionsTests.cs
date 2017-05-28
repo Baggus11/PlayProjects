@@ -1,13 +1,16 @@
-﻿using Common.Extensions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PlayProjects.UnitTests;
+using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace PlayProjects.UnitTests
+namespace Common.Extensions.Tests
 {
-    [TestClass]
+    [TestClass()]
     public class ListExtensionsTests
     {
+
+
         [TestMethod]
         public void List_To_Datatable()
         {
@@ -24,6 +27,25 @@ namespace PlayProjects.UnitTests
             dt.Dump("table");
             //Assert
             Assert.IsTrue(dt.Rows.Count > 0 && dt.Rows.Count == list.Count);
+        }
+        [TestMethod()]
+        public void AppendTest()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod()]
+        public void SwapTest()
+        {
+            throw new NotImplementedException();
+
+        }
+
+        [TestMethod()]
+        public void ToDatatableTest()
+        {
+            throw new NotImplementedException();
+
         }
     }
 }

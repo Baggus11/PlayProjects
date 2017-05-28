@@ -5,9 +5,8 @@ namespace CardGamesAPI.Yugioh
 {
     public class MonsterCard : MonsterCardBase
     {
-        public MonsterCard(string monsterName) : base(monsterName)
+        public MonsterCard(string monsterName, YugiohMonsterAttribute monsterAttribute, YugiohMonsterType monsterBaseType = YugiohMonsterType.Normal) : base(monsterName, monsterAttribute, monsterBaseType)
         {
-            MonsterBaseType = "Effect/Dragon".ToEnum<YugiohMonsterType>();
         }
         public override void Dispose()
         {

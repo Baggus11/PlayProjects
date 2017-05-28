@@ -1,5 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+﻿using CardGamesAPI.Constants;
+using Common.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CardGamesAPI.Yugioh.Tests
 {
     [TestClass()]
@@ -8,8 +9,8 @@ namespace CardGamesAPI.Yugioh.Tests
         [TestMethod()]
         public void MonsterCardTest()
         {
-
-            Assert.Fail();
+            IMonsterCard card = new MonsterCard("BEWD", YugiohMonsterAttribute.Light);
+            card.Dump();
         }
     }
 }
