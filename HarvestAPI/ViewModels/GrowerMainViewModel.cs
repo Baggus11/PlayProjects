@@ -1,4 +1,4 @@
-﻿using Common.Classes;
+﻿using HarvestAPI;
 using System.Collections.ObjectModel;
 using System.Text;
 namespace Common.ViewModels

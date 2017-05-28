@@ -100,6 +100,10 @@
       <Project>{5E4D9F12-A069-4979-9EE1-944FF27C1BF0}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HarvestAPI\HarvestAPI.csproj">
+      <Project>{704f6f66-971d-41fb-ac5e-508bdd16bbc1}</Project>
+      <Name>HarvestAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

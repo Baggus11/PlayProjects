@@ -1,8 +1,8 @@
 ﻿using Common.ViewModels;
 using System.ComponentModel;
-namespace Common.Classes
+namespace HarvestAPI
 {
-    public class Pod : BindableBase   //silly name, may change later
+    public class Pod : BindableBase
     {
         [Description("Name")]
         public string Name { get; private set; }
