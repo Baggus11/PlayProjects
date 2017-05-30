@@ -1,5 +1,14 @@
 ﻿namespace CardGamesAPI.Constants
 {
+    public static class YugiohConstants
+    {
+        public const int YugiohMinDeckSize = 40;
+        public const int YugiohMaxDeckSize = 60;
+    }
+    public static class StandardConstants
+    {
+        const int StandardDeckSize = 52;
+    }
     public enum CardSuit
     {
         Spades,

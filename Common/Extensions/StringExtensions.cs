@@ -146,5 +146,16 @@ namespace Common.Extensions
             //return (T)Convert.ChangeType(value, typeof(T));
         }
         public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
+        /// <summary>
+        /// Extract Nested Functions and Params
+        /// </summary>
+        public static MatchCollection ExtractNestedFunctionsAndParams(this string txt)
+        {
+            string rgx = @"(?:[^,()]+((?:\((?>[^()]+|\((?<open>)|\)(?<-open>))*\)))*)+";
+            var match = Regex.Match(txt, rgx);
+            string innerArgs = match.Groups[1].Value;
+            MatchCollection matches = Regex.Matches(innerArgs, rgx);
+            return matches;
+        }
     }
 }

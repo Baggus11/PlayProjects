@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace CardGamesAPI.Yugioh
 {
     public abstract class MonsterCardBase : YugiohCardBase, IMonsterCard
@@ -12,14 +11,15 @@ namespace CardGamesAPI.Yugioh
         public int Rank { get; set; }
         public int Level { get; set; }
         public MonsterCardBase(string monsterName, YugiohMonsterAttribute attribute, YugiohMonsterType type,
-            YugiohMonsterBaseType baseType)
+            YugiohMonsterBaseType baseType, int attack = 0, int defense = 0)
         {
-            //KonamiID = "";
             SysGuid = Guid.NewGuid();
             CardName = monsterName;
             MonsterAttribute = attribute;
             MonsterBaseType = baseType;
             MonsterType = type;
+            Attack = attack;
+            Defense = defense;
         }
         //public MonsterCardBase(string monsterName, string attribute, string type, string baseType = "Normal")
         //{

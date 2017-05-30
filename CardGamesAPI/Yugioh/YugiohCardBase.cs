@@ -4,28 +4,23 @@ namespace CardGamesAPI.Yugioh
     /// <summary>
     /// This class will be the base class for ALL Yugioh Cards.
     /// </summary>
-    public abstract class YugiohCardBase : IYugiohCard
+    public abstract class YugiohCardBase : CardEffectBase, IYugiohCard
     {
+        //Properties:
         public string CardName { get; set; }
         public string KonamiID { get; set; }
         public YugiohCardBaseType CardBaseType { get; set; }
+        public YugiohCardPosition Position { get; set; }
         public int SpellSpeed { get; set; }
-        public abstract Guid SysGuid { get; set; }
-
+        public Guid SysGuid { get; set; }
+        //Events:
         public event EventHandler<YugiohCardEventArgs> EffectTriggered;
-        public void Flip()
-        {
-            throw new NotImplementedException();
-        }
-        public void Set()
-        {
-            throw new NotImplementedException();
-        }
+        //Methods:        
         public abstract void Dispose();
         protected virtual void RaiseEffectTriggered(YugiohCardEventArgs e) => EffectTriggered?.Invoke(this, e);
-        public void ChangePosition(IYugiohCard card)
+        public void SetKonamiID(string konamiId)
         {
-            throw new NotImplementedException();
+            KonamiID = konamiId;
         }
     }
 }

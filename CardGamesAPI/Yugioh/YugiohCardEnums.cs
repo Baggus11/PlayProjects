@@ -3,8 +3,9 @@
     /*Yugioh Card enums */
     public enum YugiohCardPosition
     {
-        Set,
-        AttackMode,
+        SetFaceDown,
+        SetInAttackPosition,
+        AttackMode, //face up
         DefenseMode,
     }
     public enum YugiohCardBaseType
@@ -26,5 +27,10 @@
     public enum YugiohMonsterBaseType
     {
         Normal,
+        Effect,
     }
+    public enum YugiohTrapType
+    { }
+    public enum YugiohSpellType
+    { }
 }

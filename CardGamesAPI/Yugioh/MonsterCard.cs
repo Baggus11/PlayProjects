@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using CardGames;
 namespace CardGamesAPI.Yugioh
 {
     public class MonsterCard : MonsterCardBase
     {
-        public override Guid SysGuid { get; set; }
-        public MonsterCard(string monsterName, YugiohMonsterAttribute attribute, YugiohMonsterType type, YugiohMonsterBaseType baseType)
-            : base(monsterName, attribute, type, baseType)
+        public MonsterCard(string monsterName, YugiohMonsterAttribute attribute, YugiohMonsterType type, YugiohMonsterBaseType baseType, int attack = 0, int defense = 0) : base(monsterName, attribute, type, baseType, attack, defense)
         {
-            CardName = monsterName;
-            MonsterAttribute = attribute;
-            MonsterType = type;
-            MonsterBaseType = baseType;
         }
+
+        public override void Activate()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Dispose()
         {
+            throw new NotImplementedException();
         }
     }
 }

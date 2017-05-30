@@ -94,7 +94,7 @@ namespace Common.Extensions
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()} for property '{propertyName}'");
+                //Debug.WriteLine($"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()} for property '{propertyName}'");
                 return null;
             }
         }

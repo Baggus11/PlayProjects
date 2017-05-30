@@ -86,6 +86,23 @@ namespace Common.Extensions
             //sql_params_list.ForEach(x => { Debug.WriteLine($"{x.ParameterName}\t{x.SqlDbType.ToString()}\t{x.Size}"); });
             return sql_params_list;
         }
+        public static void AddCommandParams<T>(this SqlCommand command, IEnumerable<SqlParameter> sqlParams, T item)
+        {
+            try
+            {
+                foreach (var parameter in sqlParams)
+                {
+                    parameter.Value = item?.GetPropertyValue(parameter.ParameterName);
+                    if (parameter.Value != null)
+                        command.Parameters.Add(parameter);
+                }
+            }
+            catch (Exception ex)
+            {
+                string errMsg = $"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()}";
+                Debug.WriteLine(errMsg);
+            }
+        }
         public static string GetInsertQuery(this IEnumerable<SqlParameter> sqlparameters, string tableName)
         {
             if (tableName.IsNullOrWhiteSpace()) return null;
@@ -99,10 +116,92 @@ namespace Common.Extensions
                 query.Append($"@{parameter.ParameterName}, ");
             query.Length -= 2; //removes extra comma
             query.Append(")");
-
-            Debug.WriteLine($"Generated query: {query.ToString()}");
-
+            //Debug.WriteLine($"Generated query: {query.ToString()}");
             return query.ToString();
+        }
+        public static string GetDeleteQuery(this IEnumerable<SqlParameter> sqlparameters, string tableName)
+        {
+            if (tableName.IsNullOrWhiteSpace()) return null;
+            StringBuilder query = new StringBuilder($"DELETE FROM dbo.{tableName}\n");
+            query.Append("\nWHERE\n");
+            foreach (var parameter in sqlparameters)
+                GetEqualsCase(parameter, query, Operator.AND);
+            query.Length -= 4; //removes extra AND
+            //Debug.WriteLine($"Generated query: {query.ToString()}");
+            return query.ToString();
+        }
+        //Adds equals case by 
+        private static void GetEqualsCase(SqlParameter parameter, StringBuilder query, Operator op)
+        {
+            switch (parameter.SqlDbType)
+            {
+                case SqlDbType.BigInt:
+                    break;
+                case SqlDbType.Binary:
+                    break;
+                case SqlDbType.Bit:
+                    break;
+                case SqlDbType.Char:
+                    break;
+                case SqlDbType.DateTime:
+                    break;
+                case SqlDbType.Decimal:
+                    break;
+                case SqlDbType.Float:
+                    break;
+                case SqlDbType.Image:
+                    break;
+                case SqlDbType.Int:
+                    query.Append($"{parameter.ParameterName} = {(int)parameter.Value} {op.ToString()} ");
+                    break;
+                case SqlDbType.Money:
+                    break;
+                case SqlDbType.NChar:
+                    break;
+                case SqlDbType.NText:
+                    break;
+                case SqlDbType.NVarChar:
+                    break;
+                case SqlDbType.Real:
+                    break;
+                case SqlDbType.UniqueIdentifier:
+                    break;
+                case SqlDbType.SmallDateTime:
+                    break;
+                case SqlDbType.SmallInt:
+                    break;
+                case SqlDbType.SmallMoney:
+                    break;
+                case SqlDbType.Text:
+                    break;
+                case SqlDbType.Timestamp:
+                    break;
+                case SqlDbType.TinyInt:
+                    break;
+                case SqlDbType.VarBinary:
+                    break;
+                case SqlDbType.VarChar:
+                    query.Append($"{parameter.ParameterName} = '{parameter.Value.ToString()}' {op.ToString()} ");
+                    break;
+                case SqlDbType.Variant:
+                    break;
+                case SqlDbType.Xml:
+                    break;
+                case SqlDbType.Udt:
+                    break;
+                case SqlDbType.Structured:
+                    break;
+                case SqlDbType.Date:
+                    break;
+                case SqlDbType.Time:
+                    break;
+                case SqlDbType.DateTime2:
+                    break;
+                case SqlDbType.DateTimeOffset:
+                    break;
+                default:
+                    break;
+            }
         }
         /// <summary>
         /// Find Duplicate Rows from a given table
@@ -197,6 +296,11 @@ namespace Common.Extensions
                 }
             }
             return dt;
+        }
+        private enum Operator
+        {
+            AND,
+            OR,
         }
     }
 }

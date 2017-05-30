@@ -6,12 +6,13 @@ using System.Windows.Markup;
 namespace Common.Extensions
 {
     public static class EnumExtensions
-    {        /// <summary>
-             /// Returns the Description Custom Attribute of an Enum
-             /// </summary>
-             /// <param name="value"></param>
-             /// <returns>Description Attribute value as String</returns>
-             /// <remarks></remarks>
+    {
+        /// <summary>
+        /// Returns the Description Custom Attribute of an Enum
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>Description Attribute value as String</returns>
+        /// <remarks></remarks>
         public static string GetDescription(this Enum value)
         {
             try
