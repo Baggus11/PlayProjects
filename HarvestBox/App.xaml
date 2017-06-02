@@ -1,7 +1,7 @@
-﻿<Application x:Class="UIMockup.App"
+﻿<Application x:Class="HarvestBox.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:UIMockup"
+             xmlns:local="clr-namespace:HarvestBox"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

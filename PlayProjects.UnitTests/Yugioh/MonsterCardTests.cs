@@ -1,58 +1,71 @@
-﻿using CardGames;
-using CardGamesAPI.Yugioh;
+﻿using CardGamesAPI.Yugioh;
+using Common.Classes;
 using Common.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
-
 namespace Common.Yugioh.Tests
 {
     [TestClass()]
     public class MonsterCardTests
     {
-        public static List<IYugiohCard> Hand = new List<IYugiohCard>();
+        private List<IYugiohCard> Hand = new List<IYugiohCard>();
+        private string conditionStr;
+        Type objType;
+        ExpressionBuilder builder = new ExpressionBuilder();
         public MonsterCardTests()
         {
+            objType = typeof(MonsterCard);
+            conditionStr = $@"{objType.Name}.Attack > 2300 AND {objType.Name}.MonsterAttribute = {YugiohMonsterAttribute.Dark.ToExpressionCondition()}"
+               + $@" AND {objType.Name}.MonsterType = {YugiohMonsterType.Fairy.ToExpressionCondition()}";
+
+            Console.WriteLine(conditionStr);
+
             Hand = new List<IYugiohCard>
             {
                 new MonsterCard ( "Dark Magician", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Normal, 2500, 2100),
                 new MonsterCard("Blue-Eyes White Dragon", YugiohMonsterAttribute.Light, YugiohMonsterType.Dragon, YugiohMonsterBaseType.Normal, attack: 3000, defense: 2500),
                 new MonsterCard("Dark Magician Girl", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Effect, 2300, 2000),
-                //new SpellCard { CardName = "Dark Hole" },
-                //new TrapCard { CardName = "Celtic Guardian" },
             };
         }
         [TestMethod()]
-        public void MonsterCardTest()
+        public void MonsterCard_Test()
         {
             MonsterCard card = new MonsterCard("BEWD", YugiohMonsterAttribute.Light, YugiohMonsterType.Dragon, YugiohMonsterBaseType.Normal);
             card.Dump();
             Assert.IsNotNull(card);
         }
-
         [TestMethod()]
-        public void BuildAndRunExpressionTest()
+        public void Build_And_Run_Expression_Test()
         {
             try
             {
-                //NOTE: I had to use 1.4 instead of 1.6 for System.Linq.Dynamic because 2015 has weird bug...
-                Type type = typeof(MonsterCard);
-                string conditionStr = $@"{type.Name}.Attack > 2300";
-                //string conditionStr = $@"{type.Name}.Attack > 2300 AND {type.Name}.MonsterAttribute = YugiohMonsterAttribute.Dark"; //find way to check enums, or make this private string (setter uses enums)
-                var paramExpr = Expression.Parameter(type, type.Name);
+                var paramExpr = Expression.Parameter(objType, objType.Name);
                 LambdaExpression lambdaExpr = System.Linq.Dynamic.DynamicExpression.ParseLambda(new ParameterExpression[] { paramExpr }, null, conditionStr);
                 lambdaExpr.ToString().Dump("lambda");
-                Hand.GetElementsWhere(lambdaExpr).Dump("FOUND CARDS");
+                Hand.GetElementsWhere(lambdaExpr).Dump("Found cards");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                Assert.Fail(ex.Message);
             }
         }
-
-
+        [TestMethod]
+        public void Condition_Builder_Test()
+        {
+            var lambda = builder.BuildLambda<MonsterCard>(conditionStr);
+            Hand.GetElementsWhere(lambda).Dump("Found cards");
+        }
+        [TestMethod]
+        public void IEnumerable_Shuffle_Extension_Test()
+        {
+            Hand.Dump("non-shuffled");
+            Hand.Shuffle();
+            Hand.Dump("shuffled");
+        }
         //[TestMethod]
         //public void RunEffectFromConditionTest()
         //{
@@ -116,6 +129,5 @@ namespace Common.Yugioh.Tests
         //        return null;
         //    }
         //}
-
     }
 }

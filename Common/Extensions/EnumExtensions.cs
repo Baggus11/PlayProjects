@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 using System.Windows.Markup;
 namespace Common.Extensions
 {
@@ -53,6 +54,24 @@ namespace Common.Extensions
             int j = Array.IndexOf<T>(Arr, src) - 1;
             return (Arr.Length == j) ? Arr[0] : Arr[j];
         }
+
+        /// <summary>
+        /// Intended for enums to create conditions
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        /// <example>
+        /// var condition = "CurrentUser.CurrentTeamType == \"Admin\"";
+        /// </example>
+        public static string ToExpressionCondition<T>(this T enumType)
+        {
+            StringBuilder result = new StringBuilder();
+            result.Append("\"");
+            result.Append(enumType.ToString());
+            result.Append("\"");
+            return result.ToString();
+        }
     }
     /// <summary>
     /// Enum Binding Source
@@ -92,7 +111,7 @@ namespace Common.Extensions
         /// <param name="enumType"></param>
         public EnumBindingSourceExtension(Type enumType)
         {
-            this.EnumType = enumType;
+            EnumType = enumType;
         }
         /// <summary>
         /// Provide Value

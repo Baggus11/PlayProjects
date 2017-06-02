@@ -8,6 +8,51 @@ namespace Common.Extensions
 {
     public static class IEnumerableExtensions
     {
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection)
+        {
+            return collection.Shuffle(Guid.NewGuid());
+        }
+        private static IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection, Guid seed)
+        {
+            return collection.OrderBy(x => seed);
+        }
+        /// Shuffles an IList in place.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the list</typeparam>
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            list.Shuffle(new Random());
+        }
+        /// <summary>
+        /// Shuffles an IList in place.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the list</typeparam>
+        /// <param name="rand">An instance of a random number generator</param>
+        public static void Shuffle<T>(this IList<T> list, Random rand)
+        {
+            int count = list.Count;
+            while (count > 1)
+            {
+                int i = rand.Next(count--);
+                T temp = list[count];
+                list[count] = list[i];
+                list[i] = temp;
+            }
+        }
+        /// <summary>
+        /// iterates through an IEnumerable<T> 
+        /// and applies an Action
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <param name="action"></param>
+        public static void Each<T>(this IEnumerable<T> collection, Action<T> action)
+        {
+            if (collection == null) return;
+            var cached = collection;
+            foreach (var item in cached)
+                action(item);
+        }
         /// <summary>
         /// Take random elements from a IEnumerable collection
         /// </summary>
@@ -29,17 +74,6 @@ namespace Common.Extensions
         public static T TakeFirstRandom<T>(this IEnumerable<T> collection)
         {
             return collection.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
-        }
-        /// <summary>
-        /// Returns a randomized copy of a given IEnumerable
-        /// todo: Fix so that its changes are reflected in source
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
-        {
-            return source.OrderBy(s => Guid.NewGuid());
         }
         public static IEnumerable<T> MoveUp<T>(this IEnumerable<T> enumerable, int itemIndex)
         {

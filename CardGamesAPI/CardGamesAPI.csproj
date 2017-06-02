@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Constants\StandardCardEnums.cs" />
     <Compile Include="DeckBase.cs" />
+    <Compile Include="ICheatChecker.cs" />
     <Compile Include="IDeck.cs" />
     <Compile Include="ICardGameMove.cs" />
     <Compile Include="IGameState.cs" />

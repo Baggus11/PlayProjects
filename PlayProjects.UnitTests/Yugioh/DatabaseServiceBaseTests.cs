@@ -15,8 +15,8 @@ namespace Common.Yugioh.Tests
         public DatabaseServiceBaseTests()
         {
             cardService = new CardDatabaseService(connectionString);
-            monsterList.Add(new MonsterCard("Dark Magician", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Normal));
-            monsterList.Add(new MonsterCard("Silent Magician Lvl 4", YugiohMonsterAttribute.Light, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Effect));
+            monsterList.Add(new MonsterCard("Dark Magician", YugiohMonsterAttribute.Dark, YugiohMonsterType.Fairy, YugiohMonsterBaseType.Normal));
+            monsterList.Add(new MonsterCard("Silent Magician Lvl 4", YugiohMonsterAttribute.Light, YugiohMonsterType.Fairy, YugiohMonsterBaseType.Effect));
             monsterList.Dump();
         }
         [TestMethod()]

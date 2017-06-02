@@ -17,6 +17,7 @@
     public enum YugiohMonsterType
     {
         Dragon,
+        Fairy,
         Spellcaster,
     }
     public enum YugiohMonsterAttribute
