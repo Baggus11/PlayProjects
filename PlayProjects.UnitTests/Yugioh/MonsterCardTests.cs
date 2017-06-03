@@ -18,8 +18,8 @@ namespace Common.Yugioh.Tests
         public MonsterCardTests()
         {
             objType = typeof(MonsterCard);
-            conditionStr = $@"{objType.Name}.Attack > 2300 AND {objType.Name}.MonsterAttribute = {YugiohMonsterAttribute.Dark.ToExpressionCondition()}"
-               + $@" AND {objType.Name}.MonsterType = {YugiohMonsterType.Fairy.ToExpressionCondition()}";
+            conditionStr = $@"{objType.Name}.Attack > 2300 AND {objType.Name}.MonsterAttribute = {YugiohMonsterAttribute.Dark.ToExpressionEnumCondition()}"
+               + $@" AND {objType.Name}.MonsterType = {YugiohMonsterType.Fairy.ToExpressionEnumCondition()}";
 
             Console.WriteLine(conditionStr);
 

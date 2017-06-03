@@ -56,7 +56,7 @@ namespace Common.Extensions
         }
 
         /// <summary>
-        /// Intended for enums to create conditions
+        /// Intended for enums to create conditions that are comparable to instances with given enum as a property
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="enumType"></param>
@@ -64,8 +64,10 @@ namespace Common.Extensions
         /// <example>
         /// var condition = "CurrentUser.CurrentTeamType == \"Admin\"";
         /// </example>
-        public static string ToExpressionCondition<T>(this T enumType)
+        public static string ToExpressionEnumCondition<T>(this T enumType)
         {
+            if (!typeof(T).IsEnum)
+                throw new NotSupportedException($"Type {typeof(T).Name} is not a valid Enum.");
             StringBuilder result = new StringBuilder();
             result.Append("\"");
             result.Append(enumType.ToString());
