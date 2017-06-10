@@ -4,10 +4,37 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+
 namespace Common.Extensions
 {
     public static class ListExtensions
     {
+        /// Shuffles an IList in place.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the list</typeparam>
+        public static IList<T> Shuffle<T>(this IList<T> list)
+        {
+            return list.Shuffle(new Random(Guid.NewGuid().GetHashCode()));
+        }
+
+        /// <summary>
+        /// Shuffles an IList in place.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the list</typeparam>
+        /// <param name="rng">An instance of a random number generator</param>
+        public static IList<T> Shuffle<T>(this IList<T> list, Random rng)
+        {
+            int count = list.Count;
+            while (count > 1)
+            {
+                int i = rng.Next(count--);
+                T temp = list[count];
+                list[count] = list[i];
+                list[i] = temp;
+            }
+            return list;
+        }
+
         /// <summary>
         /// Append a single item of type T to a given list
         /// </summary>
@@ -20,6 +47,7 @@ namespace Common.Extensions
             list.Add(item);
             return list;
         }
+
         /// <summary>
         /// Swap
         /// By index
@@ -37,6 +65,7 @@ namespace Common.Extensions
             list[indexB] = tmp;
             return list;
         }
+
         /// <summary>
         /// Convert a List of a class type to Datatable of same type-schema
         /// </summary>

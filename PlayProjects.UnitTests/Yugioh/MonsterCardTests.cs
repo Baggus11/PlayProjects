@@ -5,7 +5,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
+
 namespace Common.Yugioh.Tests
 {
     [TestClass()]
@@ -14,6 +16,7 @@ namespace Common.Yugioh.Tests
         private List<IYugiohCard> Hand = new List<IYugiohCard>();
         private string conditionStr;
         Type objType;
+
         ExpressionBuilder builder = new ExpressionBuilder();
         public MonsterCardTests()
         {
@@ -30,6 +33,7 @@ namespace Common.Yugioh.Tests
                 new MonsterCard("Dark Magician Girl", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Effect, 2300, 2000),
             };
         }
+
         [TestMethod()]
         public void MonsterCard_Test()
         {
@@ -37,6 +41,7 @@ namespace Common.Yugioh.Tests
             card.Dump();
             Assert.IsNotNull(card);
         }
+
         [TestMethod()]
         public void Build_And_Run_Expression_Test()
         {
@@ -53,19 +58,21 @@ namespace Common.Yugioh.Tests
                 Assert.Fail(ex.Message);
             }
         }
+
         [TestMethod]
         public void Condition_Builder_Test()
         {
-            var lambda = builder.BuildLambda<MonsterCard>(conditionStr);
+            var lambda = builder.BuildLambdaExpression<MonsterCard>(conditionStr);
             Hand.GetElementsWhere(lambda).Dump("Found cards");
         }
+
         [TestMethod]
         public void IEnumerable_Shuffle_Extension_Test()
         {
-            Hand.Dump("non-shuffled");
-            Hand.Shuffle();
-            Hand.Dump("shuffled");
+            var list = Enumerable.Range(1, 40).ToList();
+            list.Shuffle().Dump("shuffled");
         }
+
         //[TestMethod]
         //public void RunEffectFromConditionTest()
         //{

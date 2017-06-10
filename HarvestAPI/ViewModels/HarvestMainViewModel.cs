@@ -1,4 +1,4 @@
-﻿using Common.ViewModels;
+﻿using Common;
 using HarvestAPI.ViewModels;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -16,21 +16,12 @@ namespace HarvestAPI
                 RaisePropertyChanged(nameof(Status));
             }
         }
-        /// <summary>
-        /// INotifyable Property _Pods
-        /// </summary>
+
         private ObservableCollection<Pod> _Pods = new ObservableCollection<Pod>();
         public ObservableCollection<Pod> Pods
         {
             get { return _Pods; }
-            set
-            {
-                if (Pods != value)
-                {
-                    _Pods = value;
-                    RaisePropertyChanged(nameof(Pods));
-                }
-            }
+            set { SetPropertyValue(ref _Pods, value); }
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="condition"></param>
         /// <returns></returns>
-        LambdaExpression BuildLambda<T>(string condition);
+        LambdaExpression BuildLambdaExpression<T>(string condition);
     }
 }

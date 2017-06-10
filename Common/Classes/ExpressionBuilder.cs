@@ -7,7 +7,7 @@ namespace Common.Classes
 {
     public class ExpressionBuilder : IExpressionBuilder
     {
-        public LambdaExpression BuildLambda<T>(string conditions)
+        public LambdaExpression BuildLambdaExpression<T>(string conditions)
         {
             try
             {

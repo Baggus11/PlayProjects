@@ -1,4 +1,5 @@
 ﻿using HarvestAPI;
+using HarvestAPI.ViewModels;
 using System.Diagnostics;
 using System.Windows;
 /// <summary>
@@ -12,17 +13,20 @@ namespace HarvestBox
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static HarvestMainViewModel Data = new HarvestMainViewModel();
+        private static HarvestMainViewModel ViewModel = new HarvestMainViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = Data;
+            DataContext = ViewModel;
+            ViewModel.Pods.Add(new Pod("Box 1", 12)); //todo - fix binding
         }
-        public static void UpdateStatusBox(string statusMsg = "")
+
+        private void UpdateStatusBox(string statusMsg = "")
         {
-            Data.Status = statusMsg;
-            Debug.WriteLine(statusMsg);
+            ViewModel.Status = statusMsg;
         }
+
         private void OnMainLoaded(object sender, RoutedEventArgs e)
         {
             UpdateStatusBox("Ready.");

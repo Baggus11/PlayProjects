@@ -29,7 +29,7 @@
             </TabItem>
             <!--  Tab that should show all occuring processes and history  -->
             <TabItem Header="Status">
-                <DataGrid>
+                <DataGrid DataContext="{Binding Pods, UpdateSourceTrigger=PropertyChanged}">
                     <!--  Process details go here  -->
                 </DataGrid>
             </TabItem>

@@ -4,41 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+
 namespace Common.Extensions
 {
     public static class IEnumerableExtensions
     {
-        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection)
-        {
-            return collection.Shuffle(Guid.NewGuid());
-        }
-        private static IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection, Guid seed)
-        {
-            return collection.OrderBy(x => seed);
-        }
-        /// Shuffles an IList in place.
-        /// </summary>
-        /// <typeparam name="T">The type of elements in the list</typeparam>
-        public static void Shuffle<T>(this IList<T> list)
-        {
-            list.Shuffle(new Random());
-        }
-        /// <summary>
-        /// Shuffles an IList in place.
-        /// </summary>
-        /// <typeparam name="T">The type of elements in the list</typeparam>
-        /// <param name="rand">An instance of a random number generator</param>
-        public static void Shuffle<T>(this IList<T> list, Random rand)
-        {
-            int count = list.Count;
-            while (count > 1)
-            {
-                int i = rand.Next(count--);
-                T temp = list[count];
-                list[count] = list[i];
-                list[i] = temp;
-            }
-        }
+
         /// <summary>
         /// iterates through an IEnumerable<T> 
         /// and applies an Action
@@ -53,6 +24,7 @@ namespace Common.Extensions
             foreach (var item in cached)
                 action(item);
         }
+
         /// <summary>
         /// Take random elements from a IEnumerable collection
         /// </summary>
@@ -64,6 +36,7 @@ namespace Common.Extensions
         {
             return collection.OrderBy(c => Guid.NewGuid()).Take(count);
         }
+
         /// <summary>
         /// Take random elements from a IEnumerable collection
         /// </summary>
@@ -75,6 +48,14 @@ namespace Common.Extensions
         {
             return collection.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
         }
+
+        /// <summary>
+        /// Move Up
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <param name="itemIndex"></param>
+        /// <returns></returns>
         public static IEnumerable<T> MoveUp<T>(this IEnumerable<T> enumerable, int itemIndex)
         {
             int i = 0;
@@ -99,6 +80,7 @@ namespace Common.Extensions
                 yield return enumerator.Current;
             }
         }
+
         /// <summary>
         /// Get Elements Where
         /// - Gets elements from an IEnumerable those that match the (compiled) lambda expression
@@ -121,6 +103,7 @@ namespace Common.Extensions
                 return collection;
             }
         }
+
         /// <summary>
         /// Get Where
         /// Gets N elements from an IEnumerable those that match the 'where' expression
@@ -134,6 +117,7 @@ namespace Common.Extensions
             Func<T, bool> funcWhere = where.Compile();
             return collection.Where(funcWhere).Take(numDesired);
         }
+
         /// <summary>
         /// Get Where
         /// Gets elements from an IEnumerable those that match the 'where' expression
@@ -147,6 +131,7 @@ namespace Common.Extensions
             Func<T, bool> funcWhere = where.Compile();
             return collection.Where(funcWhere);
         }
+
         /// <summary>
         /// Take random elements from a IEnumerable collection
         /// </summary>
@@ -159,6 +144,7 @@ namespace Common.Extensions
             Func<T, bool> funcWhere = whereclause.Compile();
             return collection.Where(funcWhere).OrderBy(c => Guid.NewGuid()).Take(count);
         }
+
         /// <summary>
         /// Take random elements from a IEnumerable collection
         /// </summary>
@@ -170,6 +156,7 @@ namespace Common.Extensions
         {
             return collection.OrderBy(c => Guid.NewGuid()).Take(count);
         }
+
         //
         /// The following are Linq Join Extensions
         /// Source: https://www.codeproject.com/articles/488643/linq-extended-joins
