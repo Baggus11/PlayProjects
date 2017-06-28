@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Common.Extensions
 {
-    public static class ListExtensions
+    public static class IListExtensions
     {
         /// Shuffles an IList in place.
         /// </summary>
@@ -105,6 +105,11 @@ namespace Common.Extensions
                 Debug.WriteLine(errMsg);
             }
             return dt;
+        }
+
+        public static IList<T> RemoveDuplicates<T>(this IList<T> items)
+        {
+            return items.Distinct().ToList();
         }
     }
 }

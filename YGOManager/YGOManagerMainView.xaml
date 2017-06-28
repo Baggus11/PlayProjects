@@ -1,0 +1,70 @@
+﻿<Window x:Class="YGOManager.YGOManagerMainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:brushes="clr-namespace:Common.Classes;assembly=Common"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:YGOManager"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Card Web Searcher"
+        Width="525"
+        Height="350"
+        mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <!--  CsgoFadeBrush  -->
+            <Label Foreground="#720072">Search</Label>
+            <TextBox Name="tbCardNames"
+                     MinWidth="250"
+                     Margin="5"
+                     AcceptsReturn="False"
+                     AcceptsTab="False"
+                     Background="LightBlue"
+                     FontSize="22"
+                     Foreground="MidnightBlue"
+                     KeyUp="tbCardNames_KeyUp"
+                     TabIndex="1"
+                     Text="{Binding Text,
+                                    UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+        <GroupBox Grid.Row="1" Header="On Disk:">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="1"
+                       Width="187"
+                       DataContext="{Binding ElementName=lvCardInfo,
+                                             Path=SelectedItem}"
+                       Source="{Binding Path=LocalPath,
+                                        Mode=OneWay}" />
+                <ListView Name="lvCardInfo"
+                          Grid.Row="0"
+                          Grid.Column="0"
+                          Height="auto"
+                          Margin="5"
+                          Background="cyan"
+                          FontSize="22"
+                          Foreground="DarkViolet"
+                          ItemsSource="{Binding CardList,
+                                                UpdateSourceTrigger=PropertyChanged}"
+                          TabIndex="2">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>
+                                    <Run Text="{Binding Path=CardName}" />
+                                    <!--<Run Text="{Binding Path=LocalPath}" />-->
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListView>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

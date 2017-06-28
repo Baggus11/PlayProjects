@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Yugioh" Class="LinqToSQLDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=NICK-PC;Initial Catalog=Yugioh;Integrated Security=True" SettingsObjectName="PlayProjects.UnitTests.Properties.Settings" SettingsPropertyName="YugiohConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Cards" Member="Cards">
+    <Type Name="Card">
+      <Column Name="SysGuid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="KonamiID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CardName" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CardBaseType" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MonsterBaseType" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MonsterType" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MonsterAttribute" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SpellSpeed" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Attack" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Defense" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="[Level]" Member="Level" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Rank" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

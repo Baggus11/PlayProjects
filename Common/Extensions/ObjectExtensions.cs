@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+
 namespace Common.Extensions
 {
     public static class ObjectExtensions
@@ -17,7 +19,7 @@ namespace Common.Extensions
         /// <param name="obj">Instance of any passed object</param>
         /// <param name="displayName">Custom Name of passed object</param>        
         /// <returns></returns>
-        public static T Dump<T>(this T obj, string displayName = "", bool ignoreNulls = false)
+        public static T Dump<T>(this T obj, string displayName = null, bool ignoreNulls = false)
         {
             if (obj != null)
             {

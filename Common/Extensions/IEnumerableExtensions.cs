@@ -4,20 +4,43 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 
 namespace Common.Extensions
 {
     public static class IEnumerableExtensions
     {
 
-        /// <summary>
-        /// iterates through an IEnumerable<T> 
-        /// and applies an Action
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="action"></param>
-        public static void Each<T>(this IEnumerable<T> collection, Action<T> action)
+        public static string ToCsv<T>(this IEnumerable<T> items)
+           where T : class
+        {
+            var csvBuilder = new StringBuilder();
+            var properties = typeof(T).GetProperties();
+            foreach (T item in items)
+            {
+                string line = string.Join(",", properties.Select(p => p.GetValue(item, null).ToCsvValue()).ToArray());
+                csvBuilder.AppendLine(line);
+            }
+            return csvBuilder.ToString();
+        }
+
+        private static string ToCsvValue<T>(this T item)
+        {
+            if (item == null) return "\"\"";
+
+            if (item is string)
+            {
+                return string.Format("\"{0}\"", item.ToString().Replace("\"", "\\\""));
+            }
+            double dummy;
+            if (double.TryParse(item.ToString(), out dummy))
+            {
+                return string.Format("{0}", item);
+            }
+            return string.Format("\"{0}\"", item);
+        }
+
+        public static void RunActionOn<T>(this IEnumerable<T> collection, Action<T> action)
         {
             if (collection == null) return;
             var cached = collection;
@@ -25,26 +48,12 @@ namespace Common.Extensions
                 action(item);
         }
 
-        /// <summary>
-        /// Take random elements from a IEnumerable collection
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> TakeRandom<T>(this IEnumerable<T> collection, int count)
+        public static IEnumerable<T> TakeRandomElements<T>(this IEnumerable<T> collection, int count)
         {
             return collection.OrderBy(c => Guid.NewGuid()).Take(count);
         }
 
-        /// <summary>
-        /// Take random elements from a IEnumerable collection
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public static T TakeFirstRandom<T>(this IEnumerable<T> collection)
+        public static T TakeFirstRandomElement<T>(this IEnumerable<T> collection)
         {
             return collection.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
         }

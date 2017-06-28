@@ -15,6 +15,7 @@ namespace Common
     {
         protected string TableName { get; set; }
         protected string ConnectionString { get; set; }
+
         public DatabaseServiceBase(string connectionString, string tableName)
         {
             TableName = tableName;
@@ -23,6 +24,7 @@ namespace Common
             else
                 Debug.WriteLine($"Could not connect with (initial) connection string: {connectionString}");
         }
+
         public virtual bool Insert<T>(T item)
         {
             bool result = false;
@@ -30,6 +32,7 @@ namespace Common
             ConnectionString.CanOpen();
             List<SqlParameter> sqlParams = ConnectionString.GetSqlParams(TableName);
             int rowsChanged = 0;
+
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 try
@@ -75,6 +78,7 @@ namespace Common
             }
             return result;
         }
+
         public bool InsertCollection<T>(IEnumerable<T> items)
         {
             bool result = false;
@@ -82,6 +86,7 @@ namespace Common
             ConnectionString.CanOpen();
             List<SqlParameter> sqlParams = ConnectionString.GetSqlParams(TableName);
             int rowsChanged = 0;
+
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 try
@@ -126,6 +131,7 @@ namespace Common
             }
             return result;
         }
+
         public bool Delete<T>(T item)
         {
             bool result = false;
@@ -133,6 +139,7 @@ namespace Common
             ConnectionString.CanOpen();
             List<SqlParameter> sqlParams = ConnectionString.GetSqlParams(TableName);
             int rowsChanged = 0;
+
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 try
@@ -178,6 +185,7 @@ namespace Common
             }
             return result;
         }
+
         public bool DeleteCollection<T>(IEnumerable<T> items)
         {
             bool result = false;
@@ -185,6 +193,7 @@ namespace Common
             ConnectionString.CanOpen();
             List<SqlParameter> sqlParams = ConnectionString.GetSqlParams(TableName);
             int rowsChanged = 0;
+
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 try
@@ -233,22 +242,27 @@ namespace Common
             }
             return result;
         }
+
         public bool Update<T>(T item)
         {
             throw new NotImplementedException();
         }
+
         public bool UpdateCollection<T>(IEnumerable<T> items)
         {
             throw new NotImplementedException();
         }
+
         public bool Exists<T>(T item)
         {
             throw new NotImplementedException();
         }
+
         //public Guid GetUniqueId<T>(T item, string name = "")
         //{
         //    //Get first Guid from db.table that matches the given name, or Single, else if more than one get first
         //    throw new NotImplementedException();
         //}
+
     }
 }

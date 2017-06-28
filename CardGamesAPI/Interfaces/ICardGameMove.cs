@@ -8,7 +8,9 @@
     public interface ICardGameMove
     {
         IGameState MoveState { get; set; } //Same as a Gamestate, just named differently.  
+
         IEffectService EffectService { get; }//this service will run the proper effects for a given game.
+
         //Other move properties...
     }
 }

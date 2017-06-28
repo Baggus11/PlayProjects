@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace CardGames
 {
     /// <summary>
@@ -8,7 +9,10 @@ namespace CardGames
     {
         //double Height { get; set; }
         //double Width { get; set; }
+
         void Set();
+
         void Flip();
+
     }
 }
