@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using CardGames;
+
 namespace CardGamesAPI.Yugioh
 {
     public class MonsterCard : MonsterCardBase

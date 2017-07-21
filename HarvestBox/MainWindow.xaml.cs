@@ -6,7 +6,7 @@ using System.Windows;
 /// todo: Write a UI for setting up and monitoring gardening units, implements and accessories.
 /// This program will be written to support 10x10 ft gardens.
 /// </sumary>
-namespace HarvestBox
+namespace HomeHarvest
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -10,15 +10,16 @@
     }
     public enum YugiohCardBaseType
     {
-        Monster,
-        Spell,
-        Trap
+        MonsterCard,
+        SpellCard,
+        TrapCard
     }
     public enum YugiohMonsterType
     {
         Dragon,
         Fairy,
         Spellcaster,
+        Fiend,
     }
     public enum YugiohMonsterAttribute
     {

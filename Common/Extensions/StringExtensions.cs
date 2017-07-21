@@ -1,13 +1,80 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
+
 namespace Common.Extensions
 {
     public static class StringExtensions
     {
+
+        public static T DeserializeFromXml<T>(this string xmlString)
+            where T : class
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                using (var reader = new StringReader(xmlString))
+                    return serializer.Deserialize(reader) as T;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static string SerializeToXml<T>(this T @object)
+            where T : class
+        {
+            try
+            {
+                var serializer = new XmlSerializer(@object.GetType());
+                using (var writer = new StringWriter())
+                {
+                    serializer.Serialize(writer, @object);
+                    return writer.ToString();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+
+        private static Type[] GetAssignableTypes<T>()
+        {
+            try
+            {
+                Type[] assignableTypes = (from t in Assembly.Load(typeof(T).Namespace).GetExportedTypes()
+                                          where !t.IsInterface && !t.IsAbstract
+                                          where typeof(T).IsAssignableFrom(t)
+                                          select t).ToArray();
+                return assignableTypes;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static Stream ToStream(this string @this)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(@this);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
+
+
         /// <summary>
         /// Extract Object
         /// Gets all the properties of T and searches the given text for matches.
@@ -24,16 +91,20 @@ namespace Common.Extensions
         ///     if false, sets as many Group values to their respective properties (despite both Counts)</param>
         /// <param name="showWarnings">If set to true, warnings and debug trace lines will be printed for each object (advanced)</param>
         /// <returns></returns>		
-        public static T ExtractObject<T>(this string text, string regexPattern, bool matchExact = true, bool showWarnings = true)
+        public static T ExtractObject<T>(this string text, string regexPattern,
+            bool matchExact = true, bool showWarnings = true)
         {
-            var dfltObj = default(T); //default ("null") return value;
+            var dfltObj = default(T);
+
             try
             {
                 PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
                 if (string.IsNullOrWhiteSpace(text))
                     return dfltObj;
+
                 Regex regex = new Regex(regexPattern, RegexOptions.Singleline);
                 Match match = regex.Match(text);
+
                 if (!match.Success)
                 {
                     if (showWarnings)
@@ -46,8 +117,10 @@ namespace Common.Extensions
                                   .ToList().ForEach(l => Debug.Write(l + '\t'));
                         Debug.WriteLine("\n");
                     }
+
                     return dfltObj;
                 }
+
                 //
                 /// If the user cares to match ALL parsed groups
                 /// to their respective properties:
@@ -68,11 +141,15 @@ namespace Common.Extensions
                         return dfltObj;
                     }
                 }
+
                 //
                 /// If the user does not care for an exact match 
                 /// and will take whatever gets parsed (correctly):
                 ////
-                object instance = Activator.CreateInstance(typeof(T));
+
+                //object instance = Activator.CreateInstance(typeof(T));
+                object instance = Activator.CreateInstance(GetAssignableTypes<T>().FirstOrDefault());
+
                 foreach (PropertyInfo prop in properties) //Assign matching group values to new instance
                 {
                     string value = match?.Groups[prop.Name]?.Value?.Trim();
@@ -80,7 +157,8 @@ namespace Common.Extensions
                         prop.SetValue(instance, TypeDescriptor.GetConverter(prop.PropertyType).ConvertFrom(value), null);
                     else prop.SetValue(instance, null, null);
                 }
-                return (T)instance; //goal
+
+                return (T)instance;
             }
             catch (Exception ex)
             {
@@ -89,6 +167,7 @@ namespace Common.Extensions
                 return dfltObj;
             }
         }
+
         /// <summary>
         /// ExtractPrimitives
         ///
@@ -130,13 +209,7 @@ namespace Common.Extensions
                 return new T[0];
             }
         }
-        /// <summary>
-        /// Convert To Enum
-        /// Converts a given string to the matching enum type T!.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
+
         public static T ToEnum<T>(this string value)
         {
             if (!typeof(T).IsEnum)
@@ -145,18 +218,18 @@ namespace Common.Extensions
                 return (T)Enum.Parse(typeof(T), value);
             //return (T)Convert.ChangeType(value, typeof(T));
         }
+
         public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
-        /// <summary>
-        /// Extract Nested Functions and Params
-        /// </summary>
+
         public static MatchCollection ExtractNestedFunctionsAndParams(this string txt)
         {
-            string rgx = @"(?:[^,()]+((?:\((?>[^()]+|\((?<open>)|\)(?<-open>))*\)))*)+";
-            var match = Regex.Match(txt, rgx);
+            string nestedFunctionsPattern = @"(?:[^,()]+((?:\((?>[^()]+|\((?<open>)|\)(?<-open>))*\)))*)+";
+            var match = Regex.Match(txt, nestedFunctionsPattern);
             string innerArgs = match.Groups[1].Value;
-            MatchCollection matches = Regex.Matches(innerArgs, rgx);
+            MatchCollection matches = Regex.Matches(innerArgs, nestedFunctionsPattern);
             return matches;
         }
+
         /// <summary>
         /// Returns characters from right of specified length
         /// </summary>
@@ -167,6 +240,7 @@ namespace Common.Extensions
         {
             return value != null && value.Length > length ? value.Substring(value.Length - length) : value;
         }
+
         /// <summary>
         /// Returns characters from left of specified length
         /// </summary>
@@ -177,5 +251,14 @@ namespace Common.Extensions
         {
             return value != null && value.Length > length ? value.Substring(0, length) : value;
         }
+
+        //Alternate version of XML Deserialization:
+        //public static T DeserializeXML<T>(this string xml) where T : class
+        //{
+        //    using (TextReader reader = new StringReader(xml))
+        //        return new XmlSerializer(typeof(T)).Deserialize(reader) as T;
+        //}
+
+
     }
 }

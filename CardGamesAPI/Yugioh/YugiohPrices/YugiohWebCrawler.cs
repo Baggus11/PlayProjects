@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace CardGamesAPI.Yugioh
+namespace CardGamesAPI.Yugioh.YugiohPrices
 {
     /// <summary>
     /// todo: Get this - http://html-agility-pack.net/
@@ -38,7 +38,6 @@ namespace CardGamesAPI.Yugioh
             }
 
             Dictionary<string, string> cardsDictionary = GetYGOSearchURLs(cardNames, saveDirectory);
-            List<Task> tasks = new List<Task>();
 
             await Task.Run(() => Parallel.ForEach(cardsDictionary, ygo_paths =>
             {
@@ -74,7 +73,6 @@ namespace CardGamesAPI.Yugioh
             }));
 
 
-            await Task.WhenAll(tasks);
         }
 
         private void DownloadCardContentFromUri(string savePath, WebClient client, List<Uri> links)

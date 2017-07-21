@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+
 namespace Common.Extensions
 {
     public static class DataTableExtensions
@@ -55,6 +56,7 @@ namespace Common.Extensions
                 return null;
             }
         }
+
         /// <summary>
         /// Convert Table To List of line items
         /// </summary>
@@ -89,6 +91,7 @@ namespace Common.Extensions
             }
             return lines;
         }
+
         /// <summary>
         /// Get Column Header Names from a given datatable instance
         /// </summary>
@@ -107,6 +110,7 @@ namespace Common.Extensions
                 return null;
             }
         }
+
         /// <summary>
         /// Set the Order of datatable columns
         /// </summary>
@@ -135,6 +139,7 @@ namespace Common.Extensions
                 }
             }
         }
+
         /// <summary>
         /// Remove a DataTable's column by name IFF it exists!
         /// </summary>
@@ -152,6 +157,7 @@ namespace Common.Extensions
                 Debug.WriteLine(errMsg);
             }
         }
+
         /// <summary>
         /// Converts a DataTable to a list with generic objects
         /// </summary>
@@ -196,6 +202,7 @@ namespace Common.Extensions
                 return null;
             }
         }
+
         /// <summary>
         /// As Dynamic Enumerable
         /// Turns a datatable into a dynamic enumerable type
@@ -207,6 +214,7 @@ namespace Common.Extensions
             // Validate argument here..
             return table.AsEnumerable().Select(row => new DynamicRow(row));
         }
+
         private sealed class DynamicRow : DynamicObject
         {
             private readonly DataRow _row;

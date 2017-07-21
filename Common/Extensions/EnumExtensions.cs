@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Markup;
+
 namespace Common.Extensions
 {
     public static class EnumExtensions
@@ -28,6 +30,7 @@ namespace Common.Extensions
                 return "";
             }
         }
+
         /// <summary>
         /// Gets the next enum from the set defined
         /// </summary>
@@ -41,6 +44,7 @@ namespace Common.Extensions
             int j = Array.IndexOf<T>(Arr, src) + 1;
             return (Arr.Length == j) ? Arr[0] : Arr[j];
         }
+
         /// <summary>
         /// Gets the previous enum from the set defined
         /// </summary>
@@ -73,6 +77,20 @@ namespace Common.Extensions
             result.Append(enumType.ToString());
             result.Append("\"");
             return result.ToString();
+        }
+
+        public static T GetRandomEnumValue<T>()
+        {
+            var values = Enum.GetValues(typeof(T));
+            return (T)values.GetValue(new Random().Next(values.Length));
+        }
+
+        public static Enum GetRandomEnumValue(this Type t)
+        {
+            return Enum.GetValues(t)
+                .OfType<Enum>()
+                .OrderBy(e => Guid.NewGuid())
+                .FirstOrDefault();
         }
     }
     /// <summary>

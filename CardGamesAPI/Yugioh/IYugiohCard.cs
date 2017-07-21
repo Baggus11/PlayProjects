@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace CardGamesAPI.Yugioh
 {
     public interface IYugiohCard

@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Common.Extensions
 {
@@ -43,6 +41,7 @@ namespace Common.Extensions
             }
             return obj;
         }
+
         public static bool JsonCompare(this object obj, object another)
         {
             if (ReferenceEquals(obj, another)) return true;
@@ -52,6 +51,7 @@ namespace Common.Extensions
             var anotherJson = JsonConvert.SerializeObject(another);
             return objJson == anotherJson;
         }
+
         public static bool DeepCompare(this object obj, object another)
         {
             if (ReferenceEquals(obj, another)) return true;
@@ -69,6 +69,7 @@ namespace Common.Extensions
             }
             return result;
         }
+
         public static bool Compare(this object obj, object another)
         {
             if (ReferenceEquals(obj, another)) return true;
@@ -86,7 +87,8 @@ namespace Common.Extensions
             }
             return result;
         }
-        public static object GetPropertyValue(this object obj, string propertyName)
+
+        public static object GetPropertyValue<T>(this T obj, string propertyName)
         {
             try
             {
@@ -100,15 +102,13 @@ namespace Common.Extensions
                 return null;
             }
         }
-        /// <summary>
-        /// Check an object's properties against a given table's schema
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <param name="tableName"></param>
-        /// <param name="connectionString"></param>
-        /// <returns></returns>
-        public static bool MatchesTable<T>(this T obj, string tableName, string connectionString)
+
+
+
+
+        //FINISH
+        public static bool MatchesSqlTable<T>(this T obj, string tableName, string connectionString)
+            where T : class
         {
             throw new NotImplementedException();
             var properties = typeof(T).GetProperties();
@@ -124,5 +124,6 @@ namespace Common.Extensions
             }
             return result;
         }
+
     }
 }

@@ -3,22 +3,25 @@ using CardGames;
 using CardGamesAPI.Constants;
 namespace CardGamesAPI
 {
-    //poco class, may extend/modify
     public class PlayingCard : ICard
     {
         public CardSuit Suit { get; set; }
         public CardColor Color { get; set; }
         public CardFaceValue MyProperty { get; set; }
+
         public void Set()
         {
             throw new NotImplementedException();
         }
+
         public void Flip()
         {
             throw new NotImplementedException();
         }
+
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -32,6 +35,7 @@ namespace CardGamesAPI
                 disposedValue = true;
             }
         }
+
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
         // ~PlayingCard() {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
@@ -45,6 +49,7 @@ namespace CardGamesAPI
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

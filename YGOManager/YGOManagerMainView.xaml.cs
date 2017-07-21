@@ -20,14 +20,20 @@ namespace YGOManager
             DataContext = ygoManager;
             tbCardNames.Focus();
 
-            Process.Start(_defaultSaveDir, string.Format("/select, \"{0}\"", _defaultSaveDir));
         }
 
         private void tbCardNames_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter) return;
-            else ygoManager.UpdateQueue();
+            if (e.Key != Key.Enter)
+                return;
+            else
+                ygoManager.UpdateListAsync();
+
         }
+
+        private void btnSyncCards_Click(object sender, RoutedEventArgs e)
+           => ygoManager.SyncCards();
+
     }
 
 

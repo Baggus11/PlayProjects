@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+
 namespace Common.Extensions
 {
     public static class SQLExtensions
@@ -18,10 +19,12 @@ namespace Common.Extensions
                 throw new Exception($"Connection string: '{connectionString} invalid");
             return true;
         }
+
         public static bool CanOpen(this string connectionString)
         {
             return new SqlConnection(connectionString).CanOpen();
         }
+
         public static bool CanOpen(this SqlConnection connection)
         {
             try
@@ -37,6 +40,7 @@ namespace Common.Extensions
                 return false;
             }
         }
+
         public static List<SqlParameter> GetSqlParams(this string connectionString, string tableName)
         {
             if (tableName.IsNullOrWhiteSpace()) throw new Exception("No table name provided!");
@@ -86,6 +90,7 @@ namespace Common.Extensions
             //sql_params_list.ForEach(x => { Debug.WriteLine($"{x.ParameterName}\t{x.SqlDbType.ToString()}\t{x.Size}"); });
             return sql_params_list;
         }
+
         public static void AddCommandParams<T>(this SqlCommand command, IEnumerable<SqlParameter> sqlParams, T item)
         {
             try
@@ -103,6 +108,7 @@ namespace Common.Extensions
                 Debug.WriteLine(errMsg);
             }
         }
+
         public static string GetInsertQuery(this IEnumerable<SqlParameter> sqlparameters, string tableName)
         {
             if (tableName.IsNullOrWhiteSpace()) return null;
@@ -119,6 +125,7 @@ namespace Common.Extensions
             //Debug.WriteLine($"Generated query: {query.ToString()}");
             return query.ToString();
         }
+
         public static string GetDeleteQuery(this IEnumerable<SqlParameter> sqlparameters, string tableName)
         {
             if (tableName.IsNullOrWhiteSpace()) return null;
@@ -130,6 +137,7 @@ namespace Common.Extensions
             //Debug.WriteLine($"Generated query: {query.ToString()}");
             return query.ToString();
         }
+
         //Adds equals case by 
         private static void GetEqualsCase(SqlParameter parameter, StringBuilder query, Operator op)
         {
@@ -203,6 +211,7 @@ namespace Common.Extensions
                     break;
             }
         }
+
         /// <summary>
         /// Find Duplicate Rows from a given table
         /// Can Exclude columns by name
@@ -297,6 +306,7 @@ namespace Common.Extensions
             }
             return dt;
         }
+
         private enum Operator
         {
             AND,

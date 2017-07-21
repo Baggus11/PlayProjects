@@ -1,10 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
+
 namespace Common.Extensions
 {
     public static class TypeExtensions
     {
+        public static Dictionary<Type, UInterface> GetRepositories<TDerived, UInterface>()
+            where UInterface : class, TDerived
+        {
+            return Assembly.GetAssembly(typeof(TDerived))
+               .GetTypes()
+               .Where(x => x.BaseType != null &&
+                           x.BaseType.GetGenericArguments().FirstOrDefault() != null)
+               .ToDictionary(x => x.BaseType.GetGenericArguments().FirstOrDefault(),
+                            x => Activator.CreateInstance(x) as UInterface);
+
+        }
+
         /// <summary>
         /// Invoke Method from an Instance (non-null)
         /// </summary>
@@ -24,6 +39,7 @@ namespace Common.Extensions
                 Debug.WriteLine(ex.ToString());
             }
         }
+
         /// <summary>
         /// Invoke Static Method from a given Type
         /// </summary>
@@ -45,6 +61,7 @@ namespace Common.Extensions
                 Debug.WriteLine(ex.ToString());
             }
         }
+
         /// <summary>
         /// Invoke Generic Method from a given class Type on a new type 'genericMethodType'
         /// </summary>
@@ -65,5 +82,6 @@ namespace Common.Extensions
                 Debug.WriteLine(ex.ToString());
             }
         }
+
     }
 }

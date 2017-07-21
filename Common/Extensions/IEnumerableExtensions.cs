@@ -48,12 +48,12 @@ namespace Common.Extensions
                 action(item);
         }
 
-        public static IEnumerable<T> TakeRandomElements<T>(this IEnumerable<T> collection, int count)
+        public static IEnumerable<T> TakeRandom<T>(this IEnumerable<T> collection, int count)
         {
             return collection.OrderBy(c => Guid.NewGuid()).Take(count);
         }
 
-        public static T TakeFirstRandomElement<T>(this IEnumerable<T> collection)
+        public static T GetFirstRandom<T>(this IEnumerable<T> collection)
         {
             return collection.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
         }

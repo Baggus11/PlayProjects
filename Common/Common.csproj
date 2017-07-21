@@ -47,6 +47,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,13 +58,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ApiMethodController.cs" />
     <Compile Include="Classes\BaseObservableCollection.cs" />
     <Compile Include="Classes\BaseViewableCollection.cs" />
+    <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\ExpressionBuilder.cs" />
+    <Compile Include="Classes\Person.cs" />
     <Compile Include="Classes\PropertyObserver.cs" />
     <Compile Include="Classes\SmtpEmailService.cs" />
     <Compile Include="Classes\ViewModelBase.cs" />
     <Compile Include="Constants\RegexPatterns.cs" />
+    <Compile Include="Extensions\ActionExtensions.cs" />
     <Compile Include="Extensions\BoolExtensions.cs" />
     <Compile Include="Extensions\DatatableExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -74,6 +79,7 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="Extensions\IListExtensions.cs" />
+    <Compile Include="Extensions\LogExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Extensions\SQLExtensions.cs" />

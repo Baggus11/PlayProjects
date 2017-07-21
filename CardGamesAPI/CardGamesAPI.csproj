@@ -32,6 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,7 +53,11 @@
     <Compile Include="Yugioh\TrapCard.cs" />
     <Compile Include="Yugioh\TrapCardBase.cs" />
     <Compile Include="Yugioh\TrapMonsterCardBase.cs" />
-    <Compile Include="Yugioh\YugiohWebCrawler.cs" />
+    <Compile Include="Yugioh\YugiohCardFactory.cs" />
+    <Compile Include="Yugioh\YugiohPrices\YugiohPricesEnums.cs" />
+    <Compile Include="Yugioh\YugiohPrices\YugiohPricesService.cs" />
+    <Compile Include="Yugioh\YugiohPrices\YugiohPricesDetails.cs" />
+    <Compile Include="Yugioh\YugiohPrices\YugiohWebCrawler.cs" />
     <Compile Include="Yugioh\YugiohCard.cs" />
     <Compile Include="Yugioh\YugiohGameState.cs" />
     <Compile Include="Yugioh\YugiohEffectService.cs" />
