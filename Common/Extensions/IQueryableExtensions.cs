@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-namespace Common.Extensions
+namespace Common
 {
     public static class IQueryableExtensions
     {

@@ -1,4 +1,4 @@
-﻿using Common.Extensions;
+﻿using Common;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -113,7 +113,6 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
 
         }
 
-
         private static async Task<string> GetRequest(Uri requestUri)
         {
             Debug.WriteLine($"Request Uri: {requestUri.ToString()}");
@@ -152,7 +151,6 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
         {
             return string.Join("+", cardName.Split(' ', '\t', '\r'));
         }
-
 
     }
 

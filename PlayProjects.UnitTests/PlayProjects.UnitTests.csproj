@@ -66,6 +66,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Classes\SmtpEmailServiceTests.cs" />
+    <Compile Include="Extensions\IEnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\IListExtensionsTests.cs" />
     <Compile Include="Extensions\ListExtensionsTests.cs" />
     <Compile Include="Extensions\StringExtensionsTests.cs" />

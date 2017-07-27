@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Common.Extensions
+namespace Common
 {
     public static class FileExtensions
     {

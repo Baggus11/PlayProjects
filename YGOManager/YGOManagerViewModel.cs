@@ -1,7 +1,6 @@
 ﻿using CardGamesAPI.Yugioh.YugiohPrices;
 using Common;
 using Common.Classes;
-using Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,7 +28,6 @@ namespace YGOManager
             get { return GetValue(() => Text); }
             set { SetValue(() => Text, value); }
         }
-
 
         private List<string> _downloadList
         {

@@ -1,11 +1,11 @@
-﻿using Common.Extensions;
-using Common.Interfaces;
+﻿using Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+
 namespace Common
 {
     /// <summary>

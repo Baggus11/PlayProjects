@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace Common.Extensions
+namespace Common
 {
     public static class TypeExtensions
     {

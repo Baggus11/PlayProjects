@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Common.Extensions
+namespace Common
 {
     public static class LogExtensions
     {

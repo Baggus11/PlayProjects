@@ -1,10 +1,8 @@
 ﻿using CardGamesAPI.Yugioh;
-using Common.Extensions;
+using Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml.Serialization;
 
 namespace PlayProjects.UnitTests
 {
@@ -56,7 +54,7 @@ namespace PlayProjects.UnitTests
             Assert.IsTrue(person2.Name.Equals("Kuriboh"));
         }
 
-        
+
 
     }
 }

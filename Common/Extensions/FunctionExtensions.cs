@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-namespace Common.Extensions
+namespace Common
 {
     //
     /// The Following is a series of Funcs for the purpose of handling functional programming in C#

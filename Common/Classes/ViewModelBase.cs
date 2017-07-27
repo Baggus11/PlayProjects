@@ -11,23 +11,88 @@ namespace Common
 {
     public abstract class ViewModelBase : /*BindableBase,*/ INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         //public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged;
         private readonly Dictionary<string, List<string>> _dependencies = new Dictionary<string, List<string>>();
         private readonly Dictionary<string, object> _propertyValueStorage;
 
         public ViewModelBase()
         {
             DetectPropertiesDependencies();
-            this._propertyValueStorage = new Dictionary<string, object>();
-
+            _propertyValueStorage = new Dictionary<string, object>();
         }
 
-        protected virtual void RaisePropertyChanged([CallerMemberName]string propertyName = null)
+        public static string NameOf<T, TProp>(Expression<Func<T, TProp>> propertySelector)
         {
-            CheckPropertyName(propertyName);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            MemberExpression body = (MemberExpression)propertySelector.Body;
+            return body.Member.Name;
         }
+
+        protected virtual bool SetValue<T>(ref T storage, T value, [CallerMemberName] string propertyName = "")
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value))
+                return false;
+
+            storage = value;
+            RaisePropertyChanged(propertyName);
+
+            return true;
+        }
+
+        protected virtual bool SetValue<T>(ref T storage, T value, Expression<Func<T>> propertyExpression)
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+            storage = value;
+
+            RaisePropertyChanged(GetPropertyNameFrom(propertyExpression));
+
+            return true;
+        }
+
+        protected virtual void SetValue<T>(Expression<Func<T>> propertyExpression, T value)
+        {
+            var lambdaExpression = propertyExpression as LambdaExpression;
+
+            if (lambdaExpression == null)
+            {
+                throw new ArgumentException("Invalid lambda expression", "Lambda expression return value can't be null");
+            }
+
+            var propertyName = GetPropertyNameFrom(lambdaExpression);
+            var storedValue = GetValue<T>(propertyName);
+
+            if (Equals(storedValue, value)) return;
+
+            _propertyValueStorage[propertyName] = value;
+            RaisePropertyChanged(propertyName);
+        }
+
+        protected T GetValue<T>(Expression<Func<T>> propertyExpression)
+        {
+            var lambdaExpression = propertyExpression as LambdaExpression;
+
+            if (lambdaExpression == null)
+            {
+                throw new ArgumentException("Invalid lambda expression", "Lambda expression return value can't be null");
+            }
+
+            var propertyName = GetPropertyNameFrom(lambdaExpression);
+            return GetValue<T>(propertyName);
+        }
+
+        private T GetValue<T>([CallerMemberName] string propertyName = null)
+        {
+            object value;
+
+            if (_propertyValueStorage.TryGetValue(propertyName, out value))
+            {
+                return (T)value;
+            }
+
+            return default(T);
+
+        }
+
 
         [Conditional("DEBUG")]
         private void CheckPropertyName(string propertyName)
@@ -39,7 +104,31 @@ namespace Common
             }
         }
 
-        private string getPropertyName(LambdaExpression lambdaExpression)
+        protected string GetPropertyName<T>(Expression<Func<T>> propertyExpression)
+        {
+            if (propertyExpression == null)
+            {
+                throw new ArgumentNullException("propertyExpression");
+            }
+
+            var body = propertyExpression.Body as MemberExpression;
+
+            if (body == null)
+            {
+                throw new ArgumentException("Invalid argument", "propertyExpression");
+            }
+
+            var property = body.Member as PropertyInfo;
+
+            if (property == null)
+            {
+                throw new ArgumentException("Argument is not a property", "propertyExpression");
+            }
+
+            return property.Name;
+        }
+
+        private string GetPropertyNameFrom(LambdaExpression lambdaExpression)
         {
             MemberExpression memberExpression;
 
@@ -56,15 +145,16 @@ namespace Common
             return memberExpression.Member.Name;
         }
 
-        protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = "")
+        private string GetPropertyNameFrom<T>(Expression<Func<T>> propertyExpression)
         {
-            bool hasChanged = EqualityComparer<T>.Default.Equals(storage, value);
+            var memberExpression = propertyExpression.Body as MemberExpression;
 
-            storage = value;
-            RaisePropertyChanged(propertyName);
+            if (memberExpression == null)
+                throw new ArgumentException("Expression must be a MemberExpression.", propertyExpression.Name);
 
-            return hasChanged;
+            return memberExpression.Member.Name;
         }
+
 
         protected virtual void RaisePropertyChanged<T>(Expression<Func<T>> selectorExpression)
         {
@@ -79,9 +169,71 @@ namespace Common
             RaisePropertyChanged(body.Member.Name);
         }
 
+        protected virtual void RaisePropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            CheckPropertyName(propertyName);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void RaisePropertiesChangedBy<T>(params Expression<Func<T>>[] expressions)
+        {
+            expressions.Select(expr => GetPropertyName(expr)).ToList().ForEach(propertyName =>
+            {
+                RaisePropertyChanged(propertyName);
+                RaisePropertiesChangedBy(propertyName, new List<string>() { propertyName });
+            });
+
+        }
+
+        protected virtual void RaisePropertiesChangedBy(string propertyName, List<string> calledProperties = null)
+        {
+            if (!_dependencies.Any() || !_dependencies.ContainsKey(propertyName))
+                return;
+
+            if (calledProperties == null)
+                calledProperties = new List<string>();
+
+            List<string> dependentProperties = _dependencies[propertyName];
+
+            foreach (var dependentProperty in dependentProperties)
+            {
+                if (!calledProperties.Contains(dependentProperty))
+                {
+                    RaisePropertyChanged(dependentProperty);
+                    RaisePropertiesChangedBy(dependentProperty, calledProperties);
+                }
+            }
+        }
+
+        private void DetectPropertiesDependencies()
+        {
+            var propertyInfoWithDependencies = GetType().GetProperties()
+                .Where(prop => Attribute.IsDefined(prop, typeof(DependentPropertiesAttribute)))
+                .ToArray();
+
+            foreach (PropertyInfo propertyInfo in propertyInfoWithDependencies)
+            {
+                var currentAttributes = propertyInfo.GetCustomAttributes(false).OfType<DependentPropertiesAttribute>().Single();
+                if (currentAttributes.Properties != null)
+                {
+                    foreach (string prop in currentAttributes.Properties)
+                    {
+                        if (!_dependencies.ContainsKey(prop))
+                        {
+                            _dependencies.Add(prop, new List<string>());
+                        }
+
+                        _dependencies[prop].Add(propertyInfo.Name);
+                    }
+                }
+            }
+        }
+
         protected void RaisePropertiesDependentOn(params Expression<Func<object>>[] expressions)//rename as work name
         {
-            expressions.Select(expression => GetPropertyName(expression)).ToList().ForEach(propertyName =>
+            expressions.Select(expression => GetPropertyName(expression))
+                .ToList()
+                .ForEach(propertyName =>
             {
                 RaisePropertyChanged(propertyName);
                 RaiseDependentProperties(propertyName, new List<string>() { propertyName });
@@ -109,79 +261,6 @@ namespace Common
             }
         }
 
-        private string GetPropertyName(Expression<Func<object>> expression)
-        {
-            var expr = (MemberExpression)expression.Body;
-
-            return expr.Member.Name;
-
-        }
-
-        private void DetectPropertiesDependencies()
-        {
-            var propertyInfoWithDependencies = GetType().GetProperties().Where(
-            prop => Attribute.IsDefined(prop, typeof(DependentPropertiesAttribute))).ToArray();
-
-            foreach (PropertyInfo propertyInfo in propertyInfoWithDependencies)
-            {
-                var ca = propertyInfo.GetCustomAttributes(false).OfType<DependentPropertiesAttribute>().Single();
-                if (ca.Properties != null)
-                {
-                    foreach (string prop in ca.Properties)
-                    {
-                        if (!_dependencies.ContainsKey(prop))
-                        {
-                            _dependencies.Add(prop, new List<string>());
-                        }
-
-                        _dependencies[prop].Add(propertyInfo.Name);
-                    }
-                }
-            }
-        }
-
-        protected void SetValue<T>(Expression<Func<T>> property, T value)
-        {
-            var lambdaExpression = property as LambdaExpression;
-
-            if (lambdaExpression == null)
-            {
-                throw new ArgumentException("Invalid lambda expression", "Lambda expression return value can't be null");
-            }
-
-            var propertyName = getPropertyName(lambdaExpression);
-            var storedValue = getValue<T>(propertyName);
-
-            if (Equals(storedValue, value)) return;
-
-            _propertyValueStorage[propertyName] = value;
-            RaisePropertyChanged(propertyName);
-        }
-
-        protected T GetValue<T>(Expression<Func<T>> property)
-        {
-            var lambdaExpression = property as LambdaExpression;
-
-            if (lambdaExpression == null)
-            {
-                throw new ArgumentException("Invalid lambda expression", "Lambda expression return value can't be null");
-            }
-
-            var propertyName = this.getPropertyName(lambdaExpression);
-            return getValue<T>(propertyName);
-        }
-
-        private T getValue<T>(string propertyName)
-        {
-            object value;
-            if (_propertyValueStorage.TryGetValue(propertyName, out value))
-            {
-                return (T)value;
-            }
-            return default(T);
-
-        }
-
     }
     public class DependentPropertiesAttribute : Attribute
     {
@@ -200,9 +279,5 @@ namespace Common
             }
         }
     }
-
-
-
-
 
 }

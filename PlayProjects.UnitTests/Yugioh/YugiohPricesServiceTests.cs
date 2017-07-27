@@ -1,5 +1,5 @@
 ﻿using CardGamesAPI.Yugioh.YugiohPrices;
-using Common.Extensions;
+using Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System.Diagnostics;

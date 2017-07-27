@@ -21,7 +21,7 @@ namespace HarvestAPI
         public ObservableCollection<Pod> Pods
         {
             get { return _Pods; }
-            set { SetProperty(ref _Pods, value); }
+            set { SetValue(ref _Pods, value); }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CardGamesAPI.Yugioh;
 using Common;
+
 namespace YGOManager
 {
     //Wrapper & viewmodel
@@ -41,21 +42,21 @@ namespace YGOManager
         public int Level
         {
             get { return _Level; }
-            set { SetProperty(ref _Level, value); }
+            set { SetValue(ref _Level, value); }
         }
 
         private string _CardText;
         public string CardText
         {
             get { return _CardText; }
-            set { SetProperty(ref _CardText, value); }
+            set { SetValue(ref _CardText, value); }
         }
 
         private int _Rank;
         public int Rank
         {
             get { return _Rank; }
-            set { SetProperty(ref _Rank, value); }
+            set { SetValue(ref _Rank, value); }
         }
 
         public string Type { get; internal set; }
@@ -64,14 +65,14 @@ namespace YGOManager
         public string CardType
         {
             get { return _CardType; }
-            set { SetProperty(ref _CardType, value); }
+            set { SetValue(ref _CardType, value); }
         }
 
         private int _Attack;
         public int Attack
         {
             get { return _Attack; }
-            set { SetProperty(ref _Attack, value); }
+            set { SetValue(ref _Attack, value); }
         }
 
         public string Attribute
@@ -84,7 +85,7 @@ namespace YGOManager
         public int Defense
         {
             get { return _Defense; }
-            set { SetProperty(ref _Defense, value); }
+            set { SetValue(ref _Defense, value); }
         }
 
     }

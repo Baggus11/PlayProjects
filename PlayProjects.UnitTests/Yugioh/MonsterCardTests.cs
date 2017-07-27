@@ -50,7 +50,7 @@ namespace Common.Yugioh.Tests
                 var paramExpr = Expression.Parameter(objType, objType.Name);
                 LambdaExpression lambdaExpr = System.Linq.Dynamic.DynamicExpression.ParseLambda(new ParameterExpression[] { paramExpr }, null, conditionStr);
                 lambdaExpr.ToString().Dump("lambda");
-                Hand.GetElementsWhere(lambdaExpr).Dump("Found cards");
+                Hand.GetWhere(lambdaExpr).Dump("Found cards");
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace Common.Yugioh.Tests
         public void Condition_Builder_Test()
         {
             var lambda = builder.BuildLambdaExpression<MonsterCard>(conditionStr);
-            Hand.GetElementsWhere(lambda).Dump("Found cards");
+            Hand.GetWhere(lambda).Dump("Found cards");
         }
 
         [TestMethod]

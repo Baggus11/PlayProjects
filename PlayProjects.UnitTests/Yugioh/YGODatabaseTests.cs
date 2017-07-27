@@ -1,4 +1,4 @@
-﻿using Common.Extensions;
+﻿using Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
-namespace Common.Extensions
+namespace Common
 {
     public static class StringExtensions
     {

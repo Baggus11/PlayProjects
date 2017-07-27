@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Common.Extensions
+namespace Common
 {
     public static class SQLExtensions
     {

@@ -1,8 +1,7 @@
-﻿using Common.Extensions;
+﻿using Common;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using static Common.Extensions.EnumExtensions;
 
 namespace CardGamesAPI.Yugioh
 {
@@ -46,9 +45,9 @@ namespace CardGamesAPI.Yugioh
             int defense = Enumerable.Range(0, 25).Select(x => x * 100).GetFirstRandom();
 
             return new MonsterCard("Kuriboh",
-                GetRandomEnumValue<YugiohMonsterAttribute>(),
-                GetRandomEnumValue<YugiohMonsterType>(),
-                GetRandomEnumValue<YugiohMonsterBaseType>(),
+                EnumExtensions.GetRandomEnumValue<YugiohMonsterAttribute>(),
+                EnumExtensions.GetRandomEnumValue<YugiohMonsterType>(),
+                EnumExtensions.GetRandomEnumValue<YugiohMonsterBaseType>(),
                 attack, defense);
         }
 

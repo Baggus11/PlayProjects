@@ -1,26 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
 
-namespace Common.Extensions
+namespace Common
 {
     public static class IEnumerableExtensions
     {
+        public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> items, int maxBatchSize)
+        {
+            return items.Select((item, index) => new { item, index })
+                .GroupBy(pairs => pairs.index / maxBatchSize)
+                .Select(mapped => mapped.Select(pair => pair.item));
+        }
 
         public static string ToCsv<T>(this IEnumerable<T> items)
            where T : class
         {
             var csvBuilder = new StringBuilder();
             var properties = typeof(T).GetProperties();
+
             foreach (T item in items)
             {
-                string line = string.Join(",", properties.Select(p => p.GetValue(item, null).ToCsvValue()).ToArray());
+                string line = string.Join(",", properties
+                    .Select(property => property
+                        .GetValue(item, null)
+                        .ToCsvValue())
+                    .ToArray());
+
                 csvBuilder.AppendLine(line);
             }
+
             return csvBuilder.ToString();
         }
 
@@ -42,10 +53,15 @@ namespace Common.Extensions
 
         public static void RunActionOn<T>(this IEnumerable<T> collection, Action<T> action)
         {
-            if (collection == null) return;
+            if (collection == null)
+                return;
+
             var cached = collection;
+
             foreach (var item in cached)
+            {
                 action(item);
+            }
         }
 
         public static IEnumerable<T> TakeRandom<T>(this IEnumerable<T> collection, int count)
@@ -58,13 +74,6 @@ namespace Common.Extensions
             return collection.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
         }
 
-        /// <summary>
-        /// Move Up
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="enumerable"></param>
-        /// <param name="itemIndex"></param>
-        /// <returns></returns>
         public static IEnumerable<T> MoveUp<T>(this IEnumerable<T> enumerable, int itemIndex)
         {
             int i = 0;
@@ -90,113 +99,94 @@ namespace Common.Extensions
             }
         }
 
-        /// <summary>
-        /// Get Elements Where
-        /// - Gets elements from an IEnumerable those that match the (compiled) lambda expression
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="lambda"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> GetElementsWhere<T>(this IEnumerable<T> collection, LambdaExpression lambda)
+        public static IEnumerable<T> GetWhere<T>(this IEnumerable<T> collection, LambdaExpression lambda)
         {
             try
             {
                 var compiledLambda = lambda.Compile();
                 return collection.Where(x => (bool)compiledLambda.DynamicInvoke(x));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string errMsg = string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.ToString());
-                Debug.WriteLine(errMsg);
-                return collection;
+                throw;
             }
         }
 
-        /// <summary>
-        /// Get Where
-        /// Gets N elements from an IEnumerable those that match the 'where' expression
-        /// </summary>
-        /// <param name="collection"></param>
-        /// <param name="where"></param>
-        /// <param name="numDesired"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> GetElementsWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> where, int numDesired = 1)
+        public static IEnumerable<T> GetWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> expression, int numDesired = 1)
         {
-            Func<T, bool> funcWhere = where.Compile();
-            return collection.Where(funcWhere).Take(numDesired);
+            try
+            {
+                Func<T, bool> funcWhere = expression.Compile();
+                return collection.Where(funcWhere).Take(numDesired);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        /// <summary>
-        /// Get Where
-        /// Gets elements from an IEnumerable those that match the 'where' expression
-        /// </summary>
-        /// <param name="collection"></param>
-        /// <param name="where"></param>
-        /// <param name="numDesired"></param>
-        /// <returns></returns>
         public static IEnumerable<T> GetElementsWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> where)
         {
-            Func<T, bool> funcWhere = where.Compile();
-            return collection.Where(funcWhere);
+            try
+            {
+                Func<T, bool> funcWhere = where.Compile();
+                return collection.Where(funcWhere);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        /// <summary>
-        /// Take random elements from a IEnumerable collection
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
         public static IEnumerable<T> GetRandomElementsWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> whereclause, int count)
         {
-            Func<T, bool> funcWhere = whereclause.Compile();
-            return collection.Where(funcWhere).OrderBy(c => Guid.NewGuid()).Take(count);
+            try
+            {
+                Func<T, bool> funcWhere = whereclause.Compile();
+                return collection.Where(funcWhere).OrderBy(c => Guid.NewGuid()).Take(count);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        /// <summary>
-        /// Take random elements from a IEnumerable collection
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
         public static IEnumerable<T> GetRandomElements<T>(this IEnumerable<T> collection, int count)
         {
-            return collection.OrderBy(c => Guid.NewGuid()).Take(count);
+            try
+            {
+                return collection.OrderBy(c => Guid.NewGuid()).Take(count);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        //
-        /// The following are Linq Join Extensions
-        /// Source: https://www.codeproject.com/articles/488643/linq-extended-joins
-        ////
-        /// <summary>
-        /// Left Join:
-        /// </summary>
-        public static IEnumerable<TResult>
-        LeftJoin<TSource, TInner, TKey, TResult>(this IEnumerable<TSource> source,
-                                                    IEnumerable<TInner> inner,
-                                                    Func<TSource, TKey> pk,
-                                                    Func<TInner, TKey> fk,
-                                                    Func<TSource, TInner, TResult> result)
+        /*
+        * The following are Linq Join Extensions
+        * Source: https://www.codeproject.com/articles/488643/linq-extended-joins
+        */
+
+        public static IEnumerable<TResult> LeftJoin<TSource, TInner, TKey, TResult>
+            (this IEnumerable<TSource> sourceCollection, IEnumerable<TInner> innerCollection,
+                  Func<TSource, TKey> pk, Func<TInner, TKey> fk,
+                  Func<TSource, TInner, TResult> result)
         {
             IEnumerable<TResult> _result = Enumerable.Empty<TResult>();
-            _result = from s in source
-                      join i in inner
+            _result = from s in sourceCollection
+                      join i in innerCollection
                       on pk(s) equals fk(i) into joinData
                       from left in joinData.DefaultIfEmpty()
                       select result(s, left);
             return _result;
         }
-        /// <summary>
-        /// Right Join:
-        /// </summary>
+
         public static IEnumerable<TResult>
-        RightJoin<TSource, TInner, TKey, TResult>(this IEnumerable<TSource> source,
-                                                  IEnumerable<TInner> inner,
-                                                  Func<TSource, TKey> pk,
-                                                  Func<TInner, TKey> fk,
-                                                  Func<TSource, TInner, TResult> result)
+        RightJoin<TSource, TInner, TKey, TResult>
+            (this IEnumerable<TSource> source, IEnumerable<TInner> inner,
+                  Func<TSource, TKey> pk, Func<TInner, TKey> fk,
+                  Func<TSource, TInner, TResult> result)
         {
             IEnumerable<TResult> _result = Enumerable.Empty<TResult>();
             _result = from i in inner
@@ -206,29 +196,21 @@ namespace Common.Extensions
                       select result(right, i);
             return _result;
         }
-        /// <summary>
-        /// Full Outer Join:
-        /// </summary>
-        public static IEnumerable<TResult>
-        FullOuterJoin<TSource, TInner, TKey, TResult>(this IEnumerable<TSource> source,
-                                                          IEnumerable<TInner> inner,
-                                                          Func<TSource, TKey> pk,
-                                                          Func<TInner, TKey> fk,
-                                                          Func<TSource, TInner, TResult> result)
+
+        public static IEnumerable<TResult> FullOuterJoin<TSource, TInner, TKey, TResult>
+            (this IEnumerable<TSource> sourceCollection, IEnumerable<TInner> inner,
+                  Func<TSource, TKey> pk, Func<TInner, TKey> fk,
+                  Func<TSource, TInner, TResult> result)
         {
-            var left = source.LeftJoin(inner, pk, fk, result).ToList();
-            var right = source.RightJoin(inner, pk, fk, result).ToList();
+            var left = sourceCollection.LeftJoin(inner, pk, fk, result).ToList();
+            var right = sourceCollection.RightJoin(inner, pk, fk, result).ToList();
             return left.Union(right);
         }
-        /// <summary>
-        /// Left Excluding Join:
-        /// </summary>
-        public static IEnumerable<TResult>
-        LeftExcludingJoin<TSource, TInner, TKey, TResult>(this IEnumerable<TSource> source,
-                                                          IEnumerable<TInner> inner,
-                                                          Func<TSource, TKey> pk,
-                                                          Func<TInner, TKey> fk,
-                                                          Func<TSource, TInner, TResult> result)
+
+        public static IEnumerable<TResult> LeftExcludingJoin<TSource, TInner, TKey, TResult>
+            (this IEnumerable<TSource> source, IEnumerable<TInner> inner,
+                  Func<TSource, TKey> pk, Func<TInner, TKey> fk,
+                  Func<TSource, TInner, TResult> result)
         {
             IEnumerable<TResult> _result = Enumerable.Empty<TResult>();
             _result = from s in source
@@ -239,15 +221,11 @@ namespace Common.Extensions
                       select result(s, left);
             return _result;
         }
-        /// <summary>
-        /// Right Excluding Join:
-        /// </summary>
-        public static IEnumerable<TResult>
-        RightExcludingJoin<TSource, TInner, TKey, TResult>(this IEnumerable<TSource> source,
-                                                        IEnumerable<TInner> inner,
-                                                        Func<TSource, TKey> pk,
-                                                        Func<TInner, TKey> fk,
-                                                        Func<TSource, TInner, TResult> result)
+
+        public static IEnumerable<TResult> RightExcludingJoin<TSource, TInner, TKey, TResult>
+            (this IEnumerable<TSource> source, IEnumerable<TInner> inner,
+                  Func<TSource, TKey> pk, Func<TInner, TKey> fk,
+                  Func<TSource, TInner, TResult> result)
         {
             IEnumerable<TResult> _result = Enumerable.Empty<TResult>();
             _result = from i in inner
@@ -258,18 +236,14 @@ namespace Common.Extensions
                       select result(right, i);
             return _result;
         }
-        /// <summary>
-        /// Full Outer Excluding Join:
-        /// </summary>
-        public static IEnumerable<TResult>
-        FullOuterExcludingJoin<TSource, TInner, TKey, TResult>(this IEnumerable<TSource> source,
-                                                      IEnumerable<TInner> inner,
-                                                      Func<TSource, TKey> pk,
-                                                      Func<TInner, TKey> fk,
-                                                      Func<TSource, TInner, TResult> result)
+
+        public static IEnumerable<TResult> FullOuterExcludingJoin<TSource, TInner, TKey, TResult>
+            (this IEnumerable<TSource> sourceCollection, IEnumerable<TInner> innerCollection,
+                 Func<TSource, TKey> pk, Func<TInner, TKey> fk,
+                 Func<TSource, TInner, TResult> result)
         {
-            var left = source.LeftExcludingJoin(inner, pk, fk, result).ToList();
-            var right = source.RightExcludingJoin(inner, pk, fk, result).ToList();
+            var left = sourceCollection.LeftExcludingJoin(innerCollection, pk, fk, result).ToList();
+            var right = sourceCollection.RightExcludingJoin(innerCollection, pk, fk, result).ToList();
             return left.Union(right);
         }
     }

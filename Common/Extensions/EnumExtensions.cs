@@ -6,16 +6,10 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Markup;
 
-namespace Common.Extensions
+namespace Common
 {
     public static class EnumExtensions
     {
-        /// <summary>
-        /// Returns the Description Custom Attribute of an Enum
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns>Description Attribute value as String</returns>
-        /// <remarks></remarks>
         public static string GetDescription(this Enum value)
         {
             try
@@ -31,12 +25,6 @@ namespace Common.Extensions
             }
         }
 
-        /// <summary>
-        /// Gets the next enum from the set defined
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="src"></param>
-        /// <returns></returns>
         public static T Next<T>(this T src) where T : struct
         {
             if (!typeof(T).IsEnum) throw new ArgumentException(string.Format("Argumnent {0} is not an Enum", typeof(T).FullName));
@@ -45,12 +33,6 @@ namespace Common.Extensions
             return (Arr.Length == j) ? Arr[0] : Arr[j];
         }
 
-        /// <summary>
-        /// Gets the previous enum from the set defined
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="src"></param>
-        /// <returns></returns>
         public static T Previous<T>(this T src) where T : struct
         {
             if (!typeof(T).IsEnum) throw new ArgumentException(string.Format("Argumnent {0} is not an Enum", typeof(T).FullName));
@@ -72,11 +54,14 @@ namespace Common.Extensions
         {
             if (!typeof(T).IsEnum)
                 throw new NotSupportedException($"Type {typeof(T).Name} is not a valid Enum.");
-            StringBuilder result = new StringBuilder();
-            result.Append("\"");
-            result.Append(enumType.ToString());
-            result.Append("\"");
-            return result.ToString();
+
+            StringBuilder comparableEnumCondition = new StringBuilder();
+
+            comparableEnumCondition.Append("\"");
+            comparableEnumCondition.Append(enumType.ToString());
+            comparableEnumCondition.Append("\"");
+
+            return comparableEnumCondition.ToString();
         }
 
         public static T GetRandomEnumValue<T>()
@@ -93,6 +78,7 @@ namespace Common.Extensions
                 .FirstOrDefault();
         }
     }
+
     /// <summary>
     /// Enum Binding Source
     /// 
@@ -121,23 +107,14 @@ namespace Common.Extensions
                 }
             }
         }
-        /// <summary>
-        /// Enum Binding Source Extension
-        /// </summary>
+
         public EnumBindingSourceExtension() { }
-        /// <summary>
-        /// Enum Binding Source Extension
-        /// </summary>
-        /// <param name="enumType"></param>
+
         public EnumBindingSourceExtension(Type enumType)
         {
             EnumType = enumType;
         }
-        /// <summary>
-        /// Provide Value
-        /// </summary>
-        /// <param name="serviceProvider"></param>
-        /// <returns></returns>
+
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             if (null == this._enumType)
@@ -152,5 +129,6 @@ namespace Common.Extensions
             enumValues.CopyTo(tempArray, 1);
             return tempArray;
         }
+
     }
 }

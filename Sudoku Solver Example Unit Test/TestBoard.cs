@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 using System.Diagnostics;
-using Common.Extensions;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+
 namespace TestSudokuEngine
 {
     [TestClass]

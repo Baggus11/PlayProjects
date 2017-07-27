@@ -1,4 +1,4 @@
-﻿namespace Common.Extensions
+﻿namespace Common
 {
     public static class BoolExtensions
     {
