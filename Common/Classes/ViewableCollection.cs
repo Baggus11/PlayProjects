@@ -4,13 +4,13 @@ using System.ComponentModel;
 
 namespace Common.Classes
 {
-    public class BaseViewableCollection<T> : BaseObservableCollection<T> where T : INotifyPropertyChanged
+    public class ViewableCollection<T> : ViewableCollectionBase<T> where T : INotifyPropertyChanged
     {
-        public BaseViewableCollection() : base() { }
+        public ViewableCollection() : base() { }
 
-        public BaseViewableCollection(IEnumerable<T> items) : base(items) { }
+        public ViewableCollection(IEnumerable<T> items) : base(items) { }
 
-        public BaseViewableCollection(List<T> items) : base(items) { }
+        public ViewableCollection(List<T> items) : base(items) { }
 
         private void ItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

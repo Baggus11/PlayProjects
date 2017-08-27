@@ -76,7 +76,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LinqToSQL.dbml</DependentUpon>
     </Compile>
-    <Compile Include="MiscTests.cs" />
+    <Compile Include="AirsoftCalculationTests.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -88,6 +88,7 @@
     <Compile Include="CodeClash.cs" />
     <Compile Include="SudokuTests.cs" />
     <Compile Include="Yugioh\MonsterCardTests.cs" />
+    <Compile Include="Yugioh\GameScenarioTests.cs" />
     <Compile Include="Yugioh\YGODatabaseTests.cs" />
     <Compile Include="Yugioh\YugiohPricesServiceTests.cs" />
   </ItemGroup>

@@ -15,6 +15,45 @@ namespace Common
                 .Select(mapped => mapped.Select(pair => pair.item));
         }
 
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> collection) =>
+            collection == null || collection.Count() == 0;
+
+        //From: https://github.com/morelinq/MoreLINQ/blob/master/MoreLinq/MaxBy.cs
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source,
+           Func<TSource, TKey> selector)
+        {
+            return source.MaxBy(selector, null);
+        }
+
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source,
+           Func<TSource, TKey> selector, IComparer<TKey> comparer)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+            comparer = comparer ?? Comparer<TKey>.Default;
+
+            using (var sourceIterator = source.GetEnumerator())
+            {
+                if (!sourceIterator.MoveNext())
+                {
+                    throw new InvalidOperationException("Sequence contains no elements");
+                }
+                var max = sourceIterator.Current;
+                var maxKey = selector(max);
+                while (sourceIterator.MoveNext())
+                {
+                    var candidate = sourceIterator.Current;
+                    var candidateProjected = selector(candidate);
+                    if (comparer.Compare(candidateProjected, maxKey) > 0)
+                    {
+                        max = candidate;
+                        maxKey = candidateProjected;
+                    }
+                }
+                return max;
+            }
+        }
+
         public static string ToCsv<T>(this IEnumerable<T> items)
            where T : class
         {
@@ -99,11 +138,11 @@ namespace Common
             }
         }
 
-        public static IEnumerable<T> GetWhere<T>(this IEnumerable<T> collection, LambdaExpression lambda)
+        public static IEnumerable<T> GetItemsWhere<T>(this IEnumerable<T> collection, LambdaExpression condition)
         {
             try
             {
-                var compiledLambda = lambda.Compile();
+                var compiledLambda = condition.Compile();
                 return collection.Where(x => (bool)compiledLambda.DynamicInvoke(x));
             }
             catch (Exception)
@@ -112,7 +151,7 @@ namespace Common
             }
         }
 
-        public static IEnumerable<T> GetWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> expression, int numDesired = 1)
+        public static IEnumerable<T> GetItemsWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> expression, int numDesired = 1)
         {
             try
             {
@@ -125,7 +164,7 @@ namespace Common
             }
         }
 
-        public static IEnumerable<T> GetElementsWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> where)
+        public static IEnumerable<T> GetItemsWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> where)
         {
             try
             {
@@ -138,7 +177,7 @@ namespace Common
             }
         }
 
-        public static IEnumerable<T> GetRandomElementsWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> whereclause, int count)
+        public static IEnumerable<T> GetRandomItemsWhere<T>(this IEnumerable<T> collection, Expression<Func<T, bool>> whereclause, int count)
         {
             try
             {
@@ -151,7 +190,7 @@ namespace Common
             }
         }
 
-        public static IEnumerable<T> GetRandomElements<T>(this IEnumerable<T> collection, int count)
+        public static IEnumerable<T> GetRandomItems<T>(this IEnumerable<T> collection, int count)
         {
             try
             {

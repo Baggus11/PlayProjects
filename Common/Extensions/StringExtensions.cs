@@ -11,6 +11,11 @@ namespace Common
 {
     public static class StringExtensions
     {
+        //public static string EncryptToAES(this string value)
+        //{
+        //    return AESEncryption.Encrypt(value);
+        //}
+        //public static string DecryptFromAES(this string value)
 
         public static T DeserializeFromXml<T>(this string xmlString)
             where T : class
@@ -45,24 +50,6 @@ namespace Common
             }
         }
 
-
-
-        private static Type[] GetAssignableTypes<T>()
-        {
-            try
-            {
-                Type[] assignableTypes = (from t in Assembly.Load(typeof(T).Namespace).GetExportedTypes()
-                                          where !t.IsInterface && !t.IsAbstract
-                                          where typeof(T).IsAssignableFrom(t)
-                                          select t).ToArray();
-                return assignableTypes;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
         public static Stream ToStream(this string @this)
         {
             var stream = new MemoryStream();
@@ -72,8 +59,6 @@ namespace Common
             stream.Position = 0;
             return stream;
         }
-
-
 
         /// <summary>
         /// Extract Object
@@ -212,11 +197,9 @@ namespace Common
 
         public static T ToEnum<T>(this string value)
         {
-            if (!typeof(T).IsEnum)
-                throw new NotSupportedException($"{MethodBase.GetCurrentMethod().Name}> Could not convert string '{value}' to type {typeof(T).Name}");
-            else
-                return (T)Enum.Parse(typeof(T), value);
-            //return (T)Convert.ChangeType(value, typeof(T));
+            return !typeof(T).IsEnum ?
+                throw new NotSupportedException($"{MethodBase.GetCurrentMethod().Name}> Could not convert string '{value}' to type {typeof(T).Name}")
+                : (T)Enum.Parse(typeof(T), value);
         }
 
         public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
@@ -252,13 +235,28 @@ namespace Common
             return value != null && value.Length > length ? value.Substring(0, length) : value;
         }
 
+        private static Type[] GetAssignableTypes<T>()
+        {
+            try
+            {
+                Type[] assignableTypes = (from t in Assembly.Load(typeof(T).Namespace).GetExportedTypes()
+                                          where !t.IsInterface && !t.IsAbstract
+                                          where typeof(T).IsAssignableFrom(t)
+                                          select t).ToArray();
+                return assignableTypes;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         //Alternate version of XML Deserialization:
         //public static T DeserializeXML<T>(this string xml) where T : class
         //{
         //    using (TextReader reader = new StringReader(xml))
         //        return new XmlSerializer(typeof(T)).Deserialize(reader) as T;
         //}
-
 
     }
 }

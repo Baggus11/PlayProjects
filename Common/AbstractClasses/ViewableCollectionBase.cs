@@ -3,17 +3,17 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows.Threading;
 
-namespace Common.Classes
+namespace Common
 {
-    public class BaseObservableCollection<T> : ObservableCollection<T>
+    public abstract class ViewableCollectionBase<T> : ObservableCollection<T>
     {
         public override event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public BaseObservableCollection() : base() { }
+        public ViewableCollectionBase() : base() { }
 
-        public BaseObservableCollection(IEnumerable<T> items) : base(items) { }
+        public ViewableCollectionBase(IEnumerable<T> items) : base(items) { }
 
-        public BaseObservableCollection(List<T> items) : base(items) { }
+        public ViewableCollectionBase(List<T> items) : base(items) { }
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {

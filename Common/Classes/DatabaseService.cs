@@ -1,5 +1,4 @@
-﻿using Common.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -11,12 +10,12 @@ namespace Common
     /// <summary>
     /// ToDO: Add functionality that converts LINQ where, orderby, and having expressions their SQL counterparts
     /// </summary>
-    public abstract class DatabaseServiceBase : IDatabaseService
+    public /*abstract*/ class DatabaseService : IDatabaseService
     {
         protected string TableName { get; set; }
         protected string ConnectionString { get; set; }
 
-        public DatabaseServiceBase(string connectionString, string tableName)
+        public DatabaseService(string connectionString, string tableName)
         {
             TableName = tableName;
             if (connectionString.CanOpen())

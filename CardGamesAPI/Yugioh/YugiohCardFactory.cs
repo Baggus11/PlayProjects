@@ -9,15 +9,10 @@ namespace CardGamesAPI.Yugioh
     {
         public static IYugiohCard CreateBasicYugiohCard<T>()
             where T : IYugiohCard
-            //where T : YugiohCardBase
-            //where T : struct
         {
             try
             {
-
-
                 var baseType = typeof(T).Name.ToEnum<YugiohCardBaseType>();
-
 
                 switch (baseType)
                 {
@@ -43,12 +38,15 @@ namespace CardGamesAPI.Yugioh
         {
             int attack = Enumerable.Range(1, 30).Select(x => x * 100).GetFirstRandom();
             int defense = Enumerable.Range(0, 25).Select(x => x * 100).GetFirstRandom();
+            var attribute = EnumExtensions.GetRandomEnumValue<YugiohMonsterAttribute>();
+            var baseType = EnumExtensions.GetRandomEnumValue<YugiohMonsterBaseType>();
+            var monsterType = EnumExtensions.GetRandomEnumValue<YugiohMonsterType>();
+            int level = Enumerable.Range(1, 12).GetFirstRandom();
 
-            return new MonsterCard("Kuriboh",
-                EnumExtensions.GetRandomEnumValue<YugiohMonsterAttribute>(),
-                EnumExtensions.GetRandomEnumValue<YugiohMonsterType>(),
-                EnumExtensions.GetRandomEnumValue<YugiohMonsterBaseType>(),
-                attack, defense);
+            var result = new MonsterCard("Token", attribute, monsterType, baseType, level, attack, defense);
+
+            return result;
+
         }
 
         private static SpellCard CreateBasicSpell()

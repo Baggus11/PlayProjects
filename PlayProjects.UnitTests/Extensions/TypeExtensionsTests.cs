@@ -20,7 +20,7 @@ namespace Common.Extensions.Tests
         {
             try
             {
-                string xml = YugiohTestFixture.CreateCards()
+                string xml = YugiohTestFixture.CreateDeck()
                        .OfType<IYugiohCard>()
                        .FirstOrDefault()
                        .SerializeToXml();

@@ -9,7 +9,7 @@ namespace CardGamesAPI
     /// </summary>
     public interface IEffectService
     {
-        IGameState State { get; set; }//hopefully this will be a move state once I'm done implementing
+        IMove MoveState { get; set; }//hopefully this will be a move state once I'm done implementing
 
         bool Activate(); //Activate a stored effect on State
 

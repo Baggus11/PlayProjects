@@ -20,8 +20,8 @@ namespace YGOManager
     {
         private string _defaultSaveDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "CardDownloads");
         private string _CardSaveDirectory;
-        private BaseViewableCollection<YGOCardViewModel> _CardList = new BaseViewableCollection<YGOCardViewModel>();
-        public BaseViewableCollection<YGOCardViewModel> CardList { get { return _CardList; } }
+        private ViewableCollection<YGOCardViewModel> _CardList = new ViewableCollection<YGOCardViewModel>();
+        public ViewableCollection<YGOCardViewModel> CardList { get { return _CardList; } }
 
         public string Text
         {

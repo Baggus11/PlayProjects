@@ -4,7 +4,7 @@ namespace CardGamesAPI.Yugioh
 {
     public class YugiohCard : YugiohCardBase
     {
-        public override void Activate()
+        public override YugiohMove Activate(YugiohMove currentState)
         {
             throw new NotImplementedException();
         }

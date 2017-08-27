@@ -42,32 +42,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\Minimax.cs" />
     <Compile Include="Constants\StandardCardEnums.cs" />
-    <Compile Include="DeckBase.cs" />
     <Compile Include="Interfaces\ICheatChecker.cs" />
-    <Compile Include="Interfaces\IDeck.cs" />
-    <Compile Include="Interfaces\ICardGameMove.cs" />
-    <Compile Include="Interfaces\IGameState.cs" />
-    <Compile Include="Yugioh\CardEffectBase.cs" />
+    <Compile Include="Interfaces\IMove.cs" />
+    <Compile Include="Interfaces\PlayerBase.cs" />
+    <Compile Include="Score.cs" />
+    <Compile Include="Yugioh\Bases\CardEffectBase.cs" />
+    <Compile Include="Yugioh\RulesEngine\RulesDAL.cs" />
     <Compile Include="Yugioh\SpellCard.cs" />
     <Compile Include="Yugioh\TrapCard.cs" />
-    <Compile Include="Yugioh\TrapCardBase.cs" />
-    <Compile Include="Yugioh\TrapMonsterCardBase.cs" />
+    <Compile Include="Yugioh\Bases\TrapCardBase.cs" />
+    <Compile Include="Yugioh\Bases\TrapMonsterCardBase.cs" />
     <Compile Include="Yugioh\YugiohCardFactory.cs" />
+    <Compile Include="Yugioh\YugiohPlayer.cs" />
     <Compile Include="Yugioh\YugiohPrices\YugiohPricesEnums.cs" />
     <Compile Include="Yugioh\YugiohPrices\YugiohPricesService.cs" />
     <Compile Include="Yugioh\YugiohPrices\YugiohPricesDetails.cs" />
     <Compile Include="Yugioh\YugiohPrices\YugiohWebCrawler.cs" />
     <Compile Include="Yugioh\YugiohCard.cs" />
-    <Compile Include="Yugioh\YugiohGameState.cs" />
-    <Compile Include="Yugioh\YugiohEffectService.cs" />
-    <Compile Include="Yugioh\EffectServiceBase.cs" />
+    <Compile Include="Yugioh\YugiohMove.cs" />
+    <Compile Include="Yugioh\RulesEngine\YugiohRulesManager.cs" />
+    <Compile Include="Yugioh\Bases\EffectServiceBase.cs" />
     <Compile Include="Interfaces\IEffectService.cs" />
     <Compile Include="Interfaces\IEffect.cs" />
-    <Compile Include="Yugioh\ISpellCard.cs" />
-    <Compile Include="Yugioh\ITrapCard.cs" />
-    <Compile Include="Yugioh\SpellCardBase.cs" />
-    <Compile Include="Yugioh\YugiohDeck.cs" />
+    <Compile Include="Yugioh\Interfaces\ISpellCard.cs" />
+    <Compile Include="Yugioh\Interfaces\ITrapCard.cs" />
+    <Compile Include="Yugioh\Bases\SpellCardBase.cs" />
     <Compile Include="Yugioh\YugiohCardEnums.cs" />
     <Compile Include="Interfaces\ICard.cs" />
     <Compile Include="PlayingCard.cs" />
@@ -77,12 +78,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Yugioh\CardDatabaseService.cs" />
-    <Compile Include="Yugioh\IMonsterCard.cs" />
-    <Compile Include="Yugioh\IYugiohCard.cs" />
+    <Compile Include="Yugioh\Interfaces\IMonsterCard.cs" />
+    <Compile Include="Yugioh\Interfaces\IYugiohCard.cs" />
     <Compile Include="Yugioh\MonsterCard.cs" />
-    <Compile Include="Yugioh\MonsterCardBase.cs" />
-    <Compile Include="Yugioh\YugiohCardBase.cs" />
+    <Compile Include="Yugioh\Bases\MonsterCardBase.cs" />
+    <Compile Include="Yugioh\Bases\YugiohCardBase.cs" />
     <Compile Include="Yugioh\YugiohCardEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>

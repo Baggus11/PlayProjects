@@ -24,7 +24,6 @@ namespace CardGamesAPI.Yugioh
 
         public event EventHandler<YugiohCardEventArgs> EffectTriggered;
 
-
         protected virtual void RaiseEffectTriggered(YugiohCardEventArgs e) => EffectTriggered?.Invoke(this, e);
 
         public void SetKonamiID(string konamiId)
@@ -33,5 +32,6 @@ namespace CardGamesAPI.Yugioh
         }
 
         public abstract void Dispose();
+
     }
 }

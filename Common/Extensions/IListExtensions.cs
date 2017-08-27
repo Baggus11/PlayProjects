@@ -9,6 +9,18 @@ namespace Common
 {
     public static class IListExtensions
     {
+        public static T PopAt<T>(this IList<T> list, int index)
+        {
+            T result = list[index];
+            list.RemoveAt(index);
+            return result;
+        }
+
+        public static void AddMany<T>(this List<T> list, params T[] elements)
+        {
+            list.AddRange(elements);
+        }
+
         /// Shuffles an IList in place.
         /// </summary>
         /// <typeparam name="T">The type of elements in the list</typeparam>

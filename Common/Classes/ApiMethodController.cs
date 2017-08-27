@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace Common.Classes
+namespace Common
 {
     public class ApiMethodController : ApiController
     {
@@ -15,7 +15,7 @@ namespace Common.Classes
         public IEnumerable<ApiMethod> GetMethods()
         {
             // get the IApiExplorer registered automatically
-            IApiExplorer explorer = this.Configuration.Services.GetApiExplorer();
+            IApiExplorer explorer = Configuration.Services.GetApiExplorer();
 
             // loop, convert and return all descriptions 
             return explorer.ApiDescriptions

@@ -1,6 +1,6 @@
 ﻿using NLog;
 
-namespace Common.Interfaces
+namespace Common
 {
     /// <summary>
     /// Contract for implemented classes to use logging methods

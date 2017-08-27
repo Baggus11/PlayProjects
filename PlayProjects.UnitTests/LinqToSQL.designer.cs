@@ -11,393 +11,387 @@
 
 namespace PlayProjects.UnitTests
 {
-	using System.Data.Linq;
-	using System.Data.Linq.Mapping;
-	using System.Data;
-	using System.Collections.Generic;
-	using System.Reflection;
-	using System.Linq;
-	using System.Linq.Expressions;
-	using System.ComponentModel;
-	using System;
-	
-	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="Yugioh")]
-	public partial class LinqToSQLDataContext : System.Data.Linq.DataContext
-	{
-		
-		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
-		
-    #region Extensibility Method Definitions
-    partial void OnCreated();
-    partial void InsertCard(Card instance);
-    partial void UpdateCard(Card instance);
-    partial void DeleteCard(Card instance);
-    #endregion
-		
-		public LinqToSQLDataContext() : 
-				base(global::PlayProjects.UnitTests.Properties.Settings.Default.YugiohConnectionString, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public LinqToSQLDataContext(string connection) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public LinqToSQLDataContext(System.Data.IDbConnection connection) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public LinqToSQLDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public LinqToSQLDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
-				base(connection, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public System.Data.Linq.Table<Card> Cards
-		{
-			get
-			{
-				return this.GetTable<Card>();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Cards")]
-	public partial class Card : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private System.Guid _SysGuid;
-		
-		private string _KonamiID;
-		
-		private string _CardName;
-		
-		private string _CardBaseType;
-		
-		private string _MonsterBaseType;
-		
-		private string _MonsterType;
-		
-		private string _MonsterAttribute;
-		
-		private System.Nullable<int> _SpellSpeed;
-		
-		private System.Nullable<int> _Attack;
-		
-		private int _Defense;
-		
-		private System.Nullable<int> _Level;
-		
-		private System.Nullable<int> _Rank;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnSysGuidChanging(System.Guid value);
-    partial void OnSysGuidChanged();
-    partial void OnKonamiIDChanging(string value);
-    partial void OnKonamiIDChanged();
-    partial void OnCardNameChanging(string value);
-    partial void OnCardNameChanged();
-    partial void OnCardBaseTypeChanging(string value);
-    partial void OnCardBaseTypeChanged();
-    partial void OnMonsterBaseTypeChanging(string value);
-    partial void OnMonsterBaseTypeChanged();
-    partial void OnMonsterTypeChanging(string value);
-    partial void OnMonsterTypeChanged();
-    partial void OnMonsterAttributeChanging(string value);
-    partial void OnMonsterAttributeChanged();
-    partial void OnSpellSpeedChanging(System.Nullable<int> value);
-    partial void OnSpellSpeedChanged();
-    partial void OnAttackChanging(System.Nullable<int> value);
-    partial void OnAttackChanged();
-    partial void OnDefenseChanging(int value);
-    partial void OnDefenseChanged();
-    partial void OnLevelChanging(System.Nullable<int> value);
-    partial void OnLevelChanged();
-    partial void OnRankChanging(System.Nullable<int> value);
-    partial void OnRankChanged();
-    #endregion
-		
-		public Card()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SysGuid", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid SysGuid
-		{
-			get
-			{
-				return this._SysGuid;
-			}
-			set
-			{
-				if ((this._SysGuid != value))
-				{
-					this.OnSysGuidChanging(value);
-					this.SendPropertyChanging();
-					this._SysGuid = value;
-					this.SendPropertyChanged("SysGuid");
-					this.OnSysGuidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_KonamiID", DbType="VarChar(50)")]
-		public string KonamiID
-		{
-			get
-			{
-				return this._KonamiID;
-			}
-			set
-			{
-				if ((this._KonamiID != value))
-				{
-					this.OnKonamiIDChanging(value);
-					this.SendPropertyChanging();
-					this._KonamiID = value;
-					this.SendPropertyChanged("KonamiID");
-					this.OnKonamiIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CardName", DbType="VarChar(150) NOT NULL", CanBeNull=false)]
-		public string CardName
-		{
-			get
-			{
-				return this._CardName;
-			}
-			set
-			{
-				if ((this._CardName != value))
-				{
-					this.OnCardNameChanging(value);
-					this.SendPropertyChanging();
-					this._CardName = value;
-					this.SendPropertyChanged("CardName");
-					this.OnCardNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CardBaseType", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string CardBaseType
-		{
-			get
-			{
-				return this._CardBaseType;
-			}
-			set
-			{
-				if ((this._CardBaseType != value))
-				{
-					this.OnCardBaseTypeChanging(value);
-					this.SendPropertyChanging();
-					this._CardBaseType = value;
-					this.SendPropertyChanged("CardBaseType");
-					this.OnCardBaseTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MonsterBaseType", DbType="VarChar(50)")]
-		public string MonsterBaseType
-		{
-			get
-			{
-				return this._MonsterBaseType;
-			}
-			set
-			{
-				if ((this._MonsterBaseType != value))
-				{
-					this.OnMonsterBaseTypeChanging(value);
-					this.SendPropertyChanging();
-					this._MonsterBaseType = value;
-					this.SendPropertyChanged("MonsterBaseType");
-					this.OnMonsterBaseTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MonsterType", DbType="VarChar(50)")]
-		public string MonsterType
-		{
-			get
-			{
-				return this._MonsterType;
-			}
-			set
-			{
-				if ((this._MonsterType != value))
-				{
-					this.OnMonsterTypeChanging(value);
-					this.SendPropertyChanging();
-					this._MonsterType = value;
-					this.SendPropertyChanged("MonsterType");
-					this.OnMonsterTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MonsterAttribute", DbType="VarChar(50)")]
-		public string MonsterAttribute
-		{
-			get
-			{
-				return this._MonsterAttribute;
-			}
-			set
-			{
-				if ((this._MonsterAttribute != value))
-				{
-					this.OnMonsterAttributeChanging(value);
-					this.SendPropertyChanging();
-					this._MonsterAttribute = value;
-					this.SendPropertyChanged("MonsterAttribute");
-					this.OnMonsterAttributeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpellSpeed", DbType="Int")]
-		public System.Nullable<int> SpellSpeed
-		{
-			get
-			{
-				return this._SpellSpeed;
-			}
-			set
-			{
-				if ((this._SpellSpeed != value))
-				{
-					this.OnSpellSpeedChanging(value);
-					this.SendPropertyChanging();
-					this._SpellSpeed = value;
-					this.SendPropertyChanged("SpellSpeed");
-					this.OnSpellSpeedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Attack", DbType="Int")]
-		public System.Nullable<int> Attack
-		{
-			get
-			{
-				return this._Attack;
-			}
-			set
-			{
-				if ((this._Attack != value))
-				{
-					this.OnAttackChanging(value);
-					this.SendPropertyChanging();
-					this._Attack = value;
-					this.SendPropertyChanged("Attack");
-					this.OnAttackChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Defense", DbType="Int NOT NULL")]
-		public int Defense
-		{
-			get
-			{
-				return this._Defense;
-			}
-			set
-			{
-				if ((this._Defense != value))
-				{
-					this.OnDefenseChanging(value);
-					this.SendPropertyChanging();
-					this._Defense = value;
-					this.SendPropertyChanged("Defense");
-					this.OnDefenseChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[Level]", Storage="_Level", DbType="Int")]
-		public System.Nullable<int> Level
-		{
-			get
-			{
-				return this._Level;
-			}
-			set
-			{
-				if ((this._Level != value))
-				{
-					this.OnLevelChanging(value);
-					this.SendPropertyChanging();
-					this._Level = value;
-					this.SendPropertyChanged("Level");
-					this.OnLevelChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rank", DbType="Int")]
-		public System.Nullable<int> Rank
-		{
-			get
-			{
-				return this._Rank;
-			}
-			set
-			{
-				if ((this._Rank != value))
-				{
-					this.OnRankChanging(value);
-					this.SendPropertyChanging();
-					this._Rank = value;
-					this.SendPropertyChanged("Rank");
-					this.OnRankChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
+    using System;
+    using System.ComponentModel;
+    using System.Data.Linq.Mapping;
+
+
+    [global::System.Data.Linq.Mapping.DatabaseAttribute(Name = "Yugioh")]
+    public partial class LinqToSQLDataContext : System.Data.Linq.DataContext
+    {
+
+        private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
+
+        #region Extensibility Method Definitions
+        partial void OnCreated();
+        partial void InsertCard(Card instance);
+        partial void UpdateCard(Card instance);
+        partial void DeleteCard(Card instance);
+        #endregion
+
+        public LinqToSQLDataContext() :
+                base(global::PlayProjects.UnitTests.Properties.Settings.Default.YugiohConnectionString, mappingSource)
+        {
+            OnCreated();
+        }
+
+        public LinqToSQLDataContext(string connection) :
+                base(connection, mappingSource)
+        {
+            OnCreated();
+        }
+
+        public LinqToSQLDataContext(System.Data.IDbConnection connection) :
+                base(connection, mappingSource)
+        {
+            OnCreated();
+        }
+
+        public LinqToSQLDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) :
+                base(connection, mappingSource)
+        {
+            OnCreated();
+        }
+
+        public LinqToSQLDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) :
+                base(connection, mappingSource)
+        {
+            OnCreated();
+        }
+
+        public System.Data.Linq.Table<Card> Cards
+        {
+            get
+            {
+                return this.GetTable<Card>();
+            }
+        }
+    }
+
+    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.Cards")]
+    public partial class Card : INotifyPropertyChanging, INotifyPropertyChanged
+    {
+
+        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+        private System.Guid _SysGuid;
+
+        private string _KonamiID;
+
+        private string _CardName;
+
+        private string _CardBaseType;
+
+        private string _MonsterBaseType;
+
+        private string _MonsterType;
+
+        private string _MonsterAttribute;
+
+        private System.Nullable<int> _SpellSpeed;
+
+        private System.Nullable<int> _Attack;
+
+        private int _Defense;
+
+        private System.Nullable<int> _Level;
+
+        private System.Nullable<int> _Rank;
+
+        #region Extensibility Method Definitions
+        partial void OnLoaded();
+        partial void OnValidate(System.Data.Linq.ChangeAction action);
+        partial void OnCreated();
+        partial void OnSysGuidChanging(System.Guid value);
+        partial void OnSysGuidChanged();
+        partial void OnKonamiIDChanging(string value);
+        partial void OnKonamiIDChanged();
+        partial void OnCardNameChanging(string value);
+        partial void OnCardNameChanged();
+        partial void OnCardBaseTypeChanging(string value);
+        partial void OnCardBaseTypeChanged();
+        partial void OnMonsterBaseTypeChanging(string value);
+        partial void OnMonsterBaseTypeChanged();
+        partial void OnMonsterTypeChanging(string value);
+        partial void OnMonsterTypeChanged();
+        partial void OnMonsterAttributeChanging(string value);
+        partial void OnMonsterAttributeChanged();
+        partial void OnSpellSpeedChanging(System.Nullable<int> value);
+        partial void OnSpellSpeedChanged();
+        partial void OnAttackChanging(System.Nullable<int> value);
+        partial void OnAttackChanged();
+        partial void OnDefenseChanging(int value);
+        partial void OnDefenseChanged();
+        partial void OnLevelChanging(System.Nullable<int> value);
+        partial void OnLevelChanged();
+        partial void OnRankChanging(System.Nullable<int> value);
+        partial void OnRankChanged();
+        #endregion
+
+        public Card()
+        {
+            OnCreated();
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SysGuid", DbType = "UniqueIdentifier NOT NULL", IsPrimaryKey = true)]
+        public System.Guid SysGuid
+        {
+            get
+            {
+                return this._SysGuid;
+            }
+            set
+            {
+                if ((this._SysGuid != value))
+                {
+                    this.OnSysGuidChanging(value);
+                    this.SendPropertyChanging();
+                    this._SysGuid = value;
+                    this.SendPropertyChanged("SysGuid");
+                    this.OnSysGuidChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_KonamiID", DbType = "VarChar(50)")]
+        public string KonamiID
+        {
+            get
+            {
+                return this._KonamiID;
+            }
+            set
+            {
+                if ((this._KonamiID != value))
+                {
+                    this.OnKonamiIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._KonamiID = value;
+                    this.SendPropertyChanged("KonamiID");
+                    this.OnKonamiIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CardName", DbType = "VarChar(150) NOT NULL", CanBeNull = false)]
+        public string CardName
+        {
+            get
+            {
+                return this._CardName;
+            }
+            set
+            {
+                if ((this._CardName != value))
+                {
+                    this.OnCardNameChanging(value);
+                    this.SendPropertyChanging();
+                    this._CardName = value;
+                    this.SendPropertyChanged("CardName");
+                    this.OnCardNameChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CardBaseType", DbType = "VarChar(50) NOT NULL", CanBeNull = false)]
+        public string CardBaseType
+        {
+            get
+            {
+                return this._CardBaseType;
+            }
+            set
+            {
+                if ((this._CardBaseType != value))
+                {
+                    this.OnCardBaseTypeChanging(value);
+                    this.SendPropertyChanging();
+                    this._CardBaseType = value;
+                    this.SendPropertyChanged("CardBaseType");
+                    this.OnCardBaseTypeChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_MonsterBaseType", DbType = "VarChar(50)")]
+        public string MonsterBaseType
+        {
+            get
+            {
+                return this._MonsterBaseType;
+            }
+            set
+            {
+                if ((this._MonsterBaseType != value))
+                {
+                    this.OnMonsterBaseTypeChanging(value);
+                    this.SendPropertyChanging();
+                    this._MonsterBaseType = value;
+                    this.SendPropertyChanged("MonsterBaseType");
+                    this.OnMonsterBaseTypeChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_MonsterType", DbType = "VarChar(50)")]
+        public string MonsterType
+        {
+            get
+            {
+                return this._MonsterType;
+            }
+            set
+            {
+                if ((this._MonsterType != value))
+                {
+                    this.OnMonsterTypeChanging(value);
+                    this.SendPropertyChanging();
+                    this._MonsterType = value;
+                    this.SendPropertyChanged("MonsterType");
+                    this.OnMonsterTypeChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_MonsterAttribute", DbType = "VarChar(50)")]
+        public string MonsterAttribute
+        {
+            get
+            {
+                return this._MonsterAttribute;
+            }
+            set
+            {
+                if ((this._MonsterAttribute != value))
+                {
+                    this.OnMonsterAttributeChanging(value);
+                    this.SendPropertyChanging();
+                    this._MonsterAttribute = value;
+                    this.SendPropertyChanged("MonsterAttribute");
+                    this.OnMonsterAttributeChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SpellSpeed", DbType = "Int")]
+        public System.Nullable<int> SpellSpeed
+        {
+            get
+            {
+                return this._SpellSpeed;
+            }
+            set
+            {
+                if ((this._SpellSpeed != value))
+                {
+                    this.OnSpellSpeedChanging(value);
+                    this.SendPropertyChanging();
+                    this._SpellSpeed = value;
+                    this.SendPropertyChanged("SpellSpeed");
+                    this.OnSpellSpeedChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Attack", DbType = "Int")]
+        public System.Nullable<int> Attack
+        {
+            get
+            {
+                return this._Attack;
+            }
+            set
+            {
+                if ((this._Attack != value))
+                {
+                    this.OnAttackChanging(value);
+                    this.SendPropertyChanging();
+                    this._Attack = value;
+                    this.SendPropertyChanged("Attack");
+                    this.OnAttackChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Defense", DbType = "Int NOT NULL")]
+        public int Defense
+        {
+            get
+            {
+                return this._Defense;
+            }
+            set
+            {
+                if ((this._Defense != value))
+                {
+                    this.OnDefenseChanging(value);
+                    this.SendPropertyChanging();
+                    this._Defense = value;
+                    this.SendPropertyChanged("Defense");
+                    this.OnDefenseChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Name = "[Level]", Storage = "_Level", DbType = "Int")]
+        public System.Nullable<int> Level
+        {
+            get
+            {
+                return this._Level;
+            }
+            set
+            {
+                if ((this._Level != value))
+                {
+                    this.OnLevelChanging(value);
+                    this.SendPropertyChanging();
+                    this._Level = value;
+                    this.SendPropertyChanged("Level");
+                    this.OnLevelChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Rank", DbType = "Int")]
+        public System.Nullable<int> Rank
+        {
+            get
+            {
+                return this._Rank;
+            }
+            set
+            {
+                if ((this._Rank != value))
+                {
+                    this.OnRankChanging(value);
+                    this.SendPropertyChanging();
+                    this._Rank = value;
+                    this.SendPropertyChanged("Rank");
+                    this.OnRankChanged();
+                }
+            }
+        }
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            if ((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(String propertyName)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
 }
 #pragma warning restore 1591

@@ -1,6 +1,4 @@
 ﻿using CardGamesAPI.Yugioh;
-using Common.Classes;
-using Common.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -17,7 +15,8 @@ namespace Common.Yugioh.Tests
         private string conditionStr;
         Type objType;
 
-        ExpressionBuilder builder = new ExpressionBuilder();
+        YugiohRulesManager rule_manager = new YugiohRulesManager();
+
         public MonsterCardTests()
         {
             objType = typeof(MonsterCard);
@@ -28,9 +27,9 @@ namespace Common.Yugioh.Tests
 
             Hand = new List<IYugiohCard>
             {
-                new MonsterCard ( "Dark Magician", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Normal, 2500, 2100),
-                new MonsterCard("Blue-Eyes White Dragon", YugiohMonsterAttribute.Light, YugiohMonsterType.Dragon, YugiohMonsterBaseType.Normal, attack: 3000, defense: 2500),
-                new MonsterCard("Dark Magician Girl", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Effect, 2300, 2000),
+                new MonsterCard ( "Dark Magician", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Normal, 7, 2500, 2100),
+                new MonsterCard("Blue-Eyes White Dragon", YugiohMonsterAttribute.Light, YugiohMonsterType.Dragon, YugiohMonsterBaseType.Normal, 8, attack: 3000, defense: 2500),
+                new MonsterCard("Dark Magician Girl", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Effect, 5, 2300, 2000),
             };
         }
 
@@ -50,20 +49,21 @@ namespace Common.Yugioh.Tests
                 var paramExpr = Expression.Parameter(objType, objType.Name);
                 LambdaExpression lambdaExpr = System.Linq.Dynamic.DynamicExpression.ParseLambda(new ParameterExpression[] { paramExpr }, null, conditionStr);
                 lambdaExpr.ToString().Dump("lambda");
-                Hand.GetWhere(lambdaExpr).Dump("Found cards");
+                Hand.GetItemsWhere(lambdaExpr).Dump("Found cards");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
                 Assert.Fail(ex.Message);
             }
+
         }
 
         [TestMethod]
         public void Condition_Builder_Test()
         {
-            var lambda = builder.BuildLambdaExpression<MonsterCard>(conditionStr);
-            Hand.GetWhere(lambda).Dump("Found cards");
+            var lambda = rule_manager.BuildLambdaExpression<MonsterCard>(conditionStr);
+            Hand.GetItemsWhere(lambda).Dump("Found cards");
         }
 
         [TestMethod]

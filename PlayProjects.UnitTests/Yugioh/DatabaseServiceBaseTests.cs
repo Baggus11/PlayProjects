@@ -11,15 +11,17 @@ namespace Common.Yugioh.Tests
     public class DatabaseServiceBaseTests
     {
         private string connectionString = "Data Source=NICK-PC;Initial Catalog=Yugioh;Integrated Security=True;";
-        CardDatabaseService cardService;
+        DatabaseService cardService;
         private List<MonsterCard> monsterList = new List<MonsterCard>();
+
         public DatabaseServiceBaseTests()
         {
-            cardService = new CardDatabaseService(connectionString);
+            cardService = new DatabaseService(connectionString, "Cards");
             monsterList.Add(new MonsterCard("Dark Magician", YugiohMonsterAttribute.Dark, YugiohMonsterType.Fairy, YugiohMonsterBaseType.Normal));
             monsterList.Add(new MonsterCard("Silent Magician Lvl 4", YugiohMonsterAttribute.Light, YugiohMonsterType.Fairy, YugiohMonsterBaseType.Effect));
-            monsterList.Dump();
+            //monsterList.Dump();
         }
+
         [TestMethod()]
         public void Insert_Item()
         {

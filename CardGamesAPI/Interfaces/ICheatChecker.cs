@@ -2,9 +2,9 @@
 {
     public interface ICheatChecker //just an idea, not sure how to implement well.
     {
-        IGameState State { get; }
+        IMove MoveState { get; }
 
-        bool RunCheck(IGameState state);
+        bool RunCheck(IMove state);
 
     }
 }
