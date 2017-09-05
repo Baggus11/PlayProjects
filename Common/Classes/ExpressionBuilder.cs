@@ -1,59 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Common
 {
-    public abstract class ExpressionBuilderBase : IExpressionBuilder
+    public static class ExpressionBuilder
     {
-        public LambdaExpression BuildLambdaExpression<T>(string conditions)
+        public static LambdaExpression Build<T>(string condition, params object[] values)
         {
             try
             {
-                Type type = typeof(T);
-                var paramExpr = Expression.Parameter(type, type.Name);
-                var result = System.Linq.Dynamic.DynamicExpression.ParseLambda(new ParameterExpression[] { paramExpr }, null, conditions);
-                return result;
+                return System.Linq.Dynamic.DynamicExpression.ParseLambda(typeof(T), typeof(bool), condition, values);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string errMsg = $"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()}";
-                Debug.WriteLine(errMsg);
                 throw;
             }
 
         }
 
-
-        public bool CheckRule<T>(T instance, string conditions)
+        public static bool CheckCondition<T>(T instance, string condition, params object[] values)
+            where T : class
         {
             if (instance == null)
             {
                 throw new NullReferenceException($"{typeof(T).Name} instance");
             }
 
-            //return CheckRule(instance, new IRule rule);
-            return (bool)BuildLambdaExpression<T>(conditions).Compile().DynamicInvoke(instance);
-        }
-        public bool CheckRule<T>(T instance, IRule rule) where T : class
-        {
-            if (instance == null)
-            {
-                throw new NullReferenceException($"{typeof(T).Name} instance");
-            }
-
-            return (bool)BuildLambdaExpression<T>(rule.Conditions).Compile().DynamicInvoke(instance);
-
+            return (bool)Build<T>(condition, values).Compile().DynamicInvoke(instance);
         }
 
-        public IEnumerable<T> CheckRule<T>(IEnumerable<T> collection, string conditions)
+        public static IEnumerable<T> CheckCondition<T>(IEnumerable<T> collection, string conditions, params object[] values)
+            where T : class
         {
             try
             {
-                var lambda = BuildLambdaExpression<T>(conditions);
+                var lambda = Build<T>(conditions, values);
                 return Extensions.Where(collection, lambda);
             }
             catch (Exception)
@@ -62,37 +45,65 @@ namespace Common
             }
         }
 
-        public IEnumerable<T> CheckRule<T>(IEnumerable<T> collection, IRule rule)
-        {
-            try
-            {
-                var lambda = BuildLambdaExpression<T>(rule.Conditions);
-                return Extensions.Where(collection, lambda);
-                //return collection.Where(x => (bool)compiledLambda.DynamicInvoke(x));
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
 
     }
 
     public static class Extensions
     {
-        public static IEnumerable<T> Where<T>(this IEnumerable<T> collection, LambdaExpression conditions)
+        public static IEnumerable<T> Where<T>(this IEnumerable<T> collection, LambdaExpression expression)
+            where T : class
         {
             try
             {
-                var compiledLambda = conditions.Compile();
-                return collection.Where(x => (bool)compiledLambda.DynamicInvoke(x));
+                var compiledLambda = expression.Compile();
+                return collection.OfType<T>().Where(x => (bool)compiledLambda.DynamicInvoke(x));
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        public static IEnumerable<T> Where<T>(this IEnumerable<T> collection, string condition, params object[] values)
+            where T : class
+        {
+            try
+            {
+                return collection.OfType<T>().Where(ExpressionBuilder.Build<T>(condition, values));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static IEnumerable<T> All<T>(this IEnumerable<T> collection, IEnumerable<string> conditions, params object[] values)
+           where T : class
+        {
+            try
+            {
+                return collection.OfType<T>().Where(instance => conditions.All(condition => ExpressionBuilder.CheckCondition(instance, condition, values)));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static IEnumerable<T> Any<T>(this IEnumerable<T> collection, IEnumerable<string> conditions, params object[] values)
+           where T : class
+        {
+            try
+            {
+                return collection.OfType<T>().Where(instance => conditions.Any(condition => ExpressionBuilder.CheckCondition(instance, condition, values)));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
     }
 
 }
