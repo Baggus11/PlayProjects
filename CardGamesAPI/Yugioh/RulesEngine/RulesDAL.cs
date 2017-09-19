@@ -1,30 +1,83 @@
 ﻿using Common;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace CardGamesAPI.Yugioh.RulesEngine
 {
-    public static class DAL
+    public static class RulesDAL
     {
+        public static DataTable GetRuleBook(string connectionString)
+        {
+            string sql = "select * from dbo.Rules";
+
+            DataTable dt = new DataTable();
+            try
+            {
+                using (SqlCommand sqlconnection = new SqlCommand(sql, new SqlConnection(connectionString)))
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlconnection))
+                {
+                    da.Fill(dt);
+                }
+                return dt;
+            }
+            catch (Exception)
+            {
+                dt = null;
+                throw;
+            }
+
+        }
+
         public static List<IRule> GetAssignedRulesFor<T>()
         {
-            return null;
+            throw new NotImplementedException();
+
         }
 
         public static bool InsertRuleFor<T>(IRule rule, T instance)
         {
-            return true;
+            throw new NotImplementedException();
+
         }
 
         public static bool UpdateRuleFor<T>(IRule oldRule, IRule updatedRule)
         {
-            return true;
+            throw new NotImplementedException();
+
         }
 
         private static bool RuleMatchesSchema<T>(IRule rule, SqlConnection connection)
         {
             //Check that type T matches the Rule Type in the DB.
-            return true;
+            throw new NotImplementedException();
+        }
+
+    }
+    public static class CardsDAL
+    {
+        public static DataTable GetTopCardsFromDb(string connectionString, int count)
+        {
+            if (count < 0) return null;
+
+            string sql = $"select top {count} * from dbo.cards";
+
+            DataTable dt = new DataTable();
+            try
+            {
+                using (SqlCommand sqlconnection = new SqlCommand(sql, new SqlConnection(connectionString)))
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlconnection))
+                {
+                    da.Fill(dt);
+                }
+                return dt;
+            }
+            catch (Exception)
+            {
+                dt = null;
+                throw;
+            }
         }
 
     }

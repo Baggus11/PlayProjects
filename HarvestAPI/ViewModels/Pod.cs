@@ -16,7 +16,5 @@ namespace HarvestAPI.ViewModels
         [Description("WeedCount")]
         public int WeedCount { get; private set; }
 
-
-
     }
 }

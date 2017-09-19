@@ -10,8 +10,10 @@ namespace Common
     /// <summary>
     /// ToDO: Add functionality that converts LINQ where, orderby, and having expressions their SQL counterparts
     /// </summary>
-    public /*abstract*/ class DatabaseService : IDatabaseService
+    public class DatabaseService : IDatabaseService
     {
+        //TODO: make this absract base that can create, update, insert and select on tables, based on <T>
+
         protected string TableName { get; set; }
         protected string ConnectionString { get; set; }
 

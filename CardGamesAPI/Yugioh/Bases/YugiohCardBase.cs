@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace CardGamesAPI.Yugioh
 {
     /// <summary>
@@ -10,17 +11,17 @@ namespace CardGamesAPI.Yugioh
 
         public string KonamiID { get; set; }
 
-        public YugiohCardBaseType CardBaseType { get; set; }
+        public YugiohCardBaseType CardType { get; set; }
 
         public YugiohCardPosition Position { get; set; }
 
         public int SpellSpeed { get; set; }
 
-        public Guid SysGuid { get; set; }
+        public Guid SysGuid { get; set; } = Guid.NewGuid();
 
-        public string LocalPath { get; set; }
+        public string LocalPath { get; set; } //obsolete - Add with pattern
 
-        public string Url { get; set; }
+        public string Url { get; set; } //obsolete - Add with pattern
 
         public event EventHandler<YugiohCardEventArgs> EffectTriggered;
 

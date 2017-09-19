@@ -1,5 +1,6 @@
 ﻿using CardGamesAPI.Yugioh;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PlayProjects.UnitTests;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +18,8 @@ namespace Common.Yugioh.Tests
 
         YugiohRulesManager rule_manager = new YugiohRulesManager();
 
-        public MonsterCardTests()
+        [TestInitialize]
+        public void Init()
         {
             objType = typeof(MonsterCard);
             conditionStr = $@"{objType.Name}.Attack > 2300 AND {objType.Name}.MonsterAttribute = {YugiohMonsterAttribute.Dark.ToExpressionEnumCondition()}"
@@ -33,12 +35,19 @@ namespace Common.Yugioh.Tests
             };
         }
 
-        [TestMethod()]
-        public void MonsterCard_Test()
+        [TestMethod]
+        [TestCategory("Misc")]
+        public void Can_Card_Be_Copied()
         {
-            MonsterCard card = new MonsterCard("BEWD", YugiohMonsterAttribute.Light, YugiohMonsterType.Dragon, YugiohMonsterBaseType.Normal);
-            card.Dump();
-            Assert.IsNotNull(card);
+            var card1 = (MonsterCard)YugiohTestFixture.CreateCard<IMonsterCard>();
+            MonsterCard card2 = null;
+            ObjectExtensions.Map(ref card1, ref card2);
+
+            card1.Dump("card1");
+            card2.Dump("card2");
+
+            Assert.AreEqual(card1, card2);
+
         }
 
         [TestMethod()]
@@ -60,19 +69,12 @@ namespace Common.Yugioh.Tests
         }
 
         [TestMethod]
-        public void Condition_Builder_Test()
-        {
-            var lambda = rule_manager.BuildLambdaExpression<MonsterCard>(conditionStr);
-            Hand.GetItemsWhere(lambda).Dump("Found cards");
-        }
-
-        [TestMethod]
         public void IEnumerable_Shuffle_Extension_Test()
         {
             var list = Enumerable.Range(1, 40).ToList();
-            list.Shuffle().Dump("shuffled");
+            var result = list.Shuffle();
+            result.Dump("shuffled");
         }
-
         //[TestMethod]
         //public void RunEffectFromConditionTest()
         //{

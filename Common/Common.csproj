@@ -92,6 +92,16 @@
     <Compile Include="Interfaces\IExpressionBuilder.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IRule.cs" />
+    <Compile Include="MarkupConverters\HtmlCssParser.cs" />
+    <Compile Include="MarkupConverters\HtmlFromXamlConverter.cs" />
+    <Compile Include="MarkupConverters\HtmlLexicalAnalyzer.cs" />
+    <Compile Include="MarkupConverters\HtmlParser.cs" />
+    <Compile Include="MarkupConverters\HtmlSchema.cs" />
+    <Compile Include="MarkupConverters\HtmlTokenType.cs" />
+    <Compile Include="MarkupConverters\HtmlToRtfConverter.cs" />
+    <Compile Include="MarkupConverters\HtmlToXamlConverter.cs" />
+    <Compile Include="MarkupConverters\MarkupConverter.cs" />
+    <Compile Include="MarkupConverters\RtfToHtmlConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

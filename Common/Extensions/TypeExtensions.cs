@@ -8,6 +8,22 @@ namespace Common
 {
     public static class TypeExtensions
     {
+        public static IEnumerable<Type> GetAssignableTypes<T>()
+        {
+            try
+            {
+                var assignableTypes = (from t in Assembly.Load(typeof(T).Namespace).GetExportedTypes()
+                                       where !t.IsInterface && !t.IsAbstract
+                                       where typeof(T).IsAssignableFrom(t)
+                                       select t).ToArray();
+                return assignableTypes;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public static Dictionary<Type, UInterface> GetRepositories<TDerived, UInterface>()
             where UInterface : class, TDerived
         {

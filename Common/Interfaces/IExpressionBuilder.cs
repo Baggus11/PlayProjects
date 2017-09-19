@@ -10,6 +10,6 @@ namespace Common
         /// </summary>
         /// <param name="condition"></param>
         /// <returns></returns>
-        LambdaExpression BuildLambdaExpression<T>(string condition);
+        LambdaExpression Build<T>(string condition);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace CardGamesAPI.Yugioh
 {
-    public interface IYugiohCard
+    public interface IYugiohCard : ICardEffect
     {
         event EventHandler<YugiohCardEventArgs> EffectTriggered;
         Guid SysGuid { get; }
@@ -13,12 +13,9 @@ namespace CardGamesAPI.Yugioh
 
         int SpellSpeed { get; set; } //for effects, obv not every card has one
 
-        YugiohCardBaseType CardBaseType { get; set; }
+        YugiohCardBaseType CardType { get; set; }
 
         YugiohCardPosition Position { get; set; }
 
-        string LocalPath { get; set; }
-
-        string Url { get; set; }
     }
 }

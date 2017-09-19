@@ -4,13 +4,12 @@ using System.Collections.Generic;
 
 namespace CardGamesAPI.Yugioh
 {
-    public class YugiohRulesManager : ExpressionBuilderBase
+    public class YugiohRulesManager
     {
-
         public YugiohRulesManager()
         {
         }
 
-        public IEnumerable<IRule> GetRules<T>() => DAL.GetAssignedRulesFor<T>();
+        public IEnumerable<IRule> GetRules<T>() => RulesDAL.GetAssignedRulesFor<T>();
     }
 }

@@ -11,11 +11,8 @@ namespace Common
 {
     public static class StringExtensions
     {
-        //public static string EncryptToAES(this string value)
-        //{
-        //    return AESEncryption.Encrypt(value);
-        //}
-        //public static string DecryptFromAES(this string value)
+        public static string Reverse(this string str)
+            => new string(str.ToCharArray().Reverse().ToArray());
 
         public static T DeserializeFromXml<T>(this string xmlString)
             where T : class
@@ -59,7 +56,6 @@ namespace Common
             stream.Position = 0;
             return stream;
         }
-
         /// <summary>
         /// Extract Object
         /// Gets all the properties of T and searches the given text for matches.

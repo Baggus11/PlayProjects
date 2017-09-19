@@ -63,9 +63,6 @@ namespace CardGamesAPI.Yugioh
             throw new NotImplementedException();
         }
 
-
-
-
     }
 
 }

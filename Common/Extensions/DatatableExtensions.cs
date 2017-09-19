@@ -12,12 +12,6 @@ namespace Common
 {
     public static class DataTableExtensions
     {
-        /// <summary>
-        /// Datatable to ObservableCollection
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="table"></param>
-        /// <returns></returns>
         public static ObservableCollection<T> ToObservableCollection<T>(this DataTable table) where T : class, new()
         {
             try
@@ -57,13 +51,6 @@ namespace Common
             }
         }
 
-        /// <summary>
-        /// Convert Table To List of line items
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="table"></param>
-        /// <param name="addAction"></param>
-        /// <returns></returns>
         public static List<T> ConvertToLineItemList<T>(this DataTable table, Func<DataRow, T> addAction)
         {
             if (table == null || table.Rows == null || table.Rows.Count == 0) return null;
@@ -92,11 +79,6 @@ namespace Common
             return lines;
         }
 
-        /// <summary>
-        /// Get Column Header Names from a given datatable instance
-        /// </summary>
-        /// <param name="table"></param>
-        /// <returns></returns>
         public static List<string> GetColumnHeaderNames(this DataTable table)
         {
             try
@@ -111,11 +93,6 @@ namespace Common
             }
         }
 
-        /// <summary>
-        /// Set the Order of datatable columns
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="columnNames"></param>
         public static void SetColumnsOrder(this DataTable table, params string[] columnNames)
         {
             if (table == null) return;
@@ -140,11 +117,6 @@ namespace Common
             }
         }
 
-        /// <summary>
-        /// Remove a DataTable's column by name IFF it exists!
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="columnName"></param>
         public static void RemoveColumn(this DataTable table, string columnName)
         {
             try
@@ -158,13 +130,8 @@ namespace Common
             }
         }
 
-        /// <summary>
-        /// Converts a DataTable to a list with generic objects
-        /// </summary>
-        /// <typeparam name="T">Generic object</typeparam>
-        /// <param name="table">DataTable</param>
-        /// <returns>List with generic objects</returns>
-        public static List<T> ToObjectList<T>(this DataTable table) where T : class, new()
+        public static List<T> ToList<T>(this DataTable table)
+            where T : class, new()
         {
             try
             {
@@ -180,6 +147,7 @@ namespace Common
                             var val = row[prop.Name];
                             if (val == DBNull.Value)
                                 propertyInfo.SetValue(obj, null, null);
+                            //TODO: place a condition for handling Enums, here.
                             else
                                 propertyInfo.SetValue(obj, Convert.ChangeType(val, propertyInfo.PropertyType), null);
                         }

@@ -93,7 +93,6 @@ namespace Common
 
         }
 
-
         [Conditional("DEBUG")]
         private void CheckPropertyName(string propertyName)
         {
@@ -154,7 +153,6 @@ namespace Common
 
             return memberExpression.Member.Name;
         }
-
 
         protected virtual void RaisePropertyChanged<T>(Expression<Func<T>> selectorExpression)
         {

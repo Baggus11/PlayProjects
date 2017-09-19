@@ -1,15 +1,14 @@
-﻿using CardGames;
-using System;
-using System.Collections.Generic;
-
-namespace CardGamesAPI.Yugioh
+﻿namespace CardGamesAPI.Yugioh
 {
-    public abstract class CardEffectBase : IEffect
+    public abstract class CardEffectBase : ICardEffect
     {
-        public string Text { get; set; }
+        public string Text { get; set; } = "";
+        public string Type { get; set; } = "";
 
-        public IEnumerable<Func<bool, ICard, ICard>> EffectActions { get; set; }
+        public string PreConditions { get; set; } = "";
+        public string PostConditions { get; set; } = "";
 
         public abstract YugiohMove Activate(YugiohMove currentState);
+
     }
 }

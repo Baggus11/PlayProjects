@@ -15,7 +15,6 @@ namespace PlayProjects.UnitTests
     using System.ComponentModel;
     using System.Data.Linq.Mapping;
 
-
     [global::System.Data.Linq.Mapping.DatabaseAttribute(Name = "Yugioh")]
     public partial class LinqToSQLDataContext : System.Data.Linq.DataContext
     {

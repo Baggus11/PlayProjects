@@ -84,6 +84,7 @@
     <Compile Include="Yugioh\Bases\MonsterCardBase.cs" />
     <Compile Include="Yugioh\Bases\YugiohCardBase.cs" />
     <Compile Include="Yugioh\YugiohCardEventArgs.cs" />
+    <Compile Include="Yugioh\YugiohRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

@@ -1,5 +1,4 @@
-﻿using System;
-namespace CardGamesAPI.Yugioh
+﻿namespace CardGamesAPI.Yugioh
 {
     public abstract class MonsterCardBase : YugiohCardBase, IMonsterCard
     {
@@ -12,10 +11,18 @@ namespace CardGamesAPI.Yugioh
         public int Rank { get; set; }
         public int Level { get; set; }
 
+        public MonsterCardBase()
+            : this(typeof(MonsterCard).Name, YugiohMonsterAttribute.None,
+                  YugiohMonsterType.None, YugiohMonsterBaseType.None)
+        {
+        }
+
         public MonsterCardBase(string monsterName, YugiohMonsterAttribute attribute, YugiohMonsterType type,
             YugiohMonsterBaseType baseType, int level = 0, int attack = 0, int defense = 0)
+                : base()
         {
-            SysGuid = Guid.NewGuid();
+            CardType = YugiohCardBaseType.MonsterCard;
+
             CardName = monsterName;
             MonsterAttribute = attribute;
             MonsterBaseType = baseType;
@@ -25,13 +32,6 @@ namespace CardGamesAPI.Yugioh
             Level = level;
         }
 
-        //public MonsterCardBase(string monsterName, string attribute, string type, string baseType = "Normal")
-        //{
-        //SysGuid = Guid.NewGuid();
-        //    CardTitle = monsterName;
-        //    MonsterAttribute = attribute.ToEnum<YugiohMonsterAttribute>();
-        //    MonsterBaseType = baseType.ToEnum<YugiohMonsterBaseType>();
-        //    MonsterType = type.ToEnum<YugiohMonsterType>();
-        //}
     }
+
 }

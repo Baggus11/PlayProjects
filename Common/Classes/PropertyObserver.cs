@@ -21,7 +21,6 @@ namespace Common
         readonly Dictionary<string, Action<TPropertySource>> _propertyNameToHandlerMap;
         readonly WeakReference _propertySourceRef;
 
-
         /// <summary>
         /// Initializes a new instance of PropertyObserver, which
         /// observes the 'propertySource' object for property changes.

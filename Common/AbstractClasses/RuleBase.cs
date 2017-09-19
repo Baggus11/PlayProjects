@@ -6,27 +6,28 @@ namespace Common
 {
     public abstract class RuleBase : IRule
     {
-        public List<Action> Behaviours { get; set; }
-        public abstract string Conditions { get; set; }
+        //public List<Action> Behaviours { get; set; }
+        public string PreConditions { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+        public string PostConditions { get; set; }
 
         public bool IsMatchingType<T>() => Type == typeof(T).Name;
 
-        public bool RunBehaviours<T>(T instance)
-        {
-            if (!IsMatchingType<T>())
-            {
-                throw new Exception($"{typeof(T).Name} does not match stored type {Type}!");
-            }
+        //public bool RunBehaviours<T>(T instance)
+        //{
+        //    if (!IsMatchingType<T>())
+        //    {
+        //        throw new Exception($"{typeof(T).Name} does not match stored type {Type}!");
+        //    }
 
-            foreach (var behaviour in Behaviours as List<Action<T>>)
-            {
-                behaviour(instance);
-            }
+        //    foreach (var behaviour in Behaviours as List<Action<T>>)
+        //    {
+        //        behaviour(instance);
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
         public bool RunActionOn<T>(IEnumerable<T> collection, Action<T> action)
         {

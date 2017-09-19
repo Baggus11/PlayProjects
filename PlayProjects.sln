@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayProjects.UnitTests", "PlayProjects.UnitTests\PlayProjects.UnitTests.csproj", "{76A1A805-01F6-488C-9E33-9F61B1BA0D71}"
 EndProject
@@ -30,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleAdornedControlSample", "SimpleAdornedControlSample\SimpleAdornedControlSample.csproj", "{AC3644F8-C818-42BB-9A41-33CAEBB4DB29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirsoftChrono", "AirsoftChrono\AirsoftChrono.csproj", "{7B91B7DA-AF05-4FB2-819E-56FAF45D8ACB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Programs", "Sample Programs", "{32124E0E-AFA2-49D2-8E3A-B9BCF02DC1F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -598,5 +600,10 @@ Global
 		{F6B9BCA6-6E59-4FD9-A755-EE5A2978EDF5} = {079819BE-2F6F-47AE-8D51-E93DBCA9B888}
 		{704F6F66-971D-41FB-AC5E-508BDD16BBC1} = {ABE842C2-FD7C-4487-BB8B-891F673669A6}
 		{6F572520-7B7A-4926-8B47-2C27D153A3CD} = {ABE842C2-FD7C-4487-BB8B-891F673669A6}
+		{A41B6DB8-D78A-4B19-9020-66959AF59339} = {32124E0E-AFA2-49D2-8E3A-B9BCF02DC1F2}
+		{AC3644F8-C818-42BB-9A41-33CAEBB4DB29} = {32124E0E-AFA2-49D2-8E3A-B9BCF02DC1F2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {47997C26-36B9-41AD-B9E7-741406ABD054}
 	EndGlobalSection
 EndGlobal

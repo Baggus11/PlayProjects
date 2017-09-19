@@ -16,6 +16,6 @@ namespace CardGamesAPI.Yugioh
 
         public abstract bool Activate<T>(Func<bool, T> action);
 
-        public abstract Func<bool, T> CompileAction<T>(IEffect effect);
+        public abstract Func<bool, T> CompileAction<T>(ICardEffect effect);
     }
 }

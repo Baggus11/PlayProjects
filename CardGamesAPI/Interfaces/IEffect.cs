@@ -1,7 +1,7 @@
 ﻿namespace CardGamesAPI
 {
     //Contract for an ICard to hold an effect
-    public interface IEffect
+    public interface ICardEffect //: IRule
     {
         string Text { get; }
 

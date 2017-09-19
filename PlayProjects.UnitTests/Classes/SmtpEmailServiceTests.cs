@@ -12,10 +12,8 @@ namespace Common.Classes.Tests
             string password = "DashIsBestPony17";
             string host = "smtp.gmail.com";
 
-
             SmtpEmailService svc = new SmtpEmailService(host, username, password);
             svc.SendEmail("michael.n.preston@gmail.com", "test", "hello from baggus");
-
 
         }
     }

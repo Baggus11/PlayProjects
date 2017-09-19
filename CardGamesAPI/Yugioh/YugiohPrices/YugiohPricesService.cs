@@ -15,7 +15,6 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
 
         private static Uri baseAddress = new Uri("http://yugiohprices.com/api/");
 
-
         public static async Task<string> CheckPriceForCard(string cardName)
         {
             string cardUriName = GetCardUriName(cardName);

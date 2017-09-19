@@ -49,7 +49,6 @@ namespace CardGamesAPI.Yugioh.Tests
             Assert.IsNotNull(task.Result);
         }
 
-
         //Data Tests
         [TestMethod()]
         public void GetCardDetailsTest()
@@ -80,7 +79,6 @@ namespace CardGamesAPI.Yugioh.Tests
 
             Assert.IsNotNull(task.Result);
         }
-
 
         [TestMethod()]
         public void GetCardSetListsTest()
@@ -126,9 +124,6 @@ namespace CardGamesAPI.Yugioh.Tests
             Process.Start(_defaultSaveDir, string.Format("/select, \"{0}\"", _defaultSaveDir));
         }
 
-
-
-
         public void CopyStream(Stream stream, string destPath)
         {
             using (var fileStream = new FileStream(destPath, FileMode.Create, FileAccess.Write))
@@ -136,5 +131,7 @@ namespace CardGamesAPI.Yugioh.Tests
                 stream.CopyTo(fileStream);
             }
         }
+
     }
+
 }

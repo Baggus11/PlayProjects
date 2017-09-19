@@ -10,6 +10,7 @@
     }
     public enum YugiohCardBaseType
     {
+        Token,
         MonsterCard,
         SpellCard,
         TrapCard
@@ -39,6 +40,7 @@
         WingedBeast,
         Wyrm,
         Zombie,
+        None,
     }
     public enum YugiohMonsterAttribute
     {
@@ -58,7 +60,7 @@
     }
     public enum YugiohTrapType
     {
-        None,
+        //None,
         Normal,
         Continuous,
         Counter,
@@ -66,13 +68,14 @@
     }
     public enum YugiohSpellType
     {
-        None,
+        //None,
         Field,
         Equip,
         Continuous,
         Ritual,
         QuickPlay,
-        Speed,
+        //Speed,
         Pendulum,
+        Normal,
     }
 }

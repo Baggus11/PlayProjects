@@ -108,7 +108,7 @@ namespace Common
             return collection.OrderBy(c => Guid.NewGuid()).Take(count);
         }
 
-        public static T GetFirstRandom<T>(this IEnumerable<T> collection)
+        public static T TakeFirstRandom<T>(this IEnumerable<T> collection)
         {
             return collection.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
         }

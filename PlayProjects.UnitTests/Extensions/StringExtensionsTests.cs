@@ -54,7 +54,5 @@ namespace PlayProjects.UnitTests
             Assert.IsTrue(person2.Name.Equals("Kuriboh"));
         }
 
-
-
     }
 }

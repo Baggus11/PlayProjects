@@ -64,8 +64,6 @@ namespace YGOManager
                               CardList.Add(new YGOCardViewModel
                               { CardName = cardName, }));
 
-
-
             }
             catch (Exception ex) /*when (ex.Log())*/
             {
@@ -91,7 +89,6 @@ namespace YGOManager
             //CheckLocalFiles();
 
             //Prompt user for sync if enabled (default).
-
 
             Text = null;
             //Process.Start(_defaultSaveDir, string.Format("/select, \"{0}\"", _defaultSaveDir));
@@ -131,7 +128,6 @@ namespace YGOManager
 
                     //cardName.Dump("Downloaded card - json");
 
-
                 }
                 catch (Exception ex) when (ex.Log())
                 {
@@ -142,7 +138,6 @@ namespace YGOManager
 
                 }
                 //catch (Exception ex) when (ex.Log("Download Failed!")) { }
-
 
             }));
 

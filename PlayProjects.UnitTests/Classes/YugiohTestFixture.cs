@@ -1,21 +1,33 @@
 ﻿using CardGamesAPI;
 using CardGamesAPI.Yugioh;
+using CardGamesAPI.Yugioh.RulesEngine;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using static CardGamesAPI.Yugioh.YugiohCardFactory;
 
 namespace PlayProjects.UnitTests
 {
     public static class YugiohTestFixture
     {
+        private static string ConnectionString = Properties.Settings.Default.YugiohConnectionString;
+
+        internal static IYugiohCard CreateCard<T>()
+        {
+            return YugiohCardFactory.CreateRandomCard(typeof(T));
+        }
+
+        internal static IYugiohCard CreateRandomCard()
+        {
+            return YugiohCardFactory.CreateRandomCardType();
+        }
+
         public static IEnumerable<IYugiohCard> CreateDeck(int numberOfCards = 40)
         {
             for (int i = 0; i < numberOfCards; i++)
             {
-                //todo: create a random card type every time.
-                yield return CreateBasicYugiohCard<MonsterCard>();
+                yield return YugiohCardFactory.CreateRandomCardType();
             }
 
         }
@@ -52,10 +64,19 @@ namespace PlayProjects.UnitTests
 
         }
 
-        public static IEnumerable<string> GetTributeRules<T>()
+        public static List<string> GetTributeRules()
         {
-            string type = typeof(T).Name;
-            return new List<string> { $"{type}.Level > 5", };
+            return new List<string>
+            {
+                "Level > 5",
+                "!Text.ToLower().Contains(\"cannot be normal summoned\")"
+            };
+        }
+
+        public static List<YugiohRule> GetRuleBook()
+        {
+            var dt = RulesDAL.GetRuleBook(ConnectionString);
+            return dt.ToList<YugiohRule>();
         }
 
         private static IEnumerable<IMove> CreateScoredMoves(int numberOfChildren, bool isCurrentPlayer)
@@ -66,5 +87,13 @@ namespace PlayProjects.UnitTests
             }
         }
 
+        internal static List<YugiohCard> GetTop100Cards()
+        {
+            var dt = CardsDAL.GetTopCardsFromDb(ConnectionString, 100);
+            return dt.ToList<YugiohCard>();
+
+        }
+
     }
+
 }

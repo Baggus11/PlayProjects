@@ -18,7 +18,6 @@ namespace Common
             var from = new MailAddress(Username);
             var to = new MailAddress(toAddress);
 
-
             try
             {
 
@@ -46,7 +45,6 @@ namespace Common
             }
         }
 
-
         public SmtpEmailService(string host, string username, string password)
         {
             Password = password;
@@ -61,11 +59,9 @@ namespace Common
             Host = null;
         }
 
-
         private string Password { get; set; }
         private string Username { get; set; }
         private string Host { get; set; }
-
 
     }
 

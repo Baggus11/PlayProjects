@@ -24,7 +24,6 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
         private string yugiohPricesBaseSearchURL = @"http://yugiohprices.com/card_price?name={0}";
         private string BaseSearchUrl;
 
-
         public YugiohWebCrawler()
         {
             BaseSearchUrl = yugiohPricesBaseSearchURL;
@@ -71,7 +70,6 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
                 }
 
             }));
-
 
         }
 

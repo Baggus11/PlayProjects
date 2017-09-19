@@ -18,7 +18,7 @@ namespace CardGamesAPI
         bool Activate<T>(IEnumerable<Func<bool, T>> actions); //one-way multiple actions
 
         //Compile a game effect from rules directly to func (see rules engine.cs)
-        Func<bool, T> CompileAction<T>(IEffect effect);
+        Func<bool, T> CompileAction<T>(ICardEffect effect);
 
     }
 }
