@@ -34,8 +34,6 @@ namespace Common
                         catch (Exception ex)
                         {
                             Debug.WriteLine(ex.ToString());
-                            //continue;
-                            //break;
                             return null;
                         }
                     }
@@ -151,12 +149,10 @@ namespace Common
                             else
                                 propertyInfo.SetValue(obj, Convert.ChangeType(val, propertyInfo.PropertyType), null);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
-                            Debug.WriteLine(ex.ToString());
-                            //continue;
-                            //break;
-                            return null;
+                            break;
+                            throw;
                         }
                     }
                     list.Add(obj);

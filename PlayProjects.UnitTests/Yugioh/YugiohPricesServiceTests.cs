@@ -20,6 +20,7 @@ namespace CardGamesAPI.Yugioh.Tests
         string cardName = "Stardust Dragon";
 
         //Price Checks
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void CheckPriceForCardPrintTagTest()
         {
@@ -31,6 +32,7 @@ namespace CardGamesAPI.Yugioh.Tests
             Assert.IsNotNull(task.Result);
         }
 
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void CheckPriceForCardNameTest()
         {
@@ -40,6 +42,7 @@ namespace CardGamesAPI.Yugioh.Tests
             Assert.IsNotNull(task.Result);
         }
 
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void CheckPriceHistoryTest()
         {
@@ -50,6 +53,7 @@ namespace CardGamesAPI.Yugioh.Tests
         }
 
         //Data Tests
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void GetCardDetailsTest()
         {
@@ -62,6 +66,7 @@ namespace CardGamesAPI.Yugioh.Tests
             Assert.IsNotNull(details);
         }
 
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void GetCardVersionTest()
         {
@@ -71,6 +76,7 @@ namespace CardGamesAPI.Yugioh.Tests
             Assert.IsNotNull(task.Result);
         }
 
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void GetCardSupportTest()
         {
@@ -80,6 +86,7 @@ namespace CardGamesAPI.Yugioh.Tests
             Assert.IsNotNull(task.Result);
         }
 
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void GetCardSetListsTest()
         {
@@ -89,6 +96,7 @@ namespace CardGamesAPI.Yugioh.Tests
             Assert.IsNotNull(result);
         }
 
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void GetRisingAndFallingListTest()
         {
@@ -99,6 +107,7 @@ namespace CardGamesAPI.Yugioh.Tests
 
         }
 
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void GetTop100ExpensiveCardsTest()
         {
@@ -108,6 +117,7 @@ namespace CardGamesAPI.Yugioh.Tests
             Assert.IsNotNull(result);
         }
 
+        [TestCategory("YugiohPricesServiceTests")]
         [TestMethod()]
         public void GetCardImageStaticUrlTest()
         {

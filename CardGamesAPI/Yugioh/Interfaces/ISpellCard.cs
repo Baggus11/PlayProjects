@@ -2,6 +2,7 @@
 {
     public interface ISpellCard : IYugiohCard
     {
-        YugiohSpellType SpellType { get; set; }
+        YugiohSpellCardType SpellType { get; set; }
+        //int SpellSpeed { get; set; }
     }
 }

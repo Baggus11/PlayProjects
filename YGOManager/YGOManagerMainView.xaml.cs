@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
@@ -27,12 +26,12 @@ namespace YGOManager
             if (e.Key != Key.Enter)
                 return;
             else
-                ygoManager.UpdateListAsync();
+                ygoManager.UpdateList();
 
         }
 
         private void btnSyncCards_Click(object sender, RoutedEventArgs e)
-           => ygoManager.SyncCards();
+           => ygoManager.SynchronizeCardsList();
 
     }
 

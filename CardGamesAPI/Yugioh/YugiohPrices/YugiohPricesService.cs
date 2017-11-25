@@ -10,9 +10,6 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
 {
     public static class YugiohPricesService
     {
-        //Common testing requirement. If you are consuming an API in a sandbox/test region, uncomment this line of code ONLY for non production uses.
-        //System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
         private static Uri baseAddress = new Uri("http://yugiohprices.com/api/");
 
         public static async Task<string> CheckPriceForCard(string cardName)

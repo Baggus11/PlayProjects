@@ -55,8 +55,10 @@ namespace CardGamesAPI.Yugioh.RulesEngine
         }
 
     }
+
     public static class CardsDAL
     {
+
         public static DataTable GetTopCardsFromDb(string connectionString, int count)
         {
             if (count < 0) return null;

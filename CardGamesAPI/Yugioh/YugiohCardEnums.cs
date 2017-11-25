@@ -8,15 +8,16 @@
         AttackMode, //face up
         DefenseMode,
     }
-    public enum YugiohCardBaseType
+    public enum YugiohCardType
     {
         Token,
-        MonsterCard,
-        SpellCard,
-        TrapCard
+        Monster,
+        Spell,
+        Trap
     }
     public enum YugiohMonsterType
     {
+        //None, //make nullable
         Aqua,
         Beast,
         BeastWarrior,
@@ -44,7 +45,7 @@
     }
     public enum YugiohMonsterAttribute
     {
-        None,
+        //None, //make nullable
         Light,
         Dark,
         Water,
@@ -52,30 +53,41 @@
         Wind,
         Earth,
     }
-    public enum YugiohMonsterBaseType
+    public enum YugiohMonsterCardType
     {
-        None,
+        //None, //make nullable
         Normal,
         Effect,
+        Fusion,
+        Ritual,
+        Synchro,
+        Tuner,
+        XYZ,
+        Gemini,
+        FlipEffect,
+        Pendulum,
+        TunerSynchro,
+        NormalPendulum,
+        FusionPendulum,
+        SynchroPendulum,
+        XYZPendulum,
     }
-    public enum YugiohTrapType
+    public enum YugiohTrapCardType
     {
-        //None,
+        //None, //make nullable
         Normal,
         Continuous,
         Counter,
         TrapMonster,
     }
-    public enum YugiohSpellType
+    public enum YugiohSpellCardType
     {
-        //None,
+        //None, //make nullable
+        Normal,
         Field,
         Equip,
         Continuous,
         Ritual,
         QuickPlay,
-        //Speed,
-        Pendulum,
-        Normal,
     }
 }

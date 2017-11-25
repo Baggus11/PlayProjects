@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -10,6 +11,10 @@ namespace Common
 {
     public static class EnumExtensions
     {
+        public static IEnumerable<TEnum> GetValues<TEnum>()
+            where TEnum : struct, IConvertible, IFormattable, IComparable
+        => Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
+
         public static string GetDescription(this Enum value)
         {
             try
@@ -25,35 +30,30 @@ namespace Common
             }
         }
 
-        public static T Next<T>(this T src) where T : struct
+        public static TEnum Next<TEnum>(this TEnum src)
+            where TEnum : struct, IConvertible, IFormattable, IComparable
         {
-            if (!typeof(T).IsEnum) throw new ArgumentException(string.Format("Argumnent {0} is not an Enum", typeof(T).FullName));
-            T[] Arr = (T[])Enum.GetValues(src.GetType());
-            int j = Array.IndexOf<T>(Arr, src) + 1;
+            if (!typeof(TEnum).IsEnum) throw new ArgumentException(string.Format("Argumnent {0} is not an Enum", typeof(TEnum).FullName));
+            TEnum[] Arr = (TEnum[])Enum.GetValues(src.GetType());
+            int j = Array.IndexOf<TEnum>(Arr, src) + 1;
             return (Arr.Length == j) ? Arr[0] : Arr[j];
         }
 
-        public static T Previous<T>(this T src) where T : struct
+        public static TEnum Previous<TEnum>(this TEnum src)
+            where TEnum : struct, IConvertible, IFormattable, IComparable
         {
-            if (!typeof(T).IsEnum) throw new ArgumentException(string.Format("Argumnent {0} is not an Enum", typeof(T).FullName));
-            T[] Arr = (T[])Enum.GetValues(src.GetType());
-            int j = Array.IndexOf<T>(Arr, src) - 1;
+            if (!typeof(TEnum).IsEnum) throw new ArgumentException(string.Format("Argumnent {0} is not an Enum", typeof(TEnum).FullName));
+            TEnum[] Arr = (TEnum[])Enum.GetValues(src.GetType());
+            int j = Array.IndexOf<TEnum>(Arr, src) - 1;
             return (Arr.Length == j) ? Arr[0] : Arr[j];
         }
 
-        /// <summary>
-        /// Intended for enums to create conditions that are comparable to instances with given enum as a property
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="enumType"></param>
-        /// <returns></returns>
-        /// <example>
-        /// var condition = "CurrentUser.CurrentTeamType == \"Admin\"";
-        /// </example>
-        public static string ToExpressionEnumCondition<T>(this T enumType)
+        // Intended for enums to create conditions that are comparable to instances with given enum as a property
+        public static string ToExpressionEnumCondition<TEnum>(this TEnum enumType)
+            where TEnum : struct, IConvertible, IFormattable, IComparable
         {
-            if (!typeof(T).IsEnum)
-                throw new NotSupportedException($"Type {typeof(T).Name} is not a valid Enum.");
+            if (!typeof(TEnum).IsEnum)
+                throw new NotSupportedException($"Type {typeof(TEnum).Name} is not a valid Enum.");
 
             StringBuilder comparableEnumCondition = new StringBuilder();
 
@@ -64,21 +64,22 @@ namespace Common
             return comparableEnumCondition.ToString();
         }
 
-        public static T GetRandomEnumValue<T>()
+        public static TEnum GetRandomEnumValue<TEnum>()
+            where TEnum : struct, IConvertible, IFormattable, IComparable
         {
-            var values = Enum.GetValues(typeof(T));
-            return (T)values.GetValue(new Random().Next(values.Length));
+            var values = Enum.GetValues(typeof(TEnum));
+            return (TEnum)values.GetValue(new Random().Next(values.Length));
         }
 
-        public static Enum GetRandomEnumValue(this Type t)
+        public static Enum GetRandomEnumValue(this Type type)
         {
-            return Enum.GetValues(t)
+            return Enum.GetValues(type)
                 .OfType<Enum>()
                 .OrderBy(e => Guid.NewGuid())
                 .FirstOrDefault();
         }
-    }
 
+    }
     /// <summary>
     /// Enum Binding Source
     /// 

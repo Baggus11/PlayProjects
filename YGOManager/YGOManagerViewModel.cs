@@ -22,21 +22,19 @@ namespace YGOManager
         private string _CardSaveDirectory;
         private ViewableCollection<YGOCardViewModel> _CardList = new ViewableCollection<YGOCardViewModel>();
         public ViewableCollection<YGOCardViewModel> CardList { get { return _CardList; } }
-
-        public string Text
-        {
-            get { return GetValue(() => Text); }
-            set { SetValue(() => Text, value); }
-        }
-
         private List<string> _downloadList
         {
             get
             {
-                return Text?
+                return RequestedCards?
                     .Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
                     .Distinct().ToList();
             }
+        }
+        public string RequestedCards
+        {
+            get { return GetValue(() => RequestedCards); }
+            set { SetValue(() => RequestedCards, value); }
         }
 
         public YGOManagerViewModel()
@@ -50,39 +48,15 @@ namespace YGOManager
             LoadCardsFromDirectory(_CardSaveDirectory);
         }
 
-        internal async void UpdateListAsync()
+        internal async void SynchronizeCardsList()
         {
-            try
-            {
-                IEnumerable<string> existingCardNames = CardList
-              .Where(card => File.Exists(card.LocalPath))
-              .Select(card => card.CardName);
+            if (_downloadList?.Count == 0)
+                return;
 
-                _downloadList?.FindAll(cardName =>
-                      !existingCardNames.Contains(cardName))
-                          .ForEach(cardName =>
-                              CardList.Add(new YGOCardViewModel
-                              { CardName = cardName, }));
-
-            }
-            catch (Exception ex) /*when (ex.Log())*/
-            {
-                string errMsg = $"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()}";
-                Debug.WriteLine(errMsg);
-                MessageBox.Show(errMsg);
-                errMsg.NLog();
-            }
-
-        }
-
-        internal async void SyncCards()
-        {
-            //Find any cards necessary to download, then download them.
             var cardsToDownload = CardList
                 .Where(card => _downloadList.Contains(card.CardName) && !card.ImageOnDisk)
                 .Select(c => c.CardName);
 
-            cardsToDownload.Dump("cards to download");
             await DownloadCards(cardsToDownload, _defaultSaveDir);
 
             //Check Db tables and local files, make a collection of necessary downloads.
@@ -90,13 +64,8 @@ namespace YGOManager
 
             //Prompt user for sync if enabled (default).
 
-            Text = null;
+            RequestedCards = null;
             //Process.Start(_defaultSaveDir, string.Format("/select, \"{0}\"", _defaultSaveDir));
-        }
-
-        private void CheckLocalFiles()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task DownloadCards(IEnumerable<string> cardNames, string saveDirectory)
@@ -143,24 +112,44 @@ namespace YGOManager
 
         }
 
+        internal Task UpdateList()
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    IEnumerable<string> existingCardNames = CardList
+                        .Where(card => File.Exists(card.LocalPath))
+                        .Select(card => card.CardName);
+
+                    _downloadList?.FindAll(cardName =>
+                          !existingCardNames.Contains(cardName))
+                              .ForEach(cardName =>
+                                  CardList.Add(new YGOCardViewModel
+                                  { CardName = cardName, }));
+
+                }
+                catch (Exception ex) /*when (ex.Log())*/
+                {
+                    string errMsg = $"{MethodBase.GetCurrentMethod().Name}: {ex.ToString()}";
+                    Debug.WriteLine(errMsg);
+                    MessageBox.Show(errMsg);
+                    errMsg.NLog();
+                }
+            });
+        }
+
         public void LoadCardsFromDirectory(string directory)
         {
             if (Directory.Exists(directory))
             {
                 var files = Directory.GetFiles(directory).ToList();
-                files?.ForEach(path =>
-                    CardList.Add(new YGOCardViewModel
-                    {
-                        LocalPath = path,
-                        CardName = Path.GetFileNameWithoutExtension(path)
-                    }));
+                files?.ForEach(path => CardList.Add(new YGOCardViewModel
+                {
+                    LocalPath = path,
+                    CardName = Path.GetFileNameWithoutExtension(path)
+                }));
             }
-        }
-
-        private void SaveCardToDb(YGOCardViewModel card)
-        {
-            //TODO: perform a mergeinsert on this card.
-            throw new NotImplementedException();
         }
 
         private void MapDataToCard(YGOCardViewModel model, YugiohPricesDetails yugiohCardData)

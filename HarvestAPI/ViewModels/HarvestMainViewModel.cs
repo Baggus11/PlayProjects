@@ -1,8 +1,9 @@
 ﻿using Common;
-using HarvestAPI.ViewModels;
+using HarvestHomeAPI.ViewModels;
 using System.Collections.ObjectModel;
 using System.Text;
-namespace HarvestAPI
+
+namespace HarvestHomeAPI
 {
     public class HarvestMainViewModel : ViewModelBase
     {

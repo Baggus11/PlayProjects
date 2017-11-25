@@ -1,6 +1,7 @@
 ﻿using Common;
 using System.ComponentModel;
-namespace HarvestAPI.ViewModels
+
+namespace HarvestHomeAPI.ViewModels
 {
     public class Pod : ViewModelBase
     {

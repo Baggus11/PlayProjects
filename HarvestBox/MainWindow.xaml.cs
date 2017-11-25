@@ -1,12 +1,10 @@
-﻿using HarvestAPI;
-using HarvestAPI.ViewModels;
-using System.Diagnostics;
+﻿using HarvestHomeAPI.ViewModels;
 using System.Windows;
 /// <summary>
 /// todo: Write a UI for setting up and monitoring gardening units, implements and accessories.
 /// This program will be written to support 10x10 ft gardens.
 /// </sumary>
-namespace HomeHarvest
+namespace HarvestHomeAPI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -31,12 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.10\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -63,7 +61,6 @@
     <Compile Include="AbstractClasses\ViewableCollectionBase.cs" />
     <Compile Include="Classes\ViewableCollection.cs" />
     <Compile Include="Classes\Converters.cs" />
-    <Compile Include="Classes\DatabaseService.cs" />
     <Compile Include="Classes\ExpressionBuilder.cs" />
     <Compile Include="Classes\Person.cs" />
     <Compile Include="Classes\PropertyObserver.cs" />
@@ -84,11 +81,9 @@
     <Compile Include="Extensions\LogExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
-    <Compile Include="Extensions\SQLExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\ThreadExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
-    <Compile Include="Interfaces\IDatabaseService.cs" />
     <Compile Include="Interfaces\IExpressionBuilder.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IRule.cs" />
@@ -108,6 +103,7 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="app.config" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

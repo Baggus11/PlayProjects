@@ -2,6 +2,6 @@
 {
     public interface ITrapCard : IYugiohCard
     {
-        YugiohTrapType TrapType { get; set; }
+        YugiohTrapCardType TrapType { get; set; }
     }
 }

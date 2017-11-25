@@ -55,7 +55,7 @@ namespace Common
         {
             try
             {
-                return @object.GetType().GetProperties()
+                return typeof(T).GetProperties()
                     ?.Single(pi => pi.Name == propertyName)
                     ?.GetValue(@object, null);
             }
@@ -129,7 +129,7 @@ namespace Common
 
         }
 
-        public static T Dump<T>(this T obj, string displayName = null, bool ignoreNulls = true)
+        public static T Dump<T>(this T obj, string displayName = null, bool showNulls = true)
         {
             if (obj != null)
             {
@@ -141,7 +141,7 @@ namespace Common
                     new JsonSerializerSettings
                     {
                         Converters = new List<JsonConverter> { new Newtonsoft.Json.Converters.StringEnumConverter() },
-                        NullValueHandling = (ignoreNulls) ? NullValueHandling.Ignore : NullValueHandling.Include,
+                        NullValueHandling = (!showNulls) ? NullValueHandling.Ignore : NullValueHandling.Include,
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
                 Debug.WriteLine(string.Format("{0}:\n{1}", displayName, prettyJson));

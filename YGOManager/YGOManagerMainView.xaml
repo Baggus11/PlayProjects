@@ -12,7 +12,8 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
     <Window.Resources>
-        <local:UriToCachedImageConverter x:Key="uriToImageConv" />
+        <local:ImageConverter x:Key="imageConv" />
+        <!--<local:UriToCachedImageConverter x:Key="uriToImageConv" />-->
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -33,7 +34,7 @@
                      Foreground="MidnightBlue"
                      KeyUp="tbCardNames_KeyUp"
                      TabIndex="1"
-                     Text="{Binding Text,
+                     Text="{Binding RequestedCards,
                                     UpdateSourceTrigger=PropertyChanged}" />
             <Button Name="btnSyncCards"
                     Width="50"
@@ -60,7 +61,7 @@
                            DataContext="{Binding ElementName=lvCardInfo,
                                                  Path=SelectedItem}"
                            Source="{Binding Path=LocalPath,
-                                            Converter={StaticResource uriToImageConv},
+                                            Converter={StaticResource imageConv},
                                             Mode=OneWay}" />
                 </Border>
                 <!--<TextBlock Height="50"

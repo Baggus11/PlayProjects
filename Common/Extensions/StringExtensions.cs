@@ -14,6 +14,11 @@ namespace Common
         public static string Reverse(this string str)
             => new string(str.ToCharArray().Reverse().ToArray());
 
+        public static string SplitCamelCase(this string str)
+            => Regex.Replace(Regex.Replace(str,
+                    @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"),
+                    @"(\p{Ll})(\P{Ll})", "$1 $2");
+
         public static T DeserializeFromXml<T>(this string xmlString)
             where T : class
         {

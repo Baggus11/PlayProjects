@@ -1,6 +1,5 @@
 ﻿using CardGamesAPI.Yugioh;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PlayProjects.UnitTests;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,37 +17,37 @@ namespace Common.Yugioh.Tests
 
         YugiohRulesManager rule_manager = new YugiohRulesManager();
 
-        [TestInitialize]
-        public void Init()
-        {
-            objType = typeof(MonsterCard);
-            conditionStr = $@"{objType.Name}.Attack > 2300 AND {objType.Name}.MonsterAttribute = {YugiohMonsterAttribute.Dark.ToExpressionEnumCondition()}"
-               + $@" AND {objType.Name}.MonsterType = {YugiohMonsterType.Fairy.ToExpressionEnumCondition()}";
+        //[TestInitialize]
+        //public void Init()
+        //{
+        //    objType = typeof(IMonsterCard);
+        //    conditionStr = $@"{objType.Name}.Attack > 2300 AND {objType.Name}.MonsterAttribute = {YugiohMonsterAttribute.Dark.ToExpressionEnumCondition()}"
+        //       + $@" AND {objType.Name}.MonsterType = {YugiohMonsterType.Fairy.ToExpressionEnumCondition()}";
 
-            Console.WriteLine(conditionStr);
+        //    Console.WriteLine(conditionStr);
 
-            Hand = new List<IYugiohCard>
-            {
-                new MonsterCard ( "Dark Magician", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Normal, 7, 2500, 2100),
-                new MonsterCard("Blue-Eyes White Dragon", YugiohMonsterAttribute.Light, YugiohMonsterType.Dragon, YugiohMonsterBaseType.Normal, 8, attack: 3000, defense: 2500),
-                new MonsterCard("Dark Magician Girl", YugiohMonsterAttribute.Dark, YugiohMonsterType.Spellcaster, YugiohMonsterBaseType.Effect, 5, 2300, 2000),
-            };
-        }
+        //    Hand = new List<IYugiohCard>
+        //    {
+        //        new NormalMonster ( "Dark Magician", 7, 2500, 2100),
+        //        new NormalMonster("Blue-Eyes White Dragon", 8, 3000, 2500),
+        //        new EffectMonster("Dark Magician Girl", 5, 2300, 2000),
+        //    };
+        //}
 
-        [TestMethod]
-        [TestCategory("Misc")]
-        public void Can_Card_Be_Copied()
-        {
-            var card1 = (MonsterCard)YugiohTestFixture.CreateCard<IMonsterCard>();
-            MonsterCard card2 = null;
-            ObjectExtensions.Map(ref card1, ref card2);
+        //[TestMethod]
+        //[TestCategory("Misc")]
+        //public void Can_Card_Be_Copied()
+        //{
+        //    var card1 = YugiohTestFixture.CreateCard<IMonsterCard>();
+        //    IMonsterCard card2 = default(IMonsterCard);
+        //    ObjectExtensions.Map(ref card1, ref card2);
 
-            card1.Dump("card1");
-            card2.Dump("card2");
+        //    card1.Dump("card1");
+        //    card2.Dump("card2");
 
-            Assert.AreEqual(card1, card2);
+        //    Assert.AreEqual(card1, card2);
 
-        }
+        //}
 
         [TestMethod()]
         public void Build_And_Run_Expression_Test()
