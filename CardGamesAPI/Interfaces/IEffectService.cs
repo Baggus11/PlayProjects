@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CardGamesAPI.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace CardGamesAPI
@@ -9,7 +10,7 @@ namespace CardGamesAPI
     /// </summary>
     public interface IEffectService
     {
-        IMove MoveState { get; set; }//hopefully this will be a move state once I'm done implementing
+        IMove Move { get; set; }
 
         bool Activate(); //Activate a stored effect on State
 

@@ -1,13 +1,9 @@
-﻿using NLog;
-
-namespace Common
+﻿namespace Common
 {
     /// <summary>
     /// Contract for implemented classes to use logging methods
     /// </summary>
-    public interface ILogger
+    public interface IClientLogger
     {
-
-        //Logger NLogger = LogManager.GetCurrentClassLogger();
     }
 }

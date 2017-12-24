@@ -1,4 +1,6 @@
-﻿namespace CardGamesAPI
+﻿using CardGamesAPI.Interfaces;
+
+namespace CardGamesAPI
 {
     public interface ICheatChecker //just an idea, not sure how to implement well.
     {

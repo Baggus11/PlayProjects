@@ -46,7 +46,7 @@ namespace DataAccessLayers.Tests
 
     }
 
-    class DummyDAL : DataAccessLayerBase
+    class DummyDAL : DataAccess
     {
         public DummyDAL(string connectionString, string tableName)
             : base(connectionString, tableName)

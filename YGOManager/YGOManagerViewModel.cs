@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static CardGamesAPI.Yugioh.YugiohPrices.YugiohPricesService;
 
-namespace YGOManager
+namespace YugiohCardDownloader
 {
     /// <summary>
     /// http://www.yugioh-card.com/uk/gameplay/detail.php?id=1155
@@ -22,15 +22,17 @@ namespace YGOManager
         private string _CardSaveDirectory;
         private ViewableCollection<YGOCardViewModel> _CardList = new ViewableCollection<YGOCardViewModel>();
         public ViewableCollection<YGOCardViewModel> CardList { get { return _CardList; } }
+
         private List<string> _downloadList
         {
             get
             {
                 return RequestedCards?
-                    .Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
-                    .Distinct().ToList();
+                    .Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)?
+                    .Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
             }
         }
+
         public string RequestedCards
         {
             get { return GetValue(() => RequestedCards); }
@@ -167,7 +169,5 @@ namespace YGOManager
                 model.Defense = d.def;
             });
         }
-
     }
-
 }

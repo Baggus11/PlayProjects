@@ -120,7 +120,7 @@
       <Project>{5E4D9F12-A069-4979-9EE1-944FF27C1BF0}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SqlEngine\DataAccessLayers.csproj">
+    <ProjectReference Include="..\SqlEngine\DataAccess.csproj">
       <Project>{64d8361a-80ba-452e-8b0c-3db0db952f17}</Project>
       <Name>DataAccessLayers</Name>
     </ProjectReference>

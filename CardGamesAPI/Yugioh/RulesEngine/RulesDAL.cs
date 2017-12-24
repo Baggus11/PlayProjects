@@ -30,25 +30,25 @@ namespace CardGamesAPI.Yugioh.RulesEngine
 
         }
 
-        public static List<IRule> GetAssignedRulesFor<T>()
+        public static List<Common.Rule> GetAssignedRulesFor<T>()
         {
             throw new NotImplementedException();
 
         }
 
-        public static bool InsertRuleFor<T>(IRule rule, T instance)
+        public static bool InsertRuleFor<T>(Common.Rule rule, T instance)
         {
             throw new NotImplementedException();
 
         }
 
-        public static bool UpdateRuleFor<T>(IRule oldRule, IRule updatedRule)
+        public static bool UpdateRuleFor<T>(Common.Rule oldRule, Common.Rule updatedRule)
         {
             throw new NotImplementedException();
 
         }
 
-        private static bool RuleMatchesSchema<T>(IRule rule, SqlConnection connection)
+        private static bool RuleMatchesSchema<T>(Common.Rule rule, SqlConnection connection)
         {
             //Check that type T matches the Rule Type in the DB.
             throw new NotImplementedException();

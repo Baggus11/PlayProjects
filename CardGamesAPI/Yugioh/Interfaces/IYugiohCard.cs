@@ -4,9 +4,12 @@ namespace CardGamesAPI.Yugioh
 {
     public interface IYugiohCard : IDisposable, ICloneable
     {
-        event EventHandler<YugiohCardEventArgs> EffectTriggered;
-        int SpellSpeed { get; set; }
         Guid SysGuid { get; }
+
+        event EventHandler<YugiohCardEventArgs> EffectTriggered;
+
+        //http://www.yu-gi-oh-cards.net/howtoplay/yugioh-chains.html
+        int SpellSpeed { get; set; }
 
         string KonamiID { get; set; }
 
@@ -20,7 +23,6 @@ namespace CardGamesAPI.Yugioh
 
         YugiohCardType CardType { get; set; }
 
-        //YugiohCardPosition Position { get; set; }
-
+        YugiohCardPosition Position { get; set; }
     }
 }

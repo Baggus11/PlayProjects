@@ -1,15 +1,13 @@
-﻿namespace CardGamesAPI.Yugioh
+﻿using CardGamesAPI.Yugioh.Classes;
+using CardGamesAPI.Yugioh.Interfaces;
+
+namespace CardGamesAPI.Yugioh.Factories
 {
-    public class TrapFactory : YugiohCardFactory
+    public class TrapFactory : YugiohCardFactoryBase
     {
         public TrapFactory()
         {
-            prototype = new TrapCard();
-        }
-
-        public override IYugiohCard BuildDetails()
-        {
-            throw new System.NotImplementedException();
+            cardPrototype = new TrapCard();
         }
     }
 }

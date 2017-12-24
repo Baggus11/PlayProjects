@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Common
@@ -7,11 +8,8 @@ namespace Common
     {
         public static void WaitAll(this IEnumerable<Thread> threads)
         {
-            if (threads != null)
-            {
-                foreach (Thread thread in threads)
-                { thread.Join(); }
-            }
+            foreach (Thread thread in threads ?? Enumerable.Empty<Thread>())
+            { thread.Join(); }
         }
     }
 }

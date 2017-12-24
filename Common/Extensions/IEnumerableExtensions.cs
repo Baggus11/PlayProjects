@@ -8,6 +8,8 @@ namespace Common
 {
     public static class IEnumerableExtensions
     {
+        public static IEnumerable<T> AsEmpty<T>(this IEnumerable<T> source) => Enumerable.Empty<T>();
+
         public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> items, int maxBatchSize)
         {
             return items.Select((item, index) => new { item, index })

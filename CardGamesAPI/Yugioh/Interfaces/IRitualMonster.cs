@@ -4,10 +4,8 @@
     public interface IRitualMonster : IMonsterCard
     {
         ISpellCard RitualSpell { get; set; }
-        //ritual materials?
+        IYugiohCard[] RitualMaterials { get; set; }
         ICardEffect CardEffect { get; set; }
         int Level { get; set; }
-
     }
-
 }

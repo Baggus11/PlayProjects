@@ -1,14 +1,9 @@
 ﻿namespace CardGamesAPI.Yugioh
 {
-    public class YugiohCardEffect : CardEffectBase
+    public class YugiohCardEffect : CardEffect<YugiohCardEffect>
     {
-        protected YugiohCardEffect()
+        protected YugiohCardEffect() : base()
         {
-        }
-
-        public override YugiohMove Activate(YugiohMove currentState)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

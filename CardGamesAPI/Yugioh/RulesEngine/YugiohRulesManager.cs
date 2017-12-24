@@ -10,6 +10,6 @@ namespace CardGamesAPI.Yugioh
         {
         }
 
-        public IEnumerable<IRule> GetRules<T>() => RulesDAL.GetAssignedRulesFor<T>();
+        public IEnumerable<Rule> GetRules<T>() => RulesDAL.GetAssignedRulesFor<T>();
     }
 }

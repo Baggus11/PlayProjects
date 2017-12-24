@@ -1,5 +1,5 @@
 ﻿using System;
-using CardGames;
+using CardGamesAPI;
 using CardGamesAPI.Constants;
 namespace CardGamesAPI
 {

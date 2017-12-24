@@ -1,8 +1,7 @@
 ﻿using Common;
 
-namespace YGOManager
+namespace YugiohCardDownloader
 {
-    //Wrapper & viewmodel
     public class YGOCardViewModel : ViewModelBase
     {
         public string CardName
@@ -35,41 +34,36 @@ namespace YGOManager
             set { SetValue(() => ImageOnDisk, value); }
         }
 
-        private int _Level;
         public int Level
         {
-            get { return _Level; }
-            set { SetValue(ref _Level, value); }
+            get { return GetValue(() => Level); }
+            set { SetValue(() => Level, value); }
         }
 
-        private string _CardText;
         public string CardText
         {
-            get { return _CardText; }
-            set { SetValue(ref _CardText, value); }
+            get { return GetValue(() => CardText); }
+            set { SetValue(() => CardText, value); }
         }
 
-        private int _Rank;
         public int Rank
         {
-            get { return _Rank; }
-            set { SetValue(ref _Rank, value); }
+            get { return GetValue(() => Rank); }
+            set { SetValue(() => Rank, value); }
         }
 
         public string Type { get; internal set; }
 
-        private string _CardType;
         public string CardType
         {
-            get { return _CardType; }
-            set { SetValue(ref _CardType, value); }
+            get { return GetValue(() => CardType); }
+            set { SetValue(() => CardType, value); }
         }
 
-        private int _Attack;
         public int Attack
         {
-            get { return _Attack; }
-            set { SetValue(ref _Attack, value); }
+            get { return GetValue(() => Attack); }
+            set { SetValue(() => Attack, value); }
         }
 
         public string Attribute
@@ -78,11 +72,10 @@ namespace YGOManager
             set { SetValue(() => Attribute, value); }
         }
 
-        private int _Defense;
         public int Defense
         {
-            get { return _Defense; }
-            set { SetValue(ref _Defense, value); }
+            get { return GetValue(() => Defense); }
+            set { SetValue(() => Defense, value); }
         }
 
     }

@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 
-namespace YGOManager
+namespace YugiohCardDownloader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -37,7 +37,7 @@ namespace Common
             try
             {
                 var lambda = Build<T>(conditions, values);
-                return Extensions.Where(collection, lambda);
+                return ExpressionExtensions.Where(collection, lambda);
             }
             catch (Exception)
             {
@@ -47,7 +47,7 @@ namespace Common
 
     }
 
-    public static class Extensions
+    public static partial class ExpressionExtensions
     {
         public static IEnumerable<T> Where<T>(this IEnumerable<T> collection, LambdaExpression expression)
             where T : class

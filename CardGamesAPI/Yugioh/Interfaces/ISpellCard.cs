@@ -4,5 +4,6 @@
     {
         YugiohSpellCardType SpellType { get; set; }
         //int SpellSpeed { get; set; }
+        //void Activate();
     }
 }

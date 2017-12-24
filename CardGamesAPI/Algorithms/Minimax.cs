@@ -1,18 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+using CardGamesAPI.Interfaces;
+using System;
 
-namespace CardGamesAPI
+namespace CardGamesAPI.Algorithms
 {
-    public class AlphaBetaMinimax : IDisposable
+    public class AlphaBetaMinimax
     {
         const bool MaxPlayer = true;
-        IMove _rootMove;
 
         public int Iterate(IMove move, int depth, int alpha, int beta, bool player)
         {
-            Debug.WriteLine($"player: {move.TurnPlayer.Name} player score: {move.TurnPlayer.Score} ");
-            Debug.WriteLine($"alpha: {alpha}, beta: {beta}");
-
             if (depth == 0 || move.IsTerminal(player))
             {
                 return move.GetScore(player);
@@ -43,11 +39,15 @@ namespace CardGamesAPI
             }
         }
 
-        public void Dispose()
-        {
-            _rootMove.Dispose();
-            _rootMove = null;
-        }
+		public AlphaBetaMinimax(){
+
+		}
+
+		~AlphaBetaMinimax(){
+
+		}
+
+
 
     }
 
@@ -86,3 +86,31 @@ namespace CardGamesAPI
     //}
 
 }
+
+namespace Algorithms {
+	public class AlphaBetaMinimax {
+
+		private const bool MaxPlayer = true;
+
+		public AlphaBetaMinimax(){
+
+		}
+
+		~AlphaBetaMinimax(){
+
+		}
+
+		/// 
+		/// <param name="move"></param>
+		/// <param name="depth"></param>
+		/// <param name="alpha"></param>
+		/// <param name="beta"></param>
+		/// <param name="player"></param>
+		public int Iterate(IMove move, int depth, int alpha, int beta, bool player){
+
+			return 0;
+		}
+
+	}//end AlphaBetaMinimax
+
+}//end namespace Algorithms

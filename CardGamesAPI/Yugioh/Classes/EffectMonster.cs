@@ -1,9 +1,7 @@
-﻿namespace CardGamesAPI.Yugioh
+﻿namespace CardGamesAPI.Yugioh.Classes
 {
     public class EffectMonster : MonsterCardBase, IEffectMonster
     {
-        public int SpellSpeed { get; set; }
-
         public EffectMonster()
             : this(typeof(EffectMonster).Name)
         { }
@@ -13,12 +11,6 @@
 
         public EffectMonster(string monsterName, YugiohMonsterCardType monsterCardType)
             : base(monsterName, monsterCardType) { }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
-
     }
 
 }

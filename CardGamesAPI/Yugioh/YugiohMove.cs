@@ -1,10 +1,10 @@
-﻿using Common;
-using System;
+﻿using CardGamesAPI.Interfaces;
+using Common;
 using System.Collections.Generic;
 
 namespace CardGamesAPI.Yugioh
 {
-    public class YugiohMove : MoveBase
+    public class YugiohMove : Move
     {
         public int CurrentDrawSize { get; set; } = 1;
 
@@ -42,8 +42,6 @@ namespace CardGamesAPI.Yugioh
             }
         }
 
-        //public int GetScore() => GetTurnPlayer(IsTurnPlayer).Score;
-
         public override bool IsTerminal(bool turnPlayer)
         {
             //todo: implement special win-conditions here
@@ -57,11 +55,6 @@ namespace CardGamesAPI.Yugioh
         public override int GetScoreOf(IPlayer player) => player.Score;
 
         private IPlayer GetTurnPlayer() => IsTurnPlayer ? TurnPlayer : Opponent;
-
-        public override void GenerateMoves()
-        {
-            throw new NotImplementedException();
-        }
 
     }
 

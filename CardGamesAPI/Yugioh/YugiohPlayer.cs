@@ -1,9 +1,10 @@
-﻿using Common;
+﻿using CardGamesAPI.Interfaces;
+using Common;
 using System.Collections.Generic;
 
 namespace CardGamesAPI.Yugioh
 {
-    public class YugiohPlayer : PlayerBase
+    public class YugiohPlayer : Player
     {
         public List<IYugiohCard> Deck = new List<IYugiohCard>();
         public List<IYugiohCard> Hand = new List<IYugiohCard>();

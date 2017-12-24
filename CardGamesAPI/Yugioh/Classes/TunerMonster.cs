@@ -1,4 +1,4 @@
-﻿namespace CardGamesAPI.Yugioh
+﻿namespace CardGamesAPI.Yugioh.Classes
 {
     //Source: http://yugioh.wikia.com/wiki/Tuner_monster
     public class TunerMonster : TunerMonsterBase, ITunerMonster

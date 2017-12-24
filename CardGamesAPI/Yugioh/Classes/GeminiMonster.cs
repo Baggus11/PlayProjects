@@ -1,9 +1,8 @@
-﻿namespace CardGamesAPI.Yugioh
+﻿namespace CardGamesAPI.Yugioh.Classes
 {
     public class GeminiMonster : MonsterCardBase, IEffectMonster, INormalMonster
     {
         public int Level { get; set; }
-        public int SpellSpeed { get; set; }
 
         public GeminiMonster()
             : this(typeof(GeminiMonster).Name)

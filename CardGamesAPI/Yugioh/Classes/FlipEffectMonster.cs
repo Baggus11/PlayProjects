@@ -1,4 +1,4 @@
-﻿namespace CardGamesAPI.Yugioh
+﻿namespace CardGamesAPI.Yugioh.Classes
 {
     internal class FlipEffectMonster : MonsterCardBase, IFlipEffectMonster
     {
