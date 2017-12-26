@@ -5,21 +5,14 @@
     public class TunerSynchroMonster : SynchroMonsterBase, ITunerMonster
     {
         public TunerSynchroMonster()
-            : this(typeof(TunerSynchroMonster).Name)
-        { }
+            : this(typeof(TunerSynchroMonster).Name) { }
 
         public TunerSynchroMonster(string name)
-            : base(name)
-        {
-            MonsterCardType = YugiohMonsterCardType.TunerSynchro;
-
-        }
+            : base(name) => MonsterCardType = YugiohMonsterCardType.TunerSynchro;
 
         public override void Dispose()
         {
             base.Dispose();
         }
-
     }
-
 }

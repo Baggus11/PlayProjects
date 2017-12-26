@@ -4,7 +4,7 @@
     {
         YugiohMonsterType? MonsterType { get; }
         YugiohMonsterAttribute? MonsterAttribute { get; }
-        YugiohMonsterCardType? MonsterCardType { get; }
+        YugiohMonsterCardType? MonsterCardType { get; set; }
         int Attack { get; set; }
         int Defense { get; set; }
     }

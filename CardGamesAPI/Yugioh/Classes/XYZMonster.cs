@@ -1,22 +1,11 @@
 ﻿namespace CardGamesAPI.Yugioh.Classes
 {
-    internal class XYZMonster : XYZMonsterBase, IMonsterCard
+    public class XYZMonster : XYZMonsterBase, IMonsterCard
     {
-        public XYZMonster()
-            : base()
-        { }
+        public XYZMonster() : base() { }
 
-        public XYZMonster(string name)
-            : base(name)
-        {
-            MonsterCardType = YugiohMonsterCardType.XYZ;
-        }
+        public XYZMonster(string name) : base(name) => MonsterCardType = YugiohMonsterCardType.XYZ;
 
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
-
+        public override void Dispose() => base.Dispose();
     }
-
 }

@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace Common
 {
-    public abstract class ViewModelBase : /*BindableBase,*/ INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
         //public event PropertyChangedEventHandler PropertyChanged = delegate { };
         public event PropertyChangedEventHandler PropertyChanged;
@@ -99,7 +99,7 @@ namespace Common
             PropertyDescriptor propertyDescriptor = TypeDescriptor.GetProperties(this)[propertyName];
             if (propertyDescriptor == null)
             {
-                throw new InvalidOperationException(string.Format(null, "The property with the propertyName '{0}' doesn't exist.", propertyName));
+                throw new InvalidOperationException(string.Format(null, "The property with the name '{0}' doesn't exist.", propertyName));
             }
         }
 
@@ -260,6 +260,7 @@ namespace Common
         }
 
     }
+
     public class DependentPropertiesAttribute : Attribute
     {
         private readonly string[] properties;

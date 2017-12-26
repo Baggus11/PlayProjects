@@ -47,8 +47,6 @@ namespace CardGamesAPI.Algorithms
 
 		}
 
-
-
     }
 
     //public class AlphaBeta

@@ -1,20 +1,12 @@
 ﻿namespace CardGamesAPI.Yugioh.Classes
 {
-    internal class RitualMonster : RitualMonsterBase
+    public class RitualMonster : RitualMonsterBase
     {
-        public RitualMonster()
-            : this(typeof(RitualMonster).Name)
-        { }
+        public RitualMonster() : this(typeof(RitualMonster).Name) { }
 
         public RitualMonster(string name)
-            : base(name)
-        {
-            MonsterCardType = YugiohMonsterCardType.Ritual;
-        }
+            : base(name) => MonsterCardType = YugiohMonsterCardType.Ritual;
 
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
+        public override void Dispose() => base.Dispose();
     }
 }

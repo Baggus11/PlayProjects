@@ -1,8 +1,10 @@
-﻿namespace CardGamesAPI.Yugioh.Classes
+﻿using System.Collections.Generic;
+
+namespace CardGamesAPI.Yugioh.Classes
 {
     public class FusionPendulumMonster : PendulumMonsterBase, IFusionMonster
     {
-        public IYugiohCard[] FusionMaterials { get; set; }
+        public List<IYugiohCard> FusionMaterials { get; set; }
         //public List<IYugiohCard> FusionMaterials { get; set; }
         public int Level { get; set; }
 

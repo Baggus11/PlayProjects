@@ -24,7 +24,7 @@ namespace CardGamesAPI.Yugioh
         {
             CardName = null;
             CardEffect = null;
-            KonamiID = null;
+            KonamiId = null;
             LocalPath = null;
             Text = null;
             Url = null;

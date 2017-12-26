@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using CardGamesAPI.Yugioh.Classes;
 
 namespace CardGamesAPI.Yugioh.Builders
 {
@@ -6,9 +6,12 @@ namespace CardGamesAPI.Yugioh.Builders
     {
         public FusionMonsterBuilder() : base(YugiohMonsterCardType.Fusion) { }
 
-        public void build(object[] details) => Build(details);
+        public override void Build(object details)
+        {
+            FusionMonster derived = new FusionMonster();
+            derived.Slurp(details);
 
-        public void AddFusionMaterial(IYugiohCard material) => ((_monster as IFusionMonster).FusionMaterials as IList).Add(material);
-
+            _card = derived;
+        }
     }
 }

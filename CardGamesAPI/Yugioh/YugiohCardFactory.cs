@@ -26,7 +26,7 @@ namespace CardGamesAPI.Yugioh.Factories
 
         public static IYugiohCardFactory GetFactory<T>() where T : IYugiohCard => baseInterfaces[typeof(T)];
 
-        public static object CreateCard(YugiohCardType baseType) => GetFactory(baseType).CreateCard();
+        public static IYugiohCard CreateCard(YugiohCardType baseType) => GetFactory(baseType).CreateCard();
 
         public static T CreateCard<T>() where T : IYugiohCard => (T)(GetFactory<T>().CreateCard());
 

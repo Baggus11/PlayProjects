@@ -9,13 +9,12 @@ namespace Common
 {
     public static class ObjectExtensions
     {
-
-        public static void Map<T, R>(ref T source, ref R destination)
+        public static void MapDerived<T, TDerived>(ref T source, ref TDerived destination)
             where T : new()
-            where R : new()
+            where TDerived : new()
         {
             if (source == null) source = new T();
-            if (destination == null) destination = new R();
+            if (destination == null) destination = new TDerived();
 
             if (source == null || destination == null)
                 throw new Exception("Source or/and Destination Objects are null!");
@@ -40,31 +39,44 @@ namespace Common
 
         }
 
-        //public static void CopyProperties<T, R>(this T destination, ref R source)
-        //    where T : new()
-        //    where R : new()
-        //{
-        //    if (source == null) source = new R();
-        //    if (destination == null) destination = new T();
-
-        //    CopyProperties(destination, ref source);
-
-        //}
-
-        public static object GetPropertyValue<T>(this T @object, string propertyName)
+        public static void EatDerived<TParent, TDerived>(this TParent destination, TDerived source)
+            where TParent : new()
+            where TDerived : TParent, new()
         {
-            try
+            if (source == null) source = new TDerived();
+            if (destination == null) destination = new TParent();
+
+            var detailsProperties = typeof(TDerived).GetProperties();
+            var cardProperties = typeof(TParent).GetProperties();
+
+            Type destinationType = destination.GetType();
+            Type sourceType = source.GetType();
+
+            var mappableProperties = from sourceProperty in sourceType.GetProperties()
+                                     let targetProperty = destinationType.GetProperty(sourceProperty.Name)
+                                     where sourceProperty.CanRead
+                                     && targetProperty != null
+                                     && (targetProperty.GetSetMethod(true) != null
+                                     && !targetProperty.GetSetMethod(true).IsPrivate)
+                                     && (targetProperty.GetSetMethod().Attributes & MethodAttributes.Static) == 0
+                                     && targetProperty.PropertyType.IsAssignableFrom(sourceProperty.PropertyType)
+                                     select new { sourceProperty = sourceProperty, targetProperty = targetProperty };
+
+            foreach (var property in mappableProperties)
             {
-                return typeof(T).GetProperties()
-                    ?.Single(pi => pi.Name == propertyName)
-                    ?.GetValue(@object, null);
+                property.targetProperty.SetValue(destination, property.sourceProperty.GetValue(source, null), null);
             }
-            catch (Exception)
-            {
-                return null;
-                throw;
-            }
+
         }
+
+        public static void ToPropertyDictionary(object @object) => @object?.GetType().GetProperties()
+            ?.ToDictionary(property => property.Name, property => property.GetValue(@object));
+
+        public static void ToPropertyLookup(object @object) => @object?.GetType().GetProperties()
+            ?.ToLookup(property => property.Name, property => property.GetValue(@object));
+
+        public static object GetPropertyValue<T>(this T @object, string propertyName) => typeof(T).GetProperties()
+            ?.Single(pi => pi.Name == propertyName)?.GetValue(@object, null);
 
         public static bool Compare(this object @object, object another)
         {
@@ -88,46 +100,22 @@ namespace Common
         }
 
         //Map properties from one instance of T to another by shape and types (not property names).
-        public static T Map<T>(this T target, T source)
-        {
-            var t_properties = typeof(T).GetProperties();
-            foreach (var item in t_properties)
-            {
-
-            }
-            throw new NotImplementedException();
-        }
+        public static T Map<T>(this T target, T source) => throw new NotImplementedException();
 
         //Map properties from one instance of T to another instance of U by shape and types(not property names).
         public static T Map<T, U>(this T target, U source)
-            where T : class where U : class
-        {
-            throw new NotImplementedException();
-
-        }
+            where T : class where U : class => throw new NotImplementedException();
 
         //Combine 2 different classes into a current intance of R.
         public static R Merge<T, U, R>(this R result, T first, U second)
-            where T : class where U : class where R : class
-        {
-            throw new NotImplementedException();
-
-        }
+            where T : class where U : class where R : class => throw new NotImplementedException();
 
         //Combine 2 different class instances into a new instance, R.
         public static R Merge<T, U, R>(T first, U second)
-            where T : class where U : class where R : new()
-        {
-            throw new NotImplementedException();
-
-        }
+            where T : class where U : class where R : new() => throw new NotImplementedException();
 
         //Combine 2 different class instances into an out instance, R.
-        public static R Merge<T, U, R>(T first, U second, out R result)
-        {
-            throw new NotImplementedException();
-
-        }
+        public static R Merge<T, U, R>(T first, U second, out R result) => throw new NotImplementedException();
 
         public static T Dump<T>(this T obj, string displayName = null, bool showNulls = true)
         {
@@ -181,25 +169,6 @@ namespace Common
             }
             return result;
         }
-
-        ////FINISH
-        //public static bool MatchesSqlTable<T>(this T obj, string tableName, string connectionString)
-        //    where T : class
-        //{
-        //    throw new NotImplementedException();
-        //    var properties = typeof(T).GetProperties();
-        //    bool result = true;
-        //    if (connectionString.IsConnectionString())
-        //    {
-        //        foreach (var parameter in connectionString.GetSqlParams(tableName))
-        //        {
-        //            //check each property
-        //            //find a fail, then:
-        //            result = false;
-        //        }
-        //    }
-        //    return result;
-        //}
 
     }
 }

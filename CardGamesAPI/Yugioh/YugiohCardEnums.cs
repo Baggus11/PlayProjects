@@ -71,6 +71,7 @@
         FusionPendulum,
         SynchroPendulum,
         XYZPendulum,
+        Token,
     }
     public enum YugiohTrapCardType
     {

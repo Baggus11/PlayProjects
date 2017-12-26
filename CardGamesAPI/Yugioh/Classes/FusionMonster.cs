@@ -4,10 +4,7 @@
     {
         public FusionMonster() : this(typeof(FusionMonster).Name) { }
 
-        public FusionMonster(string name)
-            : base(name)
-        {
-            MonsterCardType = YugiohMonsterCardType.Fusion;
-        }
+        public FusionMonster(string name) : base(name) => MonsterCardType = YugiohMonsterCardType.Fusion;
+
     }
 }

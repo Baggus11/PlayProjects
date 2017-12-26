@@ -1,6 +1,6 @@
 ﻿namespace CardGamesAPI.Yugioh
 {
-    public interface IFlipEffectMonster
+    public interface IFlipEffectMonster : IMonsterCard
     {
     }
 }

@@ -10,7 +10,8 @@
         Width="925"
         Height="650"
         WindowStartupLocation="CenterScreen"
-        mc:Ignorable="d">
+        mc:Ignorable="d" 
+        >
     <Window.Resources>
         <local:ImageConverter x:Key="imageConv" />
         <local:UriToCachedImageConverter x:Key="uriToImageConv" />
@@ -69,7 +70,7 @@
                           Grid.Column="0"
                           Height="auto"
                           Margin="5"
-                          Background="#FF02FF"
+                          Background="LightCyan"
                           FontSize="22"
                           Foreground="DarkViolet"
                           ItemsSource="{Binding CardList,

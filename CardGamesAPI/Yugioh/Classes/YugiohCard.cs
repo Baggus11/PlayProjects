@@ -12,7 +12,7 @@ namespace CardGamesAPI.Yugioh.Classes
     {
         public Guid SysGuid => Guid.Empty;
         public int SpellSpeed { get; set; }
-        public string KonamiID { get; set; }
+        public string KonamiId { get; set; }
         public string CardName { get; set; }
         public string Text { get; set; }
         public string Url { get; set; }

@@ -3,6 +3,5 @@
     public interface INormalMonster : IMonsterCard
     {
         int Level { get; set; }
-
     }
 }

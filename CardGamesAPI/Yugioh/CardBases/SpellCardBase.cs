@@ -19,15 +19,9 @@
             : this(name, spellType, null) { }
 
         public SpellCardBase(string name, YugiohSpellCardType spellType, int? spellspeed)
-            : base(name, YugiohCardType.Spell)
-        {
-            SpellType = spellType;
-        }
+            : base(name, YugiohCardType.Spell) => SpellType = spellType;
 
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
+        public override void Dispose() => base.Dispose();
 
     }
 

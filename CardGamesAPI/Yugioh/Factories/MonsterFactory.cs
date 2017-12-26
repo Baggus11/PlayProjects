@@ -7,7 +7,7 @@ namespace CardGamesAPI.Yugioh.Factories
     {
         public MonsterFactory()
         {
-            var monsterPrototype = new MonsterCard
+            IYugiohCard monsterPrototype = new MonsterCard
             {
                 MonsterImplementation = new MonsterWithEffectImplementation()
             };

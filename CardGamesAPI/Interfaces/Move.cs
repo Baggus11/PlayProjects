@@ -29,7 +29,6 @@ namespace CardGamesAPI.Interfaces
 
         public abstract bool IsTerminal(bool turnPlayer);
 
-
     }
 
 }

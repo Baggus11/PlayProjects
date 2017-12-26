@@ -11,7 +11,7 @@ namespace CardGamesAPI.Yugioh
         //http://www.yu-gi-oh-cards.net/howtoplay/yugioh-chains.html
         int SpellSpeed { get; set; }
 
-        string KonamiID { get; set; }
+        string KonamiId { get; set; }
 
         string CardName { get; set; }
 

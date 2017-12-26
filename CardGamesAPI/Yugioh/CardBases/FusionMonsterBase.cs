@@ -1,8 +1,10 @@
-﻿namespace CardGamesAPI.Yugioh
+﻿using System.Collections.Generic;
+
+namespace CardGamesAPI.Yugioh
 {
     public abstract class FusionMonsterBase : MonsterCardBase, IFusionMonster
     {
-        public IYugiohCard[] FusionMaterials { get; set; }
+        public List<IYugiohCard> FusionMaterials { get; set; } = new List<IYugiohCard>();
 
         public int Level { get; set; }
 

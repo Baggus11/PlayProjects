@@ -7,7 +7,5 @@
         int RightScale { get; set; }
         ICardEffect PendulumEffect { get; set; }
         ICardEffect CardEffect { get; set; }
-
     }
-
 }
