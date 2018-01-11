@@ -1,37 +1,157 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Common
+namespace Common.Extensions
 {
-    public static class IEnumerableExtensions
+    public static partial class Extensions
     {
-        public static IEnumerable<T> AsEmpty<T>(this IEnumerable<T> source) => Enumerable.Empty<T>();
-
-        public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> items, int maxBatchSize)
+        public static DataTable ToDatatable<T>(this IEnumerable<T> collection)
         {
-            return items.Select((item, index) => new { item, index })
-                .GroupBy(pairs => pairs.index / maxBatchSize)
-                .Select(mapped => mapped.Select(pair => pair.item));
+            var table = new DataTable();
+
+            if (collection == null || collection.Any())
+            {
+                return table;
+            }
+
+            var properties = PropertyCache[typeof(T)];
+
+            if (properties.Length == 0)
+            {
+                return table;
+            }
+
+            var values = new object[properties.Length];
+
+            try
+            {
+                foreach (var item in collection ?? Enumerable.Empty<T>())
+                {
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        values[i] = properties[i].GetValue(item);
+                    }
+
+                    table.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+            }
+            return table;
         }
 
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> collection) =>
-            collection == null || collection.Count() == 0;
+        public static IEnumerable<T> AsEmpty<T>(this IEnumerable<T> source) => Enumerable.Empty<T>();
+
+        public static IEnumerable<T> Interweave<T>(params T[] inputs) => Interweave<T>(inputs);
+
+        public static IEnumerable<T> Interweave<T>(this IEnumerable<IEnumerable<T>> inputs)
+        {
+            var enumerators = new List<IEnumerator<T>>();
+            try
+            {
+                foreach (var input in inputs)
+                {
+                    enumerators.Add(input.GetEnumerator());
+                }
+
+                while (true)
+                {
+                    enumerators.RemoveAll(enumerator =>
+                    {
+                        if (enumerator.MoveNext())
+                        {
+                            return false;
+                        }
+
+                        enumerator.Dispose();
+                        return true;
+                    });
+
+                    if (enumerators.Count == 0)
+                    {
+                        yield break;
+                    }
+
+                    foreach (var enumerator in enumerators)
+                    {
+                        yield return enumerator.Current;
+                    }
+                }
+            }
+            finally
+            {
+                if (enumerators != null)
+                {
+                    foreach (var e in enumerators)
+                    {
+                        e.Dispose();
+                    }
+                }
+            }
+        }
+
+        public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> query, int batchSize)
+        {
+            using (var enumerator = query.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    yield return enumerator.EnumerateSome(batchSize);
+                }
+            }
+        }
+
+        internal static IEnumerable<T> EnumerateSome<T>(this IEnumerator<T> enumerator, int count)
+        {
+            var list = new List<T>(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(enumerator.Current);
+                if (!enumerator.MoveNext())
+                {
+                    break;
+                }
+            }
+
+            foreach (var item in list)
+            {
+                yield return item;
+            }
+        }
+
+        //public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> items, int maxBatchSize)
+        //{
+        //    return items.Select((item, index) => new { item, index })
+        //        .GroupBy(pairs => pairs.index / maxBatchSize)
+        //        .Select(mapped => mapped.Select(pair => pair.item));
+        //}
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> collection) => collection == null || collection.Count() == 0;
 
         //From: https://github.com/morelinq/MoreLINQ/blob/master/MoreLinq/MaxBy.cs
         public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source,
-           Func<TSource, TKey> selector)
-        {
-            return source.MaxBy(selector, null);
-        }
+           Func<TSource, TKey> selector) => source.MaxBy(selector, null);
 
         public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source,
            Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (selector == null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
+
             comparer = comparer ?? Comparer<TKey>.Default;
 
             using (var sourceIterator = source.GetEnumerator())
@@ -40,8 +160,10 @@ namespace Common
                 {
                     throw new InvalidOperationException("Sequence contains no elements");
                 }
+
                 var max = sourceIterator.Current;
                 var maxKey = selector(max);
+
                 while (sourceIterator.MoveNext())
                 {
                     var candidate = sourceIterator.Current;
@@ -52,6 +174,7 @@ namespace Common
                         maxKey = candidateProjected;
                     }
                 }
+
                 return max;
             }
         }
@@ -60,15 +183,14 @@ namespace Common
            where T : class
         {
             var csvBuilder = new StringBuilder();
-            var properties = typeof(T).GetProperties();
+            var properties = PropertyCache[typeof(T)];
 
-            foreach (T item in items)
+            foreach (var item in items ?? Enumerable.Empty<T>())
             {
                 string line = string.Join(",", properties
-                    .Select(property => property
-                        .GetValue(item, null)
-                        .ToCsvValue())
-                    .ToArray());
+                    .Select(property =>
+                        property.GetValue(item, null)
+                        .ToCsvValue()).ToArray());
 
                 csvBuilder.AppendLine(line);
             }
@@ -78,53 +200,53 @@ namespace Common
 
         private static string ToCsvValue<T>(this T item)
         {
-            if (item == null) return "\"\"";
+            if (item == null)
+            {
+                return "\"\"";
+            }
 
             if (item is string)
             {
                 return string.Format("\"{0}\"", item.ToString().Replace("\"", "\\\""));
             }
-            double dummy;
-            if (double.TryParse(item.ToString(), out dummy))
+
+            if (double.TryParse(item.ToString(), out double dummy))
             {
                 return string.Format("{0}", item);
             }
+
             return string.Format("\"{0}\"", item);
         }
 
         public static void RunActionOn<T>(this IEnumerable<T> collection, Action<T> action)
         {
             if (collection == null)
+            {
                 return;
+            }
 
             var cached = collection;
 
-            foreach (var item in cached)
+            foreach (var item in cached ?? Enumerable.Empty<T>())
             {
                 action(item);
             }
         }
 
-        public static IEnumerable<T> TakeRandom<T>(this IEnumerable<T> collection, int count)
-        {
-            return collection.OrderBy(c => Guid.NewGuid()).Take(count);
-        }
+        public static IEnumerable<T> TakeRandom<T>(this IEnumerable<T> collection, int count) => collection.OrderBy(g => Guid.NewGuid()).Take(count);
 
-        public static T TakeFirstRandom<T>(this IEnumerable<T> collection)
-        {
-            return collection.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
-        }
+        public static T TakeFirstRandom<T>(this IEnumerable<T> collection) => collection.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
 
         public static IEnumerable<T> MoveUp<T>(this IEnumerable<T> enumerable, int itemIndex)
         {
             int i = 0;
-            IEnumerator<T> enumerator = enumerable.GetEnumerator();
+            var enumerator = enumerable.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 i++;
                 if (itemIndex.Equals(i))
                 {
-                    T previous = enumerator.Current;
+                    var previous = enumerator.Current;
                     if (enumerator.MoveNext())
                     {
                         yield return enumerator.Current;
@@ -214,7 +336,7 @@ namespace Common
                   Func<TSource, TKey> pk, Func<TInner, TKey> fk,
                   Func<TSource, TInner, TResult> result)
         {
-            IEnumerable<TResult> _result = Enumerable.Empty<TResult>();
+            var _result = Enumerable.Empty<TResult>();
             _result = from s in sourceCollection
                       join i in innerCollection
                       on pk(s) equals fk(i) into joinData
@@ -229,7 +351,7 @@ namespace Common
                   Func<TSource, TKey> pk, Func<TInner, TKey> fk,
                   Func<TSource, TInner, TResult> result)
         {
-            IEnumerable<TResult> _result = Enumerable.Empty<TResult>();
+            var _result = Enumerable.Empty<TResult>();
             _result = from i in inner
                       join s in source
                       on fk(i) equals pk(s) into joinData
@@ -253,7 +375,7 @@ namespace Common
                   Func<TSource, TKey> pk, Func<TInner, TKey> fk,
                   Func<TSource, TInner, TResult> result)
         {
-            IEnumerable<TResult> _result = Enumerable.Empty<TResult>();
+            var _result = Enumerable.Empty<TResult>();
             _result = from s in source
                       join i in inner
                       on pk(s) equals fk(i) into joinData
@@ -268,7 +390,7 @@ namespace Common
                   Func<TSource, TKey> pk, Func<TInner, TKey> fk,
                   Func<TSource, TInner, TResult> result)
         {
-            IEnumerable<TResult> _result = Enumerable.Empty<TResult>();
+            var _result = Enumerable.Empty<TResult>();
             _result = from i in inner
                       join s in source
                       on fk(i) equals pk(s) into joinData

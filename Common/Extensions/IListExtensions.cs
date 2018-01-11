@@ -1,123 +1,143 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 
-namespace Common
+namespace Common.Extensions
 {
-    public static class IListExtensions
+    public static partial class Extensions
     {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         public static T PopAt<T>(this IList<T> list, int index)
         {
-            T result = list[index];
+            var result = list[index];
             list.RemoveAt(index);
             return result;
         }
 
-        public static void AddMany<T>(this List<T> list, params T[] elements)
+        public static void AddMany<T>(this List<T> list, IEnumerable<T> elements)
         {
-            list.AddRange(elements);
+            list?.AddRange(elements ?? Enumerable.Empty<T>());
         }
 
-        /// Shuffles an IList in place.
-        /// </summary>
-        /// <typeparam name="T">The type of elements in the list</typeparam>
+        // Shuffles an IList in place.        
         public static IList<T> Shuffle<T>(this IList<T> list)
         {
-            return list.Shuffle(new Random(Guid.NewGuid().GetHashCode()));
+            return list == null || list.Count == 0 ?
+                list.Shuffle(new Random(Guid.NewGuid().GetHashCode())) : new List<T>();
         }
 
-        /// <summary>
-        /// Shuffles an IList in place.
-        /// </summary>
-        /// <typeparam name="T">The type of elements in the list</typeparam>
-        /// <param name="rng">An instance of a random number generator</param>
-        public static IList<T> Shuffle<T>(this IList<T> list, Random rng)
+        // Shuffles an IList in place.
+        public static IList<T> Shuffle<T>(this IList<T> list, Random random)
         {
             int count = list.Count;
+
             while (count > 1)
             {
-                int i = rng.Next(count--);
-                T temp = list[count];
+                int i = random.Next(count--);
+                var temp = list[count];
                 list[count] = list[i];
                 list[i] = temp;
             }
+
             return list;
         }
 
-        /// <summary>
-        /// Append a single item of type T to a given list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        // Append a single item of type T to a given list
         public static List<T> Append<T>(this List<T> list, T item)
         {
             list.Add(item);
             return list;
         }
 
-        /// <summary>
-        /// Swap
-        /// By index
-        /// TODO: null checks!
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="indexA"></param>
-        /// <param name="indexB"></param>
-        /// <returns></returns>
         public static IList<T> Swap<T>(this IList<T> list, int indexA, int indexB)
         {
-            T tmp = list[indexA];
+            var tmp = list[indexA];
             list[indexA] = list[indexB];
             list[indexB] = tmp;
             return list;
         }
 
-        /// <summary>
-        /// Convert a List of a class type to Datatable of same type-schema
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        public static DataTable ToDatatable<T>(this List<T> items)
+        public static DataTable ToDatatable<T>(this List<T> list, string name = "")
         {
-            DataTable dt = new DataTable();
-            try
+            var table = string.IsNullOrWhiteSpace(name) ? new DataTable(typeof(T).Name) : new DataTable(name);
+
+            if (list.Count == 0)
             {
-                if (items.Count != 0)
-                {
-                    //Add headers:
-                    var properties = items.First().GetType()
-                         .GetProperties().ToList();
-                    properties.ForEach(p => dt.Columns.Add(p.Name, p.PropertyType));
-                    //Add all the values as new DataRows:
-                    object[] values = new object[properties.Count];
-                    foreach (T item in items)
-                    {
-                        for (int i = 0; i < values.Length; i++)
-                        {
-                            values[i] = properties[i].GetValue(item);
-                        }
-                        dt.Rows.Add(values);
-                    }
-                }
-                else
-                {
-                    Debug.WriteLine("No line items found!");
-                }
+                return table;
             }
-            catch (Exception ex)
+
+            //var properties = typeof(T).GetProperties();
+            var properties = PropertyCache[typeof(T)];
+
+            foreach (var property in properties)
             {
-                string errMsg = string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.ToString());
-                Debug.WriteLine(errMsg);
+                table.Columns.Add(property.Name.SplitCamelCase(), property.PropertyType);
             }
-            return dt;
+
+            foreach (var item in list ?? Enumerable.Empty<T>())
+            {
+                object[] rowValues = new object[properties.Length];
+
+                for (int i = 0; i < rowValues.Length; i++)
+                {
+                    rowValues[i] = properties[i].GetValue(item);
+                }
+
+                table.Rows.Add(rowValues);
+            }
+
+            return table;
         }
+
+
+        //public static DataTable ToDatatable<T>(this List<T> list)
+        //{
+        //    var table = new DataTable();
+
+        //    Debug.WriteLine($"to datatable() list count: {list.Count}");
+
+        //    if (list == null || list.Count == 0)
+        //    {
+        //        return table;
+        //    }
+
+        //    var properties = typeof(T).GetProperties();
+        //    //var properties = PropertyCache[typeof(T)];
+
+        //    if (properties.Length == 0)
+        //    {
+        //        return table;
+        //    }
+
+        //    var values = new object[properties.Count()];
+
+        //    try
+        //    {
+        //        foreach (var item in list ?? Enumerable.Empty<T>())
+        //        {
+        //            Debug.WriteLine("item");
+
+        //            for (int i = 0; i < values.Length; i++)
+        //            {
+
+        //                values[i] = properties[i].GetValue(item);
+        //                Debug.WriteLine("values");
+        //            }
+
+        //            table.Rows.Add(values);
+        //            Debug.WriteLine("item added to table");
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger.Error(ex);
+        //    }
+        //    return table;
+        //}
 
         public static IList<T> RemoveDuplicates<T>(this IList<T> items)
         {

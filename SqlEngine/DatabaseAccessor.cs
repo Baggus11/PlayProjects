@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -328,10 +329,14 @@ namespace DataAccess
         private static List<SqlParameter> GetSqlParamsFromTable(string connectionString, string tableName)
         {
             if (string.IsNullOrWhiteSpace(tableName))
+            {
                 throw new Exception("No table name provided!");
+            }
 
             if (!connectionString.IsValidConnectionString())
-                return null;
+            {
+                return Enumerable.Empty<SqlParameter>().ToList();
+            }
 
             List<SqlDbType> sqlDbTypes = new List<SqlDbType>();
             DataTable dt = new DataTable();
@@ -394,7 +399,9 @@ namespace DataAccess
         private static string CreateInsertQueryFromSqlParameters(IEnumerable<SqlParameter> sqlparameters, string tableName)
         {
             if (string.IsNullOrWhiteSpace(tableName))
+            {
                 return null;
+            }
 
             StringBuilder query = new StringBuilder($"INSERT INTO dbo.{tableName}\n");
 
@@ -429,7 +436,9 @@ namespace DataAccess
         private static string CreateDeleteQueryFromSqlParameters(IEnumerable<SqlParameter> sqlparameters, string tableName)
         {
             if (string.IsNullOrWhiteSpace(tableName))
+            {
                 return null;
+            }
 
             StringBuilder query = new StringBuilder($"DELETE FROM dbo.{tableName}\n");
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CardGamesAPI.Algorithms
 {
@@ -14,15 +15,9 @@ namespace CardGamesAPI.Algorithms
             Graph = graph;
         }
 
-        public IEnumerable<T> Search(T start)
-        {
-            return Algorithm.Search(start);
-        }
+        public IEnumerable<T> Search(T start) => start != null ? Algorithm.Search(start) : Enumerable.Empty<T>();
 
-        public void SwitchAlgorithm(IAlgorithm<T> nextAlgorithm)
-        {
-            Algorithm = nextAlgorithm;
-        }
+        public void SwitchAlgorithm(IAlgorithm<T> nextAlgorithm) => Algorithm = nextAlgorithm;
 
     }
 }

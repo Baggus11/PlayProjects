@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CardGamesAPI</RootNamespace>
     <AssemblyName>CardGamesAPI</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,13 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\BFSAlgorithm.cs" />
+    <Compile Include="Algorithms\Searches\BFSAlgorithm.cs" />
     <Compile Include="Algorithms\Graph.cs" />
-    <Compile Include="Algorithms\DFSAlgorithm.cs" />
-    <Compile Include="Algorithms\Minimax.cs" />
+    <Compile Include="Algorithms\Searches\DFSAlgorithm.cs" />
+    <Compile Include="Algorithms\Searches\Minimax.cs" />
+    <Compile Include="Algorithms\Sorts\Quicksort.cs" />
     <Compile Include="Algorithms\SearchContext.cs" />
     <Compile Include="Constants\StandardCardEnums.cs" />
-    <Compile Include="Algorithms\IAlgorithm.cs" />
+    <Compile Include="Algorithms\Interfaces\IAlgorithm.cs" />
     <Compile Include="INode.cs" />
     <Compile Include="Interfaces\IPlayer.cs" />
     <Compile Include="Interfaces\Move.cs" />
@@ -57,42 +59,14 @@
     <Compile Include="Yugioh\Classes\NormalTrap.cs" />
     <Compile Include="Yugioh\Classes\ContinuousTrap.cs" />
     <Compile Include="Yugioh\Classes\ContinuousSpell.cs" />
-    <Compile Include="Yugioh\Builders\ContinuousSpellBuilder.cs" />
-    <Compile Include="Yugioh\Builders\ContinuousTrapBuilder.cs" />
     <Compile Include="Yugioh\Classes\NormalSpell.cs" />
     <Compile Include="Yugioh\Classes\EquipSpell.cs" />
     <Compile Include="Yugioh\Classes\CounterTrap.cs" />
-    <Compile Include="Yugioh\Builders\CounterTrapBuilder.cs" />
-    <Compile Include="Yugioh\Builders\EquipSpellBuilder.cs" />
     <Compile Include="Yugioh\Classes\FieldSpell.cs" />
-    <Compile Include="Yugioh\Builders\FieldSpellBuilder.cs" />
-    <Compile Include="Yugioh\Builders\FlipEffectMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\FusionMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\FusionPendulumBuilder.cs" />
-    <Compile Include="Yugioh\Builders\GeminiMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\MonsterCardBuilderBase.cs" />
-    <Compile Include="Yugioh\Builders\NormalMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\NormalPendulumMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\NormalSpellBuilder.cs" />
-    <Compile Include="Yugioh\Builders\NormalTrapBuilder.cs" />
-    <Compile Include="Yugioh\Builders\PendulumMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\QuickPlaySpellBuilder.cs" />
-    <Compile Include="Yugioh\Builders\RitualMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\RitualSpellBuilder.cs" />
-    <Compile Include="Yugioh\Builders\SpellCardBuilderBase.cs" />
-    <Compile Include="Yugioh\Builders\SynchroMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\SynchroPendulumMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\TokenBuilder.cs" />
-    <Compile Include="Yugioh\Builders\TrapCardBuilderBase.cs" />
-    <Compile Include="Yugioh\Builders\TrapMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\TunerMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\TunerSynhroMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\XYZMonsterBuilder.cs" />
-    <Compile Include="Yugioh\Builders\XYZPendulumBuilder.cs" />
     <Compile Include="Yugioh\CardBases\PendulumMonsterBase.cs" />
     <Compile Include="Yugioh\CardBases\RitualMonsterBase.cs" />
     <Compile Include="Yugioh\CardBases\TunerMonsterBase.cs" />
-    <Compile Include="Algorithms\Algorithm.cs" />
+    <Compile Include="Algorithms\Interfaces\SearchAlgorithm.cs" />
     <Compile Include="Yugioh\Classes\FusionPendulumMonster.cs" />
     <Compile Include="Yugioh\Classes\MonsterCard.cs" />
     <Compile Include="Yugioh\Classes\NormalPendulumMonster.cs" />
@@ -102,6 +76,7 @@
     <Compile Include="Yugioh\Classes\TunerSynchroMonster.cs" />
     <Compile Include="Yugioh\Classes\XYZPendulumMonster.cs" />
     <Compile Include="Yugioh\Classes\YugiohCard.cs" />
+    <Compile Include="Yugioh\Classes\RitualSpell.cs" />
     <Compile Include="Yugioh\YugiohCardFactory.cs" />
     <Compile Include="Yugioh\Implementors\BasicCardImplementation.cs" />
     <Compile Include="Yugioh\Implementors\TokenImplementation.cs" />

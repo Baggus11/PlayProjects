@@ -1,69 +1,46 @@
 ﻿using System;
-using System.Linq.Expressions;
 
-namespace Common
+namespace Common.Extensions
 {
     //
     /// The Following is a series of Funcs for the purpose of handling functional programming in C#
-    /// I may add more as I learn more.
     ////
-    public static class FunctionExtensions
+    public static partial class Extensions
     {
-        /// <summary>
-        /// ??? TODO: Find out how this works and what it does!
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="func"></param>
-        /// <param name="cacheInterval"></param>
-        /// <returns></returns>
-        public static Func<T> Cache<T>(this Func<T> func, int cacheInterval)
+        public static Func<T> Cache<T>(this Func<T> function, int cacheInterval)
         {
-            var cachedValue = func();
+            var cachedValue = function();
             var timeCached = DateTime.Now;
+
             Func<T> cachedFunc = () =>
             {
                 if ((DateTime.Now - timeCached).Seconds >= cacheInterval)
                 {
                     timeCached = DateTime.Now;
-                    cachedValue = func();
+                    cachedValue = function();
                 }
+
                 return cachedValue;
             };
+
             return cachedFunc;
         }
-        /// <summary>
-        /// Not
-        /// </summary>
+
         public static Func<T, bool> Not<T>(this Func<T, bool> predicate) { return a => !predicate(a); }
-        /// <summary>
-        /// And
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
+
         public static Func<T, bool> And<T>(this Func<T, bool> left, Func<T, bool> right) { return a => left(a) && right(a); }
-        /// <summary>
-        /// Or
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
+
         public static Func<T, bool> Or<T>(this Func<T, bool> left, Func<T, bool> right) { return a => left(a) || right(a); }
-        /// <summary>
-        /// Y - Combinator
-        /// </summary>
-        /// <typeparam name="A"></typeparam>
-        /// <typeparam name="R"></typeparam>
-        /// <param name="r"></param>
-        /// <returns></returns>
+
+        // Y - Combinator        
         private delegate Func<A, R> Recursive<A, R>(Recursive<A, R> r);
+
         public static Func<A, R> Y<A, R>(Func<Func<A, R>, Func<A, R>> f)
         {
             Recursive<A, R> rec = r => a => f(r(r))(a);
             return rec(rec);
         }
+
         //
         /// Currying Funcs
         ////

@@ -10,11 +10,13 @@ namespace Common
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null)
+            {
                 return null;
+            }
 
             if (!string.IsNullOrEmpty(value.ToString()))
             {
-                BitmapImage bi = new BitmapImage();
+                var bi = new BitmapImage();
                 bi.BeginInit();
                 bi.UriSource = new Uri(value.ToString());
                 bi.CacheOption = BitmapCacheOption.OnLoad;

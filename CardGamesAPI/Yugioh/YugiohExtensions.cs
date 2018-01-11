@@ -15,8 +15,8 @@ namespace CardGamesAPI.Yugioh
         {
             var sourceProperties = source.GetType().GetProperties();
 
-            Type destinationType = card.GetType();
-            Type sourceType = source.GetType();
+            var destinationType = card.GetType();
+            var sourceType = source.GetType();
 
             var mappableProperties = from sourceProperty in sourceProperties
                                      let targetProperty = destinationType.GetProperty(sourceProperty.Name)
@@ -67,13 +67,13 @@ namespace CardGamesAPI.Yugioh
         {
             if (item != null)
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                MemoryStream stream = new MemoryStream();
+                var formatter = new BinaryFormatter();
+                var stream = new MemoryStream();
 
                 formatter.Serialize(stream, item);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                T result = (T)formatter.Deserialize(stream);
+                var result = (T)formatter.Deserialize(stream);
 
                 stream.Close();
 

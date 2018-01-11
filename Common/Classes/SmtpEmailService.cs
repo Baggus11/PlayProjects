@@ -11,9 +11,20 @@ namespace Common
 
         public void SendEmail(string toAddress, string subject, string body)
         {
-            if (string.IsNullOrWhiteSpace(Password)) throw new Exception("Password cannot be empty!");
-            if (string.IsNullOrWhiteSpace(Username)) throw new Exception("Username cannot be empty!");
-            if (string.IsNullOrWhiteSpace(Host)) throw new Exception("Host cannot be empty!");
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                throw new Exception("Password cannot be empty!");
+            }
+
+            if (string.IsNullOrWhiteSpace(Username))
+            {
+                throw new Exception("Username cannot be empty!");
+            }
+
+            if (string.IsNullOrWhiteSpace(Host))
+            {
+                throw new Exception("Host cannot be empty!");
+            }
 
             var from = new MailAddress(Username);
             var to = new MailAddress(toAddress);
@@ -21,7 +32,7 @@ namespace Common
             try
             {
 
-                using (MailMessage mail = new MailMessage())
+                using (var mail = new MailMessage())
                 {
                     mail.From = new MailAddress(Username);
                     mail.To.Add(toAddress);
@@ -29,7 +40,7 @@ namespace Common
                     mail.Body = body;
                     mail.IsBodyHtml = true;
 
-                    using (SmtpClient smtp = new SmtpClient(Host, 587))
+                    using (var smtp = new SmtpClient(Host, 587))
                     {
                         smtp.Credentials = new NetworkCredential(Username, Password);
                         smtp.EnableSsl = true;

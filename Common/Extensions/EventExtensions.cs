@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Common
+namespace Common.Extensions
 {
-    public static class EventExtensions
+    public static partial class Extensions
     {
         /// 
         /// Raises an event thread-safely if the event has subscribers. 
@@ -14,10 +14,7 @@ namespace Common
         [SuppressMessage("Microsoft.Design",
             "CA1030:UseEventsWhereAppropriate",
             Justification = "This warning comes up when you use the word `Fire` in a method name. This method specifically raises events, and so does not need changing.")]
-        public static void Fire<T>(this EventHandler me, object sender, EventArgs args)
-        {
-            me?.Invoke(sender, args);
-        }
+        public static void Fire<T>(this EventHandler handler, object sender, EventArgs args) => handler?.Invoke(sender, args);
         /// 
         /// Raises an event thread-safely if the event has subscribers. 
         /// 
@@ -26,10 +23,7 @@ namespace Common
         /// The object that sent this event. 
         /// The event args. 
         [SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "This warning comes up when you use the word `Fire` in a method name. This method specifically raises events, and so does not need changing.")]
-        public static void Fire<T>(this EventHandler me, object sender, T args) where T : EventArgs
-        {
-            me?.Invoke(sender, args);
-        }
+        public static void Fire<T>(this EventHandler handler, object sender, T args) where T : EventArgs => handler?.Invoke(sender, args);
         /*For statics*/
         /// 
         /// Raises a static event thread-safely if the event has subscribers. 
@@ -39,10 +33,7 @@ namespace Common
         [SuppressMessage("Microsoft.Design",
             "CA1030:UseEventsWhereAppropriate",
             Justification = "This warning comes up when you use the word `Fire` in a method name. This method specifically raises events, and so does not need changing.")]
-        public static void Fire<T>(this EventHandler me, EventArgs args)
-        {
-            me.Fire(null, args);
-        }
+        public static void Fire<T>(this EventHandler handler, EventArgs args) => handler.Fire(null, args);
         /// 
         /// Raises a static event thread-safely if the event has subscribers. 
         /// 
@@ -52,9 +43,6 @@ namespace Common
         [SuppressMessage("Microsoft.Design",
             "CA1030:UseEventsWhereAppropriate",
             Justification = "This warning comes up when you use the word `Fire` in a method name. This method specifically raises events, and so does not need changing.")]
-        public static void Fire<T>(this EventHandler me, T args) where T : EventArgs
-        {
-            me.Fire(null, args);
-        }
+        public static void Fire<T>(this EventHandler handler, T args) where T : EventArgs => handler.Fire(null, args);
     }
 }

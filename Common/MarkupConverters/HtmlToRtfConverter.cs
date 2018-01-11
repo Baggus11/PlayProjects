@@ -18,7 +18,10 @@ namespace MarkupConverter
         private static string ConvertXamlToRtf(string xamlText)
         {
             var richTextBox = new RichTextBox();
-            if (string.IsNullOrEmpty(xamlText)) return "";
+            if (string.IsNullOrEmpty(xamlText))
+            {
+                return "";
+            }
 
             var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
 

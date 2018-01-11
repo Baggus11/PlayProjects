@@ -20,7 +20,7 @@ namespace Common.Classes
 
         protected override void ClearItems()
         {
-            foreach (T item in Items) { if (item != null) { item.PropertyChanged -= ItemPropertyChanged; } }
+            foreach (var item in Items) { if (item != null) { item.PropertyChanged -= ItemPropertyChanged; } }
             base.ClearItems();
         }
 

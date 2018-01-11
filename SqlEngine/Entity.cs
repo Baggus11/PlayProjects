@@ -24,7 +24,7 @@ namespace DataAccess
 
         private SqlConnectionStringBuilder _connectionStringBuilder; //Facilitates building and checking connection strings
 
-        protected internal bool CheckSchema<TChild>()
+        protected internal bool CheckSchema()
         {
             throw new NotImplementedException(MethodBase.GetCurrentMethod().Name);
         } //Checks TChild to see if the child class in any way matches the database specified.

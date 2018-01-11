@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Common.Extensions;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,26 +15,26 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
         public static async Task<string> CheckPriceForCard(string cardName)
         {
             string cardUriName = GetCardUriName(cardName);
-            Uri requestUri = new Uri($"http://yugiohprices.com/api/get_card_prices/{cardUriName}");
+            var requestUri = new Uri($"http://yugiohprices.com/api/get_card_prices/{cardUriName}");
 
             return await GetRequest(requestUri);
         }
 
         public static async Task<string> CheckPriceForCardPrintTag(string printTag)
         {
-            Uri requestUri = new Uri($"http://yugiohprices.com/api/price_for_print_tag/{printTag}");
+            var requestUri = new Uri($"http://yugiohprices.com/api/price_for_print_tag/{printTag}");
             return await GetRequest(requestUri);
         }
 
         public static async Task<string> CheckPriceHistory(string printTag, string rarity)
         {
-            Uri requestUri = new Uri($"http://yugiohprices.com/api/price_history/{printTag}?rarity={rarity}");
+            var requestUri = new Uri($"http://yugiohprices.com/api/price_history/{printTag}?rarity={rarity}");
             return await GetRequest(requestUri);
         }
 
         public static async Task<string> GetCardSetData()
         {
-            Uri requestUri = new Uri("http://yugiohprices.com/api/card_sets");
+            var requestUri = new Uri("http://yugiohprices.com/api/card_sets");
             return await GetRequest(requestUri);
         }
 
@@ -49,13 +49,13 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
 
         public static async Task<string> GetRisingAndFallingList()
         {
-            Uri requestUri = new Uri("http://yugiohprices.com/api/rising_and_falling");
+            var requestUri = new Uri("http://yugiohprices.com/api/rising_and_falling");
             return await GetRequest(requestUri);
         }
 
         public static async Task<string> GetTop100ExpensiveCards(string rarity)
         {
-            Uri requestUri = new Uri($"http://yugiohprices.com/api/top_100_cards?rarity=?rarity={rarity}");
+            var requestUri = new Uri($"http://yugiohprices.com/api/top_100_cards?rarity=?rarity={rarity}");
             return await GetRequest(requestUri);
         }
 
@@ -64,7 +64,7 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
             string cardUriName = GetCardUriName(cardName);
             string methodName = cardDataType.GetDescription();
 
-            Uri requestUri = new Uri($"http://yugiohprices.com/api/{methodName}/{cardUriName}");
+            var requestUri = new Uri($"http://yugiohprices.com/api/{methodName}/{cardUriName}");
 
             return await GetRequest(requestUri);
         }
@@ -74,7 +74,7 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
             string cardUriName = GetCardUriName(cardName);
             string imageTypeName = imageType.GetDescription();
 
-            Uri requestUri = new Uri($"http://yugiohprices.com/api/{imageTypeName}/{cardUriName}");
+            var requestUri = new Uri($"http://yugiohprices.com/api/{imageTypeName}/{cardUriName}");
             return await GetRequestAsByteArray(requestUri);
 
         }
@@ -89,9 +89,9 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
                 string fullpath = Path.Combine(cardDirectory, cardName + extension);
                 var data = await GetCardImageByteData(cardName, ImageRequestType.CardImage);
 
-                using (MemoryStream stream = new MemoryStream(data))
+                using (var stream = new MemoryStream(data))
                 {
-                    Image image = Image.FromStream(stream);
+                    var image = Image.FromStream(stream);
                     if (!File.Exists(fullpath))
                     {
                         image.Save(fullpath);

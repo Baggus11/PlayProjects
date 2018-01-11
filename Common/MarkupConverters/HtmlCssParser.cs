@@ -42,7 +42,7 @@ namespace MarkupConverter
             // Apply local style to current formatting properties
             if (style != null)
             {
-                string[] styleValues = style.Split(';');
+                var styleValues = style.Split(';');
                 for (int i = 0; i < styleValues.Length; i++)
                 {
                     string[] styleNameValue;
@@ -837,7 +837,7 @@ namespace MarkupConverter
             if (htmlElement.LocalName.ToLower() != "style")
             {
                 // This is not a STYLE element. Recurse into it
-                for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
+                for (var htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
                 {
                     if (htmlChildNode is XmlElement)
                     {
@@ -850,9 +850,9 @@ namespace MarkupConverter
             // Add style definitions from this style.
 
             // Collect all text from this style definition
-            StringBuilder stylesheetBuffer = new StringBuilder();
+            var stylesheetBuffer = new StringBuilder();
 
-            for (XmlNode htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
+            for (var htmlChildNode = htmlElement.FirstChild; htmlChildNode != null; htmlChildNode = htmlChildNode.NextSibling)
             {
                 if (htmlChildNode is XmlText || htmlChildNode is XmlComment)
                 {
@@ -945,7 +945,7 @@ namespace MarkupConverter
                 _styleDefinitions = new List<StyleDefinition>();
             }
 
-            string[] simpleSelectors = selector.Split(',');
+            var simpleSelectors = selector.Split(',');
 
             for (int i = 0; i < simpleSelectors.Length; i++)
             {
@@ -969,7 +969,7 @@ namespace MarkupConverter
                 {
                     string selector = _styleDefinitions[i].Selector;
 
-                    string[] selectorLevels = selector.Split(' ');
+                    var selectorLevels = selector.Split(' ');
 
                     int indexInSelector = selectorLevels.Length - 1;
                     int indexInContext = sourceContext.Count - 1;

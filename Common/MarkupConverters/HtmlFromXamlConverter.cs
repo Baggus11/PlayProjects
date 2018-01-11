@@ -95,7 +95,7 @@ namespace MarkupConverter
 
             // Create a buffer StringBuilder for collecting css properties for inline STYLE attributes
             // on every element level (it will be re-initialized on every level).
-            StringBuilder inlineStyle = new StringBuilder();
+            var inlineStyle = new StringBuilder();
 
             if (asFullDocument)
             {
@@ -174,9 +174,14 @@ namespace MarkupConverter
                         break;
                     case "TextDecorations":
                         if (xamlReader.Value.ToLower() == "strikethrough")
+                        {
                             css = "text-decoration:line-through;";
+                        }
                         else
+                        {
                             css = "text-decoration:underline;";
+                        }
+
                         break;
                     case "TextEffects":
                         break;
@@ -276,7 +281,7 @@ namespace MarkupConverter
 
         private static string ParseXamlThickness(string thickness)
         {
-            string[] values = thickness.Split(',');
+            var values = thickness.Split(',');
 
             for (int i = 0; i < values.Length; i++)
             {

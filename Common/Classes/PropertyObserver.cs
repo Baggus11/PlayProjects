@@ -29,7 +29,9 @@ namespace Common
         public PropertyObserver(TPropertySource propertySource)
         {
             if (propertySource == null)
+            {
                 throw new ArgumentNullException("propertySource");
+            }
 
             _propertySourceRef = new WeakReference(propertySource);
             _propertyNameToHandlerMap = new Dictionary<string, Action<TPropertySource>>();
@@ -46,16 +48,22 @@ namespace Common
             Action<TPropertySource> handler)
         {
             if (expression == null)
+            {
                 throw new ArgumentNullException("expression");
+            }
 
             string propertyName = this.GetPropertyName(expression);
             if (String.IsNullOrEmpty(propertyName))
+            {
                 throw new ArgumentException("'expression' did not provide a property name.");
+            }
 
             if (handler == null)
+            {
                 throw new ArgumentNullException("handler");
+            }
 
-            TPropertySource propertySource = this.GetPropertySource();
+            var propertySource = this.GetPropertySource();
             if (propertySource != null)
             {
                 _propertyNameToHandlerMap[propertyName] = handler;
@@ -73,13 +81,17 @@ namespace Common
         public PropertyObserver<TPropertySource> UnregisterHandler(Expression<Func<TPropertySource, object>> expression)
         {
             if (expression == null)
+            {
                 throw new ArgumentNullException("expression");
+            }
 
             string propertyName = GetPropertyName(expression);
             if (String.IsNullOrEmpty(propertyName))
+            {
                 throw new ArgumentException("'expression' did not provide a property name.");
+            }
 
-            TPropertySource propertySource = GetPropertySource();
+            var propertySource = GetPropertySource();
             if (propertySource != null)
             {
                 if (_propertyNameToHandlerMap.ContainsKey(propertyName))
@@ -135,14 +147,16 @@ namespace Common
             if (managerType == typeof(PropertyChangedEventManager))
             {
                 string propertyName = ((PropertyChangedEventArgs)e).PropertyName;
-                TPropertySource propertySource = (TPropertySource)sender;
+                var propertySource = (TPropertySource)sender;
 
                 if (String.IsNullOrEmpty(propertyName))
                 {
                     // When the property name is empty, all properties are considered to be invalidated.
                     // Iterate over a copy of the list of handlers, in case a handler is registered by a callback.
-                    foreach (Action<TPropertySource> handler in _propertyNameToHandlerMap.Values.ToArray())
+                    foreach (var handler in _propertyNameToHandlerMap.Values.ToArray())
+                    {
                         handler(propertySource);
+                    }
 
                     return true;
                 }

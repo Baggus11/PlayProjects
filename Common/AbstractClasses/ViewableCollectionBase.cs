@@ -25,7 +25,7 @@ namespace Common
                     // Walk thru invocation list
                     foreach (NotifyCollectionChangedEventHandler handler in CollectionChanged.GetInvocationList())
                     {
-                        DispatcherObject dispatcherObject = handler.Target as DispatcherObject;
+                        var dispatcherObject = handler.Target as DispatcherObject;
 
                         // If the subscriber is a DispatcherObject and different thread
                         if (dispatcherObject != null && dispatcherObject.CheckAccess() == false)

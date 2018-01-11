@@ -2,14 +2,16 @@
 using System.Linq;
 using System.Threading;
 
-namespace Common
+namespace Common.Extensions
 {
-    public static class ThreadExtensions
+    public static partial class Extensions
     {
         public static void WaitAll(this IEnumerable<Thread> threads)
         {
-            foreach (Thread thread in threads ?? Enumerable.Empty<Thread>())
-            { thread.Join(); }
+            foreach (var thread in threads ?? Enumerable.Empty<Thread>())
+            {
+                thread.Join();
+            }
         }
     }
 }

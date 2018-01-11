@@ -1,5 +1,4 @@
-﻿using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -12,11 +11,11 @@ namespace CardGamesAPI.Yugioh.RulesEngine
         {
             string sql = "select * from dbo.Rules";
 
-            DataTable dt = new DataTable();
+            var dt = new DataTable();
             try
             {
-                using (SqlCommand sqlconnection = new SqlCommand(sql, new SqlConnection(connectionString)))
-                using (SqlDataAdapter da = new SqlDataAdapter(sqlconnection))
+                using (var sqlconnection = new SqlCommand(sql, new SqlConnection(connectionString)))
+                using (var da = new SqlDataAdapter(sqlconnection))
                 {
                     da.Fill(dt);
                 }
@@ -61,23 +60,28 @@ namespace CardGamesAPI.Yugioh.RulesEngine
 
         public static DataTable GetTopCardsFromDb(string connectionString, int count)
         {
-            if (count < 0) return null;
+            if (count < 0)
+            {
+                return null;
+            }
 
             string sql = $"select top {count} * from dbo.cards";
 
-            DataTable dt = new DataTable();
+            var table = new DataTable();
+
             try
             {
-                using (SqlCommand sqlconnection = new SqlCommand(sql, new SqlConnection(connectionString)))
-                using (SqlDataAdapter da = new SqlDataAdapter(sqlconnection))
+                using (var sqlconnection = new SqlCommand(sql, new SqlConnection(connectionString)))
+                using (var da = new SqlDataAdapter(sqlconnection))
                 {
-                    da.Fill(dt);
+                    da.Fill(table);
                 }
-                return dt;
+
+                return table;
             }
             catch (Exception)
             {
-                dt = null;
+                table = null;
                 throw;
             }
         }

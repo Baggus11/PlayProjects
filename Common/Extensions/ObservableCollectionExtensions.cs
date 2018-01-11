@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
-namespace Common
+namespace Common.Extensions
 {
-    public static class ObservableCollectionExtensions
+    public static partial class Extensions
     {
-        public static void AddRange<T>(this ObservableCollection<T> oc, IEnumerable<T> collection)
+        public static void AddRange<T>(this ObservableCollection<T> observableCollection, IEnumerable<T> collection)
         {
-            if (collection == null)
+            foreach (var item in collection ?? Enumerable.Empty<T>())
             {
-                throw new ArgumentNullException("collection");
+                observableCollection.Add(item);
             }
-            foreach (var item in collection)
-            {
-                oc.Add(item);
-            }
-
         }
     }
 }

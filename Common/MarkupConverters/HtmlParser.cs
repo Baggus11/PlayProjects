@@ -125,9 +125,9 @@ namespace MarkupConverter
         /// </returns>
         internal static XmlElement ParseHtml(string htmlString)
         {
-            HtmlParser htmlParser = new HtmlParser(htmlString);
+            var htmlParser = new HtmlParser(htmlString);
 
-            XmlElement htmlRootElement = htmlParser.ParseHtmlContent();
+            var htmlRootElement = htmlParser.ParseHtmlContent();
 
             return htmlRootElement;
         }
@@ -201,7 +201,7 @@ namespace MarkupConverter
         /// </returns>
         internal static string AddHtmlClipboardHeader(string htmlString)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             // each of 6 numbers is represented by "{0:D10}" in the format string
             // must actually occupy 10 digit positions ("0123456789")
@@ -263,7 +263,7 @@ namespace MarkupConverter
         {
             // Create artificial root elelemt to be able to group multiple top-level elements
             // We create "html" element which may be a duplicate of real HTML element, which is ok, as HtmlConverter will swallow it painlessly..
-            XmlElement htmlRootElement = _document.CreateElement("html", XhtmlNamespace);
+            var htmlRootElement = _document.CreateElement("html", XhtmlNamespace);
             OpenStructuringElement(htmlRootElement);
 
             while (_htmlLexicalAnalyzer.NextTokenType != HtmlTokenType.EOF)
@@ -277,7 +277,7 @@ namespace MarkupConverter
                         _htmlLexicalAnalyzer.GetNextTagToken();
 
                         // Create an element
-                        XmlElement htmlElement = _document.CreateElement(htmlElementName, XhtmlNamespace);
+                        var htmlElement = _document.CreateElement(htmlElementName, XhtmlNamespace);
 
                         // Parse element attributes
                         ParseAttributes(htmlElement);
@@ -356,10 +356,10 @@ namespace MarkupConverter
 
         private XmlElement CreateElementCopy(XmlElement htmlElement)
         {
-            XmlElement htmlElementCopy = _document.CreateElement(htmlElement.LocalName, XhtmlNamespace);
+            var htmlElementCopy = _document.CreateElement(htmlElement.LocalName, XhtmlNamespace);
             for (int i = 0; i < htmlElement.Attributes.Count; i++)
             {
-                XmlAttribute attribute = htmlElement.Attributes[i];
+                var attribute = htmlElement.Attributes[i];
                 htmlElementCopy.SetAttribute(attribute.Name, attribute.Value);
             }
             return htmlElementCopy;
@@ -368,7 +368,7 @@ namespace MarkupConverter
         private void AddEmptyElement(XmlElement htmlEmptyElement)
         {
             InvariantAssert(_openedElements.Count > 0, "AddEmptyElement: Stack of opened elements cannot be empty, as we have at least one artificial root element");
-            XmlElement htmlParent = _openedElements.Peek();
+            var htmlParent = _openedElements.Peek();
             htmlParent.AppendChild(htmlEmptyElement);
         }
 
@@ -389,7 +389,7 @@ namespace MarkupConverter
             {
                 while (_openedElements.Count > 0 && HtmlSchema.IsInlineElement(_openedElements.Peek().LocalName))
                 {
-                    XmlElement htmlInlineElement = _openedElements.Pop();
+                    var htmlInlineElement = _openedElements.Pop();
                     InvariantAssert(_openedElements.Count > 0, "OpenStructuringElement: stack of opened elements cannot become empty here");
 
                     _pendingInlineElements.Push(CreateElementCopy(htmlInlineElement));
@@ -399,7 +399,7 @@ namespace MarkupConverter
             // Add this block element to its parent
             if (_openedElements.Count > 0)
             {
-                XmlElement htmlParent = _openedElements.Peek();
+                var htmlParent = _openedElements.Peek();
 
                 // Check some known block elements for auto-closing (LI and P)
                 if (HtmlSchema.ClosesOnNextElementStart(htmlParent.LocalName, htmlElement.LocalName))
@@ -423,7 +423,7 @@ namespace MarkupConverter
 
         private bool IsElementOpened(string htmlElementName)
         {
-            foreach (XmlElement openedElement in _openedElements)
+            foreach (var openedElement in _openedElements)
             {
                 if (openedElement.LocalName == htmlElementName)
                 {
@@ -443,9 +443,9 @@ namespace MarkupConverter
             {
                 // Closing an empty inline element.
                 // Note that HtmlConverter will skip empty inlines, but for completeness we keep them here on parser level.
-                XmlElement htmlInlineElement = _pendingInlineElements.Pop();
+                var htmlInlineElement = _pendingInlineElements.Pop();
                 InvariantAssert(_openedElements.Count > 0, "CloseElement: Stack of opened elements cannot be empty, as we have at least one artificial root element");
-                XmlElement htmlParent = _openedElements.Peek();
+                var htmlParent = _openedElements.Peek();
                 htmlParent.AppendChild(htmlInlineElement);
                 return;
             }
@@ -454,7 +454,7 @@ namespace MarkupConverter
                 while (_openedElements.Count > 1) // we never pop the last element - the artificial root
                 {
                     // Close all unbalanced elements.
-                    XmlElement htmlOpenedElement = _openedElements.Pop();
+                    var htmlOpenedElement = _openedElements.Pop();
 
                     if (htmlOpenedElement.LocalName == htmlElementName)
                     {
@@ -479,8 +479,8 @@ namespace MarkupConverter
 
             InvariantAssert(_openedElements.Count > 0, "AddTextContent: Stack of opened elements cannot be empty, as we have at least one artificial root element");
 
-            XmlElement htmlParent = _openedElements.Peek();
-            XmlText textNode = _document.CreateTextNode(textContent);
+            var htmlParent = _openedElements.Peek();
+            var textNode = _document.CreateTextNode(textContent);
             htmlParent.AppendChild(textNode);
         }
 
@@ -490,8 +490,8 @@ namespace MarkupConverter
 
             InvariantAssert(_openedElements.Count > 0, "AddComment: Stack of opened elements cannot be empty, as we have at least one artificial root element");
 
-            XmlElement htmlParent = _openedElements.Peek();
-            XmlComment xmlComment = _document.CreateComment(comment);
+            var htmlParent = _openedElements.Peek();
+            var xmlComment = _document.CreateComment(comment);
             htmlParent.AppendChild(xmlComment);
         }
 
@@ -501,13 +501,13 @@ namespace MarkupConverter
         {
             if (_pendingInlineElements.Count > 0)
             {
-                XmlElement htmlInlineElement = _pendingInlineElements.Pop();
+                var htmlInlineElement = _pendingInlineElements.Pop();
 
                 OpenPendingInlineElements();
 
                 InvariantAssert(_openedElements.Count > 0, "OpenPendingInlineElements: Stack of opened elements cannot be empty, as we have at least one artificial root element");
 
-                XmlElement htmlParent = _openedElements.Peek();
+                var htmlParent = _openedElements.Peek();
                 htmlParent.AppendChild(htmlInlineElement);
                 _openedElements.Push(htmlInlineElement);
             }

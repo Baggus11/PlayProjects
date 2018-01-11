@@ -4,14 +4,13 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Common
+namespace Common.Extensions
 {
-    public static class FileExtensions
+    public static partial class Extensions
     {
-
         public static void CreateStartupFolderShortcut()
         {
-            WshShellClass wshShell = new WshShellClass();
+            var wshShell = new WshShellClass();
             IWshShortcut shortcut;
             string startUpFolderPath =
               Environment.GetFolderPath(Environment.SpecialFolder.Startup);
@@ -42,11 +41,11 @@ namespace Common
             string filenameOnly = Path.GetFileName(shortcutFilename);
 
             Shell32.Shell shell = new ShellClass();
-            Shell32.Folder folder = shell.NameSpace(pathOnly);
-            Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
+            var folder = shell.NameSpace(pathOnly);
+            var folderItem = folder.ParseName(filenameOnly);
             if (folderItem != null)
             {
-                ShellLinkObject link =
+                var link =
                   (ShellLinkObject)folderItem.GetLink;
                 return link.Path;
             }
@@ -59,10 +58,10 @@ namespace Common
             string startUpFolderPath =
               Environment.GetFolderPath(Environment.SpecialFolder.Startup);
 
-            DirectoryInfo di = new DirectoryInfo(startUpFolderPath);
-            FileInfo[] files = di.GetFiles("*.lnk");
+            var di = new DirectoryInfo(startUpFolderPath);
+            var files = di.GetFiles("*.lnk");
 
-            foreach (FileInfo fi in files)
+            foreach (var fi in files)
             {
                 string shortcutTargetFile = GetShortcutTargetFile(fi.FullName);
 
@@ -73,7 +72,5 @@ namespace Common
                 }
             }
         }
-
     }
-
 }

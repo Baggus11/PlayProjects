@@ -36,7 +36,7 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
                 Directory.CreateDirectory(saveDirectory);
             }
 
-            Dictionary<string, string> cardsDictionary = GetYGOSearchURLs(cardNames, saveDirectory);
+            var cardsDictionary = GetYGOSearchURLs(cardNames, saveDirectory);
 
             await Task.Run(() => Parallel.ForEach(cardsDictionary, ygo_paths =>
             {
@@ -47,16 +47,16 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
                 {
                     try
                     {
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(full_searchUrl);
+                        var request = (HttpWebRequest)WebRequest.Create(full_searchUrl);
                         request.Credentials = CredentialCache.DefaultCredentials;
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        var response = (HttpWebResponse)request.GetResponse();
 
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
-                            using (WebClient client = new WebClient())
-                            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                            using (var client = new WebClient())
+                            using (var reader = new StreamReader(response.GetResponseStream()))
                             {
-                                List<Uri> links = FetchLinksFromSource(reader.ReadToEnd());
+                                var links = FetchLinksFromSource(reader.ReadToEnd());
                                 DownloadCardContentFromUri(card_savePath, client, links);
                             }
 
@@ -97,7 +97,7 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
             string file_Name;
             string card_SavePath;
 
-            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            var dictionary = new Dictionary<string, string>();
 
             foreach (var cardname in cardNames)
             {
@@ -115,8 +115,8 @@ namespace CardGamesAPI.Yugioh.YugiohPrices
 
         private List<Uri> FetchLinksFromSource(string htmlSource)
         {
-            List<Uri> links = new List<Uri>();
-            MatchCollection matchesImgSrc = Regex.Matches(htmlSource, WebImageSrcTagRegex,
+            var links = new List<Uri>();
+            var matchesImgSrc = Regex.Matches(htmlSource, WebImageSrcTagRegex,
                 RegexOptions.IgnoreCase | RegexOptions.Singleline);
             string href = "";
 

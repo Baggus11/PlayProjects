@@ -24,14 +24,16 @@ namespace Common
 
         public static string NameOf<T, TProp>(Expression<Func<T, TProp>> propertySelector)
         {
-            MemberExpression body = (MemberExpression)propertySelector.Body;
+            var body = (MemberExpression)propertySelector.Body;
             return body.Member.Name;
         }
 
         protected virtual bool SetValue<T>(ref T storage, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(storage, value))
+            {
                 return false;
+            }
 
             storage = value;
             RaisePropertyChanged(propertyName);
@@ -41,7 +43,11 @@ namespace Common
 
         protected virtual bool SetValue<T>(ref T storage, T value, Expression<Func<T>> propertyExpression)
         {
-            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(storage, value))
+            {
+                return false;
+            }
+
             storage = value;
 
             RaisePropertyChanged(GetPropertyNameFrom(propertyExpression));
@@ -61,7 +67,10 @@ namespace Common
             var propertyName = GetPropertyNameFrom(lambdaExpression);
             var storedValue = GetValue<T>(propertyName);
 
-            if (Equals(storedValue, value)) return;
+            if (Equals(storedValue, value))
+            {
+                return;
+            }
 
             _propertyValueStorage[propertyName] = value;
             RaisePropertyChanged(propertyName);
@@ -96,7 +105,7 @@ namespace Common
         [Conditional("DEBUG")]
         private void CheckPropertyName(string propertyName)
         {
-            PropertyDescriptor propertyDescriptor = TypeDescriptor.GetProperties(this)[propertyName];
+            var propertyDescriptor = TypeDescriptor.GetProperties(this)[propertyName];
             if (propertyDescriptor == null)
             {
                 throw new InvalidOperationException(string.Format(null, "The property with the name '{0}' doesn't exist.", propertyName));
@@ -149,7 +158,9 @@ namespace Common
             var memberExpression = propertyExpression.Body as MemberExpression;
 
             if (memberExpression == null)
+            {
                 throw new ArgumentException("Expression must be a MemberExpression.", propertyExpression.Name);
+            }
 
             return memberExpression.Member.Name;
         }
@@ -157,12 +168,16 @@ namespace Common
         protected virtual void RaisePropertyChanged<T>(Expression<Func<T>> selectorExpression)
         {
             if (selectorExpression == null)
+            {
                 throw new ArgumentNullException("selectorExpression");
+            }
 
-            MemberExpression body = selectorExpression.Body as MemberExpression;
+            var body = selectorExpression.Body as MemberExpression;
 
             if (body == null)
+            {
                 throw new ArgumentException("The body must be a member expression");
+            }
 
             RaisePropertyChanged(body.Member.Name);
         }
@@ -186,12 +201,16 @@ namespace Common
         protected virtual void RaisePropertiesChangedBy(string propertyName, List<string> calledProperties = null)
         {
             if (!_dependencies.Any() || !_dependencies.ContainsKey(propertyName))
+            {
                 return;
+            }
 
             if (calledProperties == null)
+            {
                 calledProperties = new List<string>();
+            }
 
-            List<string> dependentProperties = _dependencies[propertyName];
+            var dependentProperties = _dependencies[propertyName];
 
             foreach (var dependentProperty in dependentProperties)
             {
@@ -209,7 +228,7 @@ namespace Common
                 .Where(prop => Attribute.IsDefined(prop, typeof(DependentPropertiesAttribute)))
                 .ToArray();
 
-            foreach (PropertyInfo propertyInfo in propertyInfoWithDependencies)
+            foreach (var propertyInfo in propertyInfoWithDependencies)
             {
                 var currentAttributes = propertyInfo.GetCustomAttributes(false).OfType<DependentPropertiesAttribute>().Single();
                 if (currentAttributes.Properties != null)
@@ -242,12 +261,16 @@ namespace Common
         private void RaiseDependentProperties(string propertyName, List<string> calledProperties = null)
         {
             if (!_dependencies.Any() || !_dependencies.ContainsKey(propertyName))
+            {
                 return;
+            }
 
             if (calledProperties == null)
+            {
                 calledProperties = new List<string>();
+            }
 
-            List<string> dependentProperties = _dependencies[propertyName];
+            var dependentProperties = _dependencies[propertyName];
 
             foreach (var dependentProperty in dependentProperties)
             {

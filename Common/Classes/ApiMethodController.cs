@@ -15,7 +15,7 @@ namespace Common
         public IEnumerable<ApiMethod> GetMethods()
         {
             // get the IApiExplorer registered automatically
-            IApiExplorer explorer = Configuration.Services.GetApiExplorer();
+            var explorer = Configuration.Services.GetApiExplorer();
 
             // loop, convert and return all descriptions 
             return explorer.ApiDescriptions

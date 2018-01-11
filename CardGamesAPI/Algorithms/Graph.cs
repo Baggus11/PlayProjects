@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CardGamesAPI.Algorithms
 {
-
     public class Graph<T>
     {
         public Dictionary<T, HashSet<T>> AdjacencyList { get; } = new Dictionary<T, HashSet<T>>();
 
         public Graph(IEnumerable<T> vertices, IEnumerable<Tuple<T, T>> edges)
         {
-            foreach (var vertex in vertices)
+            foreach (var vertex in vertices ?? Enumerable.Empty<T>())
             {
                 AddVertex(vertex);
             }
-            foreach (var edge in edges)
+
+            foreach (var edge in edges ?? Enumerable.Empty<Tuple<T, T>>())
             {
                 AddEdge(edge);
             }
@@ -34,5 +35,4 @@ namespace CardGamesAPI.Algorithms
             AdjacencyList[vertex] = new HashSet<T>();
         }
     }
-
 }

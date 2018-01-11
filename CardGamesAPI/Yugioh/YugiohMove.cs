@@ -1,5 +1,5 @@
 ﻿using CardGamesAPI.Interfaces;
-using Common;
+using Common.Extensions;
 using System.Collections.Generic;
 
 namespace CardGamesAPI.Yugioh

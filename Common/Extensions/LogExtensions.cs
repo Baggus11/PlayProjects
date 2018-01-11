@@ -3,17 +3,15 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Common
+namespace Common.Extensions
 {
-    public static class LogExtensions
+    public static partial class Extensions
     {
         private static readonly Logger NLogger = LogManager.GetCurrentClassLogger();
 
-        public static void NLog(this string message) =>
-            NLogger.Debug(message);
+        public static void NLog(this string message) => NLogger.Debug(message);
 
-        public static void NLog(this Exception exception, string message = null) =>
-         NLogger.Error(exception, message);
+        public static void NLog(this Exception exception, string message = null) => NLogger.Error(exception, message);
 
         public static bool Log(this Exception ex, [CallerMemberName] string message = null, params object[] args)
         {

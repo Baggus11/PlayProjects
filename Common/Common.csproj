@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Common</RootNamespace>
     <AssemblyName>Common</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Classes\ApiMethodController.cs" />
     <Compile Include="AbstractClasses\ViewableCollectionBase.cs" />
+    <Compile Include="Extensions\EmbeddedResource.cs" />
     <Compile Include="Classes\ViewableCollection.cs" />
     <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\ExpressionBuilder.cs" />
@@ -73,14 +76,15 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\EventExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\FunctionExtensions.cs" />
     <Compile Include="Extensions\FileExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="Extensions\IListExtensions.cs" />
     <Compile Include="Extensions\LogExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
+    <Compile Include="Extensions\PropertyCacher.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\ThreadExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />

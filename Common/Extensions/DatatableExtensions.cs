@@ -8,102 +8,134 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 
-namespace Common
+namespace Common.Extensions
 {
-    public static class DataTableExtensions
+    public static partial class Extensions
     {
-        public static ObservableCollection<T> ToObservableCollection<T>(this DataTable table) where T : class, new()
+        public static ObservableCollection<T> ToObservableCollection<T>(this DataTable table)
+            where T : class, new()
         {
-            try
+            var observableCollection = new ObservableCollection<T>();
+
+            if (table == null || table.Rows.Count == 0)
             {
-                ObservableCollection<T> oc = new ObservableCollection<T>();
-                foreach (var row in table.AsEnumerable())
+                return observableCollection;
+            }
+                        
+            var properties = PropertyCache[typeof(T)];
+
+            string propertyName = "";
+
+            foreach (var row in table.AsEnumerable())
+            {
+                var obj = new T();
+
+                foreach (var property in properties ?? Enumerable.Empty<PropertyInfo>())
                 {
-                    T obj = new T();
-                    foreach (var prop in obj.GetType().GetProperties())
+                    try
                     {
-                        try
+                        propertyName = property.Name;
+
+                        var value = row[propertyName];
+
+                        if (value == DBNull.Value)
                         {
-                            PropertyInfo propertyInfo = obj.GetType().GetProperty(prop.Name);
-                            var val = row[prop.Name];
-                            if (val == DBNull.Value)
-                                propertyInfo.SetValue(obj, null, null);
-                            else
-                                propertyInfo.SetValue(obj, Convert.ChangeType(val, propertyInfo.PropertyType), null);
+                            property.SetValue(obj, null, null);
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            Debug.WriteLine(ex.ToString());
-                            return null;
+                            property.SetValue(obj, Convert.ChangeType(value, property.PropertyType), null);
                         }
+
                     }
-                    oc.Add(obj);
-                }
-                return oc;
-            }
-            catch (Exception ex)
-            {
-                string errMsg = string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.ToString());
-                Debug.WriteLine(errMsg);
-                return null;
-            }
-        }
-
-        public static List<T> ConvertToLineItemList<T>(this DataTable table, Func<DataRow, T> addAction)
-        {
-            if (table == null || table.Rows == null || table.Rows.Count == 0) return null;
-            List<T> lines = new List<T>();
-            //
-            /// Convert table rows into line items
-            ////
-            var datarows = table.Rows.Cast<DataRow>().ToList();
-            try
-            {
-                foreach (var row in datarows)
-                {
-                    T nextLine = addAction(row);
-                    if (nextLine != null)
-                        lines.Add(nextLine);
-                    else
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex);
                         continue;
+                    }
+                }
+
+                observableCollection.Add(obj);
+            }
+
+            return observableCollection;
+
+        }
+
+        public static List<T> AddRowsByAction<T>(this DataTable table, Func<DataRow, T> rowAdditionAction)
+            where T : class, new()
+        {
+            var lines = new List<T>();
+
+            if (table == null || table.Rows.Count == 0)
+            {
+                return lines;
+            }
+
+            var dataRows = table.Rows.Cast<DataRow>();
+
+            try
+            {
+                foreach (var row in dataRows ?? Enumerable.Empty<DataRow>())
+                {
+                    var nextLine = rowAdditionAction(row);
+
+                    if (nextLine != null)
+                    {
+                        lines.Add(nextLine);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                string errMsg = string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.ToString());
-                Debug.WriteLine(errMsg);
-                return null;
+                _logger.Error(ex);
             }
+
             return lines;
+
         }
 
-        public static List<string> GetColumnHeaderNames(this DataTable table)
+        public static List<string> GetColumnNames(this DataTable table)
         {
             try
             {
-                return table.Columns.Cast<DataColumn>().Select(col => col.ColumnName).ToList();
+                if (table == null || table.Rows.Count == 0)
+                {
+                    return new List<string>();
+                }
+
+                return table.Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
             }
             catch (Exception ex)
             {
-                string errMsg = string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.ToString());
-                Debug.WriteLine(errMsg);
-                return null;
+                _logger.Error(ex);
+                return new List<string>();
             }
         }
 
-        public static void SetColumnsOrder(this DataTable table, params string[] columnNames)
+        public static void SetColumnsOrder(this DataTable table, params string[] orderedColumnNames)
         {
-            if (table == null) return;
+            if (table == null || table.Rows.Count == 0)
+            {
+                return;
+            }
+
+            if (orderedColumnNames == null || orderedColumnNames.Length == 0)
+            {
+                return;
+            }
+
             int columnIndex = 0;
-            foreach (var columnName in columnNames)
+            var columnNames = table.GetColumnNames();
+
+            foreach (var columnName in orderedColumnNames.Except(columnNames ?? Enumerable.Empty<string>()))
             {
                 try
                 {
-                    if (table.Columns[columnName] == null)
-                    {
-                        Debug.WriteLine($"Could not find column {columnName} in table {table.TableName}");
-                        return;
-                    }
                     table.Columns[columnName].SetOrdinal(columnIndex);
                     columnIndex++;
                 }
@@ -119,7 +151,16 @@ namespace Common
         {
             try
             {
-                if (table.Columns.Contains(columnName)) table.Columns.Remove(columnName);
+                if (table == null || table.Rows.Count == 0)
+                {
+                    return;
+                }
+
+                if (table.Columns.Contains(columnName))
+                {
+                    table.Columns.Remove(columnName);
+                }
+
             }
             catch (Exception ex)
             {
@@ -131,40 +172,71 @@ namespace Common
         public static List<T> ToList<T>(this DataTable table)
             where T : class, new()
         {
-            try
+            var list = new List<T>();
+
+            if (table == null || table.Rows.Count == 0)
             {
-                List<T> list = new List<T>();
-                foreach (var row in table.AsEnumerable())
-                {
-                    T obj = new T();
-                    foreach (var prop in obj.GetType().GetProperties())
-                    {
-                        try
-                        {
-                            PropertyInfo propertyInfo = obj.GetType().GetProperty(prop.Name);
-                            var val = row[prop.Name];
-                            if (val == DBNull.Value)
-                                propertyInfo.SetValue(obj, null, null);
-                            //TODO: place a condition for handling Enums, here.
-                            else
-                                propertyInfo.SetValue(obj, Convert.ChangeType(val, propertyInfo.PropertyType), null);
-                        }
-                        catch (Exception)
-                        {
-                            break;
-                            throw;
-                        }
-                    }
-                    list.Add(obj);
-                }
                 return list;
             }
-            catch (Exception ex)
+                        
+            var properties = PropertyCache[typeof(T)];
+
+            if (properties == null || properties.Length == 0)
             {
-                string errMsg = string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.ToString());
-                Debug.WriteLine(errMsg);
-                return null;
+                return list;
             }
+
+            var tableColumnNames = table.GetColumnNames();
+
+            string propertyName = "";
+
+            foreach (var row in table.AsEnumerable())
+            {
+                var item = new T();
+
+                foreach (var property in properties ?? Enumerable.Empty<PropertyInfo>())
+                {
+                    try
+                    {
+                        propertyName = property.Name;
+
+                        if (!tableColumnNames.Contains(propertyName))
+                        {
+                            continue;
+                        }
+
+                        var value = row[propertyName];
+
+                        if (value == DBNull.Value)
+                        {
+                            property.SetValue(item, null, null);
+                        }
+
+                        //TODO: place a condition for handling Enums, here.
+                        else if (property.PropertyType.Equals(typeof(SqlDbType)))
+                        {
+                            var dbType = (SqlDbType)Enum.Parse(typeof(SqlDbType), value.ToString(), true);
+                            property.SetValue(item, dbType, null);
+                        }
+
+                        else
+                        {
+                            property.SetValue(item, Convert.ChangeType(value, property.PropertyType), null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        continue;
+                    }
+                }
+
+                list.Add(item);
+
+            }
+
+            return list;
+
         }
 
         /// <summary>
@@ -175,8 +247,7 @@ namespace Common
         /// <returns></returns>
         public static IEnumerable<dynamic> AsDynamicEnumerable(this DataTable table)
         {
-            // Validate argument here..
-            return table.AsEnumerable().Select(row => new DynamicRow(row));
+            return table == null ? table.AsEnumerable().Select(row => new DynamicRow(row)) : Enumerable.Empty<dynamic>();
         }
 
         private sealed class DynamicRow : DynamicObject
@@ -192,31 +263,33 @@ namespace Common
                 return retVal;
             }
         }
+
         /**** SQL To Datatable ***/
         /// <summary>
         /// Fill a given DataTable
         /// </summary>
-        /// <param name="dt"></param>
+        /// <param name="table"></param>
         /// <param name="connStr"></param>
         /// <param name="selectQuery"></param>
-        private static void FillTable(this DataTable dt, string connStr, string selectQuery)
+        private static void FillTable(this DataTable table, string connStr, string selectQuery)
         {
-            Debug.WriteLine(selectQuery);
-            Debug.WriteLine(connStr);
-            using (SqlDataAdapter da = new SqlDataAdapter(selectQuery.ToString(), connStr))
+            try
             {
-                da.SelectCommand.CommandTimeout = 180; //make into a Setting?
-                try
+                using (var da = new SqlDataAdapter(selectQuery, connStr))
                 {
-                    da.Fill(dt);
-                    Debug.WriteLine(dt.Rows.Count);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.Message));
-                    throw; //replace with a decent exception
+                    da.SelectCommand.CommandTimeout = 180;
+
+                    da.Fill(table);
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(string.Format("{0}: {1}", MethodBase.GetCurrentMethod().Name, ex.Message));
+                logger.Error(ex);
+                throw;
+            }
         }
+
     }
+
 }

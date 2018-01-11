@@ -2,7 +2,7 @@
 {
     public interface IYugiohCardBuilder
     {
-        void Build(object details);
+        void Build<T>(object details);
         IYugiohCard Card { get; }
     }
 }
