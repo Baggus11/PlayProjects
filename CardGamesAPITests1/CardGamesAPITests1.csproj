@@ -96,6 +96,9 @@
   <ItemGroup>
     <Content Include="Yugioh\Factories\PlayProjects.vssettings" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
