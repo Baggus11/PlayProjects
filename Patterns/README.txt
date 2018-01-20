@@ -1,0 +1,1 @@
+﻿This library [DesignPatterns] is for collection unique or commonly used design patterns into a single module.

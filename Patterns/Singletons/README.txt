@@ -1,0 +1,1 @@
+﻿This [Singleton] pattern is SOLID compliant.
