@@ -18,10 +18,24 @@ namespace Common.Extensions
     {
         public static T ToInstance<T>(this IDictionary<string, object> dictionary) where T : class
         {
-            var type = typeof(T);
+            var instance = (T)ToInstance(CreateDefaultInstance<T>(), dictionary, typeof(T));
+            //var instance = (T)ToInstance(Activator.CreateInstance<T>(), dictionary, type);
 
-            var instance = (T)ToInstance(Activator.CreateInstance<T>(), dictionary, type);
             return instance;
+        }
+
+        private static object CreateDefaultInstance(Type instanceType)
+        {
+            var flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
+            var constructor = instanceType.GetConstructor(flags, null, new Type[0], null);
+
+            return constructor.Invoke(null);
+        }
+
+        private static T CreateDefaultInstance<T>()
+        {
+            var instanceType = typeof(T);
+            return (T)CreateDefaultInstance(instanceType);
         }
 
         private static object ToInstance(object parent, IDictionary<string, object> dictionary, Type childType, bool isInnerClass = false)
@@ -45,8 +59,7 @@ namespace Common.Extensions
                     //todo: if List of expandos, do a foreach over all expandos in list
 
                     //todo: if list of objects that are not defined and NOT expandos, must be a list<object>, just iterate blindly in another method that handles list of object and calls toIntance when encountering expandos.
-
-
+                    
                     //Debug.WriteLine($"key: {pair.Key.ToString()}\traw value: {pair.Value.ToString()}\ttype: {valType.ToString()}");
 
                     if (!valType.Name.Equals(nameof(ExpandoObject)))
@@ -64,14 +77,17 @@ namespace Common.Extensions
 
                     if (propertyName.Equals(parentType.Name, StringComparison.OrdinalIgnoreCase))
                     {
-                        object childTemplate = Activator.CreateInstance(childType);
+                        object childTemplate = CreateDefaultInstance(childType);
+
+                        //object childTemplate = Activator.CreateInstance(childType);
                         object child = ToInstance(parent: childTemplate, dictionary: subDictionary, childType: childType);
 
                         parent = child;
                     }
                     else
                     {
-                        var nextProperty = childProperties.SingleOrDefault(p => p.PropertyType.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
+                        var nextProperty = childProperties.SingleOrDefault(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
+                        //var nextProperty = childProperties.SingleOrDefault(p => p.PropertyType.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
 
                         if (nextProperty == null)
                         {
@@ -80,9 +96,10 @@ namespace Common.Extensions
                         }
 
                         var nextPropertyType = nextProperty?.PropertyType;
-                        object child = Activator.CreateInstance(nextPropertyType);
+                        //object child = Activator.CreateInstance(nextPropertyType);
 
-                        object subInstance = ToInstance(child, subDictionary, nextPropertyType, true) ?? Activator.CreateInstance(nextPropertyType);
+                        object child = CreateDefaultInstance(nextPropertyType);
+                        object subInstance = ToInstance(child, subDictionary, nextPropertyType, true) ?? /*Activator.CreateInstance(nextPropertyType)*/ CreateDefaultInstance(nextPropertyType);
 
                         nextProperty.SetValue(parent, subInstance);
                     }
@@ -98,6 +115,7 @@ namespace Common.Extensions
 
             return parent;
         }
+
 
         public static IEnumerable<KeyValuePair<string, object>> ToExpandoPairs(this ExpandoObject expando)
         {
