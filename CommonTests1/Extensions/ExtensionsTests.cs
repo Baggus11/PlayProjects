@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Common.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Linq;
 
@@ -25,6 +26,15 @@ namespace Common.Extensions.Tests
             .ToList<Person>()/*.Dump("list again")*/;
             watch.Stop();
             Debug.WriteLine("Time Elapsed: " + watch.Elapsed);
+        }
+
+        [TestMethod()]
+        public void PopTest()
+        {
+            var list = Enumerable.Range(1, 10).ToList();
+            var myints = list.Pop(1);
+            Assert.IsTrue(myints.Count > 0);
+            myints.Dump();
         }
 
         //[TestMethod]

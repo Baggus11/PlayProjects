@@ -10,8 +10,8 @@ namespace Common.Extensions
     {
         public static Dictionary<Type, PropertyInfo[]> Cache(this Type type)
         {
-            PropertyCacher._propertyCache.Add(type, type.GetProperties());
-            return PropertyCacher._propertyCache;
+            PropertyCache._propertyCache.Add(type, type.GetProperties());
+            return PropertyCache._propertyCache;
         }
 
         public static IEnumerable<Type> GetAssignableTypes<T>()

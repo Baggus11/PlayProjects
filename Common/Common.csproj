@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Classes\ApiMethodController.cs" />
     <Compile Include="AbstractClasses\ViewableCollectionBase.cs" />
+    <Compile Include="Extensions\DynamicObjectExtensions.cs" />
     <Compile Include="Extensions\EmbeddedResource.cs" />
     <Compile Include="Classes\ViewableCollection.cs" />
     <Compile Include="Classes\Converters.cs" />
@@ -89,7 +90,8 @@
     <Compile Include="Extensions\LogExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
-    <Compile Include="Extensions\PropertyCacher.cs" />
+    <Compile Include="Extensions\PropertyCache.cs" />
+    <Compile Include="Extensions\RandomizerExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\ThreadExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />

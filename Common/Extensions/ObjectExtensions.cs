@@ -55,9 +55,9 @@ namespace Common.Extensions
         public static T Map<T, U>(this T target, U source)
             where T : class where U : class => throw new NotImplementedException();
 
-        public static TDefined Slurp<TDefined>(this object destination, object source)
+        public static object Slurp(this object destination, object source)
         {
-            var destinationType = typeof(TDefined);
+            var destinationType = destination.GetType();
             var sourceType = source.GetType();
 
             var mappableProperties = from sourceProperty in PropertyCache[sourceType]
@@ -75,7 +75,7 @@ namespace Common.Extensions
                 property.targetProperty.SetValue(destination, property.sourceProperty.GetValue(source, null), null);
             }
 
-            return (TDefined)destination;
+            return destination;
         }
 
         //Alias for Consume method because I like(d) the name        

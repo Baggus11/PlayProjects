@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 
 namespace Common.Extensions
 {
@@ -15,6 +16,21 @@ namespace Common.Extensions
             var result = list[index];
             list.RemoveAt(index);
             return result;
+        }
+
+        public static T Pop<T>(this IList<T> list, T item)
+        {
+            return list.Remove(item) ? item : throw new Exception($"{MethodBase.GetCurrentMethod().Name}: could not remove item");
+        }
+
+        public static IList<T> Pop<T>(this IList<T> list, int count)
+        {           
+            var last = list.TakeLast(count).ToList();
+            for (int i = 0; i < count; i++)
+            {
+                list.RemoveAt(list.Count - 1);
+            }
+            return last;
         }
 
         public static void AddMany<T>(this List<T> list, IEnumerable<T> elements)

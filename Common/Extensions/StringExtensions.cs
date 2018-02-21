@@ -13,6 +13,7 @@ namespace Common.Extensions
 {
     public static partial class Extensions
     {
+        public static string Append(this string input, string text) => new StringBuilder(input).Append(text).ToString();
         public static string Reverse(this string str) => new string(str.ToCharArray().Reverse().ToArray());
 
         public static string SplitCamelCase(this string str) => Regex.Replace(Regex.Replace(str,
