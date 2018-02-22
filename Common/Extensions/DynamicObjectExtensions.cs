@@ -16,27 +16,30 @@ namespace Common.Extensions
 {
     public static partial class DynamicObjectExtensions
     {
+        private static bool _createNonPublicConstructor = true;
+
         public static T ToInstance<T>(this IDictionary<string, object> dictionary) where T : class
         {
-            var instance = (T)ToInstance(CreateDefaultInstance<T>(), dictionary, typeof(T));
-            //var instance = (T)ToInstance(Activator.CreateInstance<T>(), dictionary, type);
+            var type = typeof(T);
+            //var instance = (T)ToInstance(CreateDefaultInstance<T>(), dictionary, typeof(T));
+            var instance = (T)ToInstance(Activator.CreateInstance(type, _createNonPublicConstructor), dictionary, type);
 
             return instance;
         }
 
-        private static object CreateDefaultInstance(Type instanceType)
-        {
-            var flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
-            var constructor = instanceType.GetConstructor(flags, null, new Type[0], null);
+        //private static object CreateDefaultInstance(Type instanceType)
+        //{
+        //    var flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
+        //    var constructor = instanceType.GetConstructor(flags, null, new Type[0], null);
 
-            return constructor.Invoke(null);
-        }
+        //    return constructor.Invoke(null);
+        //}
 
-        private static T CreateDefaultInstance<T>()
-        {
-            var instanceType = typeof(T);
-            return (T)CreateDefaultInstance(instanceType);
-        }
+        //private static T CreateDefaultInstance<T>()
+        //{
+        //    var instanceType = typeof(T);
+        //    return (T)CreateDefaultInstance(instanceType);
+        //}
 
         private static object ToInstance(object parent, IDictionary<string, object> dictionary, Type childType, bool isInnerClass = false)
         {
@@ -59,7 +62,7 @@ namespace Common.Extensions
                     //todo: if List of expandos, do a foreach over all expandos in list
 
                     //todo: if list of objects that are not defined and NOT expandos, must be a list<object>, just iterate blindly in another method that handles list of object and calls toIntance when encountering expandos.
-                    
+
                     //Debug.WriteLine($"key: {pair.Key.ToString()}\traw value: {pair.Value.ToString()}\ttype: {valType.ToString()}");
 
                     if (!valType.Name.Equals(nameof(ExpandoObject)))
@@ -77,9 +80,8 @@ namespace Common.Extensions
 
                     if (propertyName.Equals(parentType.Name, StringComparison.OrdinalIgnoreCase))
                     {
-                        object childTemplate = CreateDefaultInstance(childType);
-
-                        //object childTemplate = Activator.CreateInstance(childType);
+                        //object childTemplate = CreateDefaultInstance(childType);
+                        object childTemplate = Activator.CreateInstance(childType, _createNonPublicConstructor);
                         object child = ToInstance(parent: childTemplate, dictionary: subDictionary, childType: childType);
 
                         parent = child;
@@ -96,10 +98,9 @@ namespace Common.Extensions
                         }
 
                         var nextPropertyType = nextProperty?.PropertyType;
-                        //object child = Activator.CreateInstance(nextPropertyType);
-
-                        object child = CreateDefaultInstance(nextPropertyType);
-                        object subInstance = ToInstance(child, subDictionary, nextPropertyType, true) ?? /*Activator.CreateInstance(nextPropertyType)*/ CreateDefaultInstance(nextPropertyType);
+                        object child = Activator.CreateInstance(nextPropertyType, _createNonPublicConstructor);
+                        //object child = CreateDefaultInstance(nextPropertyType);
+                        object subInstance = ToInstance(child, subDictionary, nextPropertyType, true) ?? Activator.CreateInstance(nextPropertyType, _createNonPublicConstructor) /*CreateDefaultInstance(nextPropertyType)*/;
 
                         nextProperty.SetValue(parent, subInstance);
                     }
