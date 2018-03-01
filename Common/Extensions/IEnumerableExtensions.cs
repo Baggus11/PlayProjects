@@ -138,7 +138,7 @@ namespace Common.Extensions
         {
             var table = new DataTable();
 
-            if (collection == null || collection.Any())
+            if (collection == null || !collection.Any())
             {
                 return table;
             }
