@@ -7,7 +7,7 @@
     <Application.Resources>
         <Style x:Key="basicStyle">
             <Setter Property="Control.FontFamily" Value="Monda" />
-            <Setter Property="Control.FontSize" Value="12" />
+            <Setter Property="Control.FontSize" Value="16" />
         </Style>
         <Style BasedOn="{StaticResource basicStyle}" TargetType="{x:Type Label}">
             <Setter Property="HorizontalAlignment" Value="Right" />

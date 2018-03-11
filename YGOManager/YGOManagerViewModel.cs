@@ -74,7 +74,9 @@ namespace YugiohCardDownloader
         public async Task DownloadCards(IEnumerable<string> cardNames, string saveDirectory)
         {
             if (!Directory.Exists(saveDirectory))
+            {
                 Directory.CreateDirectory(saveDirectory);
+            }
 
             await Task.Run(() => Parallel.ForEach(cardNames, cardName =>
             {
