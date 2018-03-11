@@ -243,3 +243,4 @@ ModelManifest.xml
 /ExamplePrismApplication
 /SimpleAdornedControlSample
 /A-StarExample/A-StarExample.csproj
+*.dll

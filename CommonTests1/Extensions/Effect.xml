@@ -1,0 +1,12 @@
+﻿<CardEffect>
+  <EffectText>Destroy all monsters on the field</EffectText>
+  <SpellSpeed>2</SpellSpeed>
+  <Option>
+    <Text>Option1</Text>
+    <Cost>800</Cost>
+    <Target>
+      <Name>Mike</Name>
+      <LifePoints>7200</LifePoints>
+    </Target>
+  </Option>
+</CardEffect>
