@@ -8,7 +8,7 @@ namespace CardGamesAPI.Yugioh
 {
     public abstract class CardEffect<TCard> : ICardEffect
     {
-        public string EffectText { get; set; } = "";
+        public string EffectText { get; set; }
         public string PreConditions { get; set; }
         public string PostConditions { get; set; }
 
