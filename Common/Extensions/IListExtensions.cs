@@ -108,7 +108,6 @@ namespace Common.Extensions
             return table;
         }
 
-
         //public static DataTable ToDatatable<T>(this List<T> list)
         //{
         //    var table = new DataTable();

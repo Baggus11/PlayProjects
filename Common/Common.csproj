@@ -65,7 +65,8 @@
   <ItemGroup>
     <Compile Include="Classes\ApiMethodController.cs" />
     <Compile Include="AbstractClasses\ViewableCollectionBase.cs" />
-    <Compile Include="Extensions\DynamicObjectExtensions.cs" />
+    <Compile Include="Classes\Maybe.cs" />
+    <Compile Include="Extensions\DynamicExtensions.cs" />
     <Compile Include="Extensions\EmbeddedResource.cs" />
     <Compile Include="Classes\ViewableCollection.cs" />
     <Compile Include="Classes\Converters.cs" />
