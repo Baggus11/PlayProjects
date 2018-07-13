@@ -9,6 +9,14 @@ namespace Common.Extensions
 {
     public static partial class Extensions
     {
+        private static JsonConverter _jsonConverter = new Newtonsoft.Json.Converters.StringEnumConverter();
+        private static JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
+        {
+            Converters = new List<JsonConverter> { _jsonConverter },
+            NullValueHandling = NullValueHandling.Include,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+
         public static void Map<TParent, TDerived>(ref TParent source, ref TDerived destination)
             where TParent : new()
             where TDerived : new()
@@ -272,15 +280,12 @@ namespace Common.Extensions
                     displayName = obj.GetType().Name;
                 }
 
-                var prettyJson = JsonConvert.SerializeObject(
-                    obj,
-                    Formatting.Indented,
-                    new JsonSerializerSettings
-                    {
-                        Converters = new List<JsonConverter> { new Newtonsoft.Json.Converters.StringEnumConverter() },
-                        NullValueHandling = (!showNulls) ? NullValueHandling.Ignore : NullValueHandling.Include,
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
+                if (!showNulls)
+                {
+                    _jsonSerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                }
+
+                var prettyJson = JsonConvert.SerializeObject(obj, Formatting.Indented, _jsonSerializerSettings);
                 Debug.WriteLine(string.Format("{0}:\n{1}", displayName, prettyJson));
             }
             else if (obj == null)
@@ -290,6 +295,7 @@ namespace Common.Extensions
                     Debug.WriteLine(string.Format("Object '{0}'{1}", displayName, " is null.")); //Optional
                 }
             }
+
             return obj;
         }
     }
